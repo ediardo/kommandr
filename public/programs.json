@@ -1,0 +1,7 @@
+{
+  "programs": [
+    {"name": "xtrabackup"},
+    {"name": "ls"},
+    {"name": "ssh"}
+  ]
+}
