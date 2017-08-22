@@ -7,7 +7,7 @@ import {Provider} from 'react-redux';
 import {createStore, applyMiddleware} from 'redux';
 import reducer from './reducers';
 import App from './containers/App';
-
+import './styles.scss';
 
 const middleware = [ thunkMiddleware ];
 middleware.push(createLogger());

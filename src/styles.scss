@@ -61,6 +61,7 @@ header {
       list-style: none;
       margin: 0;
       padding: 0em;
+      transition: 0.2s;
       li {
         list-style-type: none;
         padding: 0.3em 0.45em;
@@ -79,7 +80,7 @@ header {
   }
   .search-input {
     border: 0;
-
+    width: 100%;
     &:focus {
       outline: none;
     }

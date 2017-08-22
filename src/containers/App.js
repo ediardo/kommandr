@@ -6,7 +6,6 @@ import CommandLine from '../components/CommandLine';
 import {bindActionCreators} from 'redux';
 import commandLineActions from '../actions/commandLineActions';
 import uiAction from '../actions/completerActions';
-import './App.scss';
 
 const App = ({commandLine, programs, options, ui, actions}) => (
   <div className="App">

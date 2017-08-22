@@ -31,19 +31,21 @@ class CommandLine extends React.Component {
     this.copyCli = this.copyCli.bind(this);
     this.cliToString = this.cliToString.bind(this);
     this.resetCli = this.resetCli.bind(this);
+    this.focusSearchInput = this.focusSearchInput.bind(this);
   }
 
   addProgram(program) {
     const {commandLineActions} = this.props;
     commandLineActions.addProgram({id: program.id});
     this.setState({
-      programCompleterIsOpen: !this.state.programCompleterIsOpen,
+      programCompleterIsOpen: false,
       isProgramSelected: true,
       query: '',
-      selectedProgramId: program.id,
       inputPlaceholder: 'Add an option',
-      lastProgramId: program.id
-    })
+      lastProgramId: program.id,
+      optionCompleterIsOpen: true
+    });
+
   }
 
   addOption(option) {
@@ -54,11 +56,12 @@ class CommandLine extends React.Component {
       displayFormat: 'long'
     });
     this.setState({
-      optionCompleterIsOpen: !this.state.optionCompleterIsOpen,
+      optionCompleterIsOpen: false,
       inputPlaceholder: 'Set a value',
-      isWaitingForValue: !this.state.isWaitingForValue,
+      isWaitingForValue: true,
       lastOptionId: option.id
     });
+    this.focusSearchInput();
   }
 
   addValue(option, value) {
@@ -140,6 +143,10 @@ class CommandLine extends React.Component {
     })
   }
 
+  focusSearchInput() {
+    this.searchInput.focus();
+  }
+
   copyCli() {
     const str = this.cliToString();
     copy(str);
@@ -161,7 +168,7 @@ class CommandLine extends React.Component {
           <div className="search-container">
             <ProgramCompleterContainer items={this.props.programs} query={this.props.query} isOpen={programCompleterIsOpen} onClick={this.addProgram} />
             <OptionCompleterContainer items={this.props.options} query={this.props.query} isOpen={optionCompleterIsOpen} onClick={this.addOption} />
-            <input className="search-input" type="text" value={this.state.query} onKeyDown={this.handleInputKeyDown} placeholder={this.state.inputPlaceholder} onClick={this.handleClick} onChange={this.handleInputChange}></input>
+            <input ref={(input) => {this.searchInput = input;}} className="search-input" type="text" value={this.state.query} onKeyDown={this.handleInputKeyDown} placeholder={this.state.inputPlaceholder} onClick={this.handleClick} onChange={this.handleInputChange}></input>
           </div>
           <div className="clearfix" style={({height: 0})}></div>
         </div>
