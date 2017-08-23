@@ -11,7 +11,6 @@ class SelectedPrograms extends React.Component {
     let programList = null;
     if (programs.length > 0) {
       programList = programs.map(program => {
-
         return (
           <span key={program.id}>
             <Program program={program} />

@@ -120,7 +120,6 @@ class CommandLine extends React.Component {
 
   cliToString() {
     const {commandLine, programs, options} = this.props;
-    console.log(this.props);
     let cli = [];
     commandLine.allPrograms.map(programId => {
       cli = [...cli, programs[programId].name];
@@ -167,7 +166,7 @@ class CommandLine extends React.Component {
 
           <div className="search-container">
             <ProgramCompleterContainer items={this.props.programs} query={this.props.query} isOpen={programCompleterIsOpen} onClick={this.addProgram} />
-            <OptionCompleterContainer items={this.props.options} query={this.props.query} isOpen={optionCompleterIsOpen} onClick={this.addOption} />
+            <OptionCompleterContainer query={this.props.query} isOpen={optionCompleterIsOpen} onClick={this.addOption} />
             <input ref={(input) => {this.searchInput = input;}} className="search-input" type="text" value={this.state.query} onKeyDown={this.handleInputKeyDown} placeholder={this.state.inputPlaceholder} onClick={this.handleClick} onChange={this.handleInputChange}></input>
           </div>
           <div className="clearfix" style={({height: 0})}></div>

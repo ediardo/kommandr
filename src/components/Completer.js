@@ -8,6 +8,7 @@ class Completer extends React.Component {
 
   render() {
     const {items} = this.props;
+    console.log(this.props);
     const listItems = Object.keys(items).map(id => {
       return (
         <li key={id} className="completer-item" onClick={this.onClickHandler.bind(this, items[id])} >

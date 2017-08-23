@@ -11,20 +11,20 @@ class SelectedOptions extends React.Component {
       <div className="selected-options pull-left">
         <ul>
           {
-            options.map(option => {
+            commandLine[program.id].allOptions.map(optionId => {
               const OptionPopover = (
-                <Popover id="popover-trigger-focus" title={option.name}>
-                 {option.description}
+                <Popover id="popover-trigger-focus" title={options[optionId].name}>
+                 {options[optionId].description}
                 </Popover>
               );
               return (
 
-                <li key={option.id} className="option-item">
+                <li key={optionId} className="option-item">
                   <OverlayTrigger placement="top" trigger={['focus', 'hover']} overlay={OptionPopover}>
-                    <span className="option-">{option.longOpt}</span>
+                    <span className="option-">{options[optionId].longOpt}</span>
                   </OverlayTrigger>
-                  <span className="option-value-separator">{commandLine[program.id].options[option.id].separator}</span>
-                  <span className="option-value">{commandLine[program.id].options[option.id].value}</span>
+                  <span className="option-value-separator">{commandLine[program.id].options[optionId].separator}</span>
+                  <span className="option-value">{commandLine[program.id].options[optionId].value}</span>
                   <span>&nbsp;</span>
                 </li>
               )
@@ -37,7 +37,7 @@ class SelectedOptions extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  options: selectedOptionsSelector(state),
+  options: state.options,
   commandLine: state.commandLine
 });
 
