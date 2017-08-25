@@ -1,9 +1,8 @@
-import React from 'react';
-import {connect} from 'react-redux';
-import {Popover, OverlayTrigger} from 'react-bootstrap';
-import selectedOptionsSelector from '../selectors/selectedOptions';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Popover, OverlayTrigger } from 'react-bootstrap';
 
-class SelectedOptions extends React.Component {
+class SelectedOptions extends Component {
 
   render() {
     const {options, program, commandLine} = this.props;
