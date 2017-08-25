@@ -5,7 +5,7 @@ class Footer extends Component {
     return (
       <div className="footer">
         <div className="container-fluid">
-        kommandr.com - djedir@gmail.com
+        kommandr.com
         </div>
       </div>
     );

@@ -9,7 +9,6 @@ const selectedOptionsSelector = state => {
 }
 
 const getOptions = (options, selectedOptionsIds) => {
-  console.log(options, selectedOptionsIds);
   const selectedOptions = _.reject(
     options,
     option => _.includes(selectedOptionsIds, option.id)
