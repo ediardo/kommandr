@@ -1,5 +1,4 @@
-
-import {combineReducers} from 'redux';
+import { combineReducers } from 'redux';
 import programReducer from './programs';
 import commandLineReducer from './commandLine';
 import optionReducer from './options';

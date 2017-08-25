@@ -1,11 +1,13 @@
 import React from 'react';
-import {connect} from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import CommandLine from '../components/CommandLine';
-import {bindActionCreators} from 'redux';
-import commandLineActions from '../actions/commandLineActions';
-import uiAction from '../actions/completerActions';
+
+import commandLineActions from '../redux/actions/commandLineActions';
+import uiAction from '../redux/actions/completerActions';
 
 const App = ({commandLine, programs, options, ui, actions}) => (
   <div className="app">
