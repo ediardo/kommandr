@@ -1,10 +1,10 @@
 import React from 'react';
-import {Button} from 'react-bootstrap';
+import {Button} from 'reactstrap';
 import ProgramCompleterContainer from '../containers/ProgramCompleter';
 import OptionCompleterContainer from '../containers/OptionCompleter';
 import SelectedPrograms from '../containers/SelectedPrograms';
 import copy from 'copy-to-clipboard';
-
+import Prompt from './Prompt';
 
 class CommandLine extends React.Component {
 
@@ -19,19 +19,22 @@ class CommandLine extends React.Component {
       selectedOptions: [],
       inputPlaceholder: 'Select a program',
       lastOptionId: undefined,
-      isWaitingForValue: false,
-      lastProgramId: undefined
+      isWaitingArg: false,
+      lastProgramId: undefined,
+      prompt: '$'
     }
 
     this.handleClick = this.handleClick.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.addProgram = this.addProgram.bind(this);
     this.addOption = this.addOption.bind(this);
+    this.setOptionValue = this.setOptionValue.bind(this);
     this.handleInputKeyDown = this.handleInputKeyDown.bind(this);
     this.copyCli = this.copyCli.bind(this);
     this.cliToString = this.cliToString.bind(this);
     this.resetCli = this.resetCli.bind(this);
     this.focusSearchInput = this.focusSearchInput.bind(this);
+    this.hideCompleter = this.hideCompleter.bind(this);
   }
 
   addProgram(program) {
@@ -42,7 +45,7 @@ class CommandLine extends React.Component {
       isProgramSelected: true,
       query: '',
       inputPlaceholder: 'Add an option',
-      lastProgramId: program.id,
+      selectedProgramId: program.id,
       optionCompleterIsOpen: true
     });
 
@@ -58,29 +61,42 @@ class CommandLine extends React.Component {
     this.setState({
       optionCompleterIsOpen: false,
       inputPlaceholder: 'Set a value',
-      isWaitingForValue: true,
+      isWaitingArg: true,
       lastOptionId: option.id
     });
     this.focusSearchInput();
   }
 
-  addValue(option, value) {
-    const {commandLineActions} = this.props;
-    commandLineActions.addValue({
-
-    })
+  setOptionValue(option, value) {
+    const {commandLineActions} = this.props, {id, programId} = option;
+    commandLineActions.setOptionValue({id, programId, value });
   }
 
   handleClick(e) {
-    const {isProgramSelected, programCompleterIsOpen, isWaitingForValue} = this.state;
-    e.preventDefault();
-    if (!isProgramSelected && !programCompleterIsOpen) {
+    const {optionCompleterIsOpen, programCompleterIsOpen, isWaitingArg, selectedProgramId} = this.state;
+    e.stopPropagation();
+    if (selectedProgramId === undefined && !programCompleterIsOpen) {
       this.setState({
-        programCompleterIsOpen: !this.state.programCompleterIsOpen
+        programCompleterIsOpen: true
       });
-    } else if (isProgramSelected && !isWaitingForValue) {
+    } else if (!isWaitingArg && !optionCompleterIsOpen) {
       this.setState({
-        optionCompleterIsOpen: !this.state.optionCompleterIsOpen
+        optionCompleterIsOpen: true
+      });
+    } else {
+      this.setState({
+        optionCompleterIsOpen: false,
+        programCompleterIsOpen: false
+      });
+    }
+  }
+
+  hideCompleter(e) {
+    if (!e.path.includes('ul.completer-items')) {
+      document.body.removeEventListener('click', this.hideCompleter);
+      this.setState({
+        programCompleterIsOpen: false,
+        optionCompleterIsOpen: false
       });
     }
   }
@@ -92,26 +108,38 @@ class CommandLine extends React.Component {
   }
 
   handleInputKeyDown(e) {
-    const {isWaitingForValue} = this.state;
+    const {isWaitingArg, query, selectedProgramId} = this.state;
     const {commandLineActions} = this.props;
+    const {allOptions} = this.props.commandLine[selectedProgramId];
     if (e.key === 'Escape') {
       this.setState({
         optionCompleterIsOpen: false,
         programCompleterIsOpen: false,
-        isWaitingForValue: false
+        isWaitingArg: false
       });
     }
-    if (isWaitingForValue) {
-      if (e.key === 'Enter') {
-        commandLineActions.setOptionValue({
-          id: this.state.lastOptionId ,
-          programId: this.state.lastProgramId,
-          value: this.state.query
+    if (e.key === 'Backspace') {
+      if (query === '' && (isWaitingArg || allOptions.length > 0)) {
+        commandLineActions.removeOption({
+          id: allOptions[allOptions.length - 1],
+          programId: selectedProgramId
         });
+        this.setState({
+          isWaitingArg: false,
+          optionCompleterIsOpen: true
+        })
+      }
+    }
+    if (isWaitingArg) {
+      if (e.key === 'Enter') {
+        this.setOptionValue({
+          id: this.state.lastOptionId,
+          programId: selectedProgramId
+        }, this.state.query);
         this.setState({
           query: '',
           inputPlaceholder: 'Add an option',
-          isWaitingForValue: false,
+          isWaitingArg: false,
           optionCompleterIsOpen: true
         })
       }
@@ -138,7 +166,9 @@ class CommandLine extends React.Component {
     this.setState({
       inputPlaceholder: 'Select a program',
       optionCompleterIsOpen: false,
-      programCompleterIsOpen: true
+      programCompleterIsOpen: true,
+      isWaitingArg: false,
+      selectedProgramId: undefined
     })
   }
 
@@ -151,26 +181,35 @@ class CommandLine extends React.Component {
     copy(str);
   }
 
-  render() {
-    const {programCompleterIsOpen, optionCompleterIsOpen} = this.state;
-    return (
-      <div id="kommandr-container">
-        <div className="actions-container">
-          <div>
-            <Button bsStyle="info" bsSize="small" onClick={this.copyCli}>Copy to clipboard!</Button>
-            <Button bsStyle="danger" bsSize="small" onClick={this.resetCli}>Reset</Button>
-          </div>
-        </div>
-        <div id="kommandr">
-          <SelectedPrograms />
+  componentDidMount() {
+    this.focusSearchInput();
+  }
 
-          <div className="search-container">
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextState.optionCompleterIsOpen || nextState.programCompleterIsOpen) {
+       document.body.addEventListener('click', this.hideCompleter);
+    }
+    return true;
+  }
+
+  render() {
+    const {programCompleterIsOpen, optionCompleterIsOpen, prompt, isWaitingArg, selectedProgramId} = this.state;
+    return (
+      <div className="kommandr-container">
+        <div className="kommandr">
+          <Prompt prompt={prompt} className="float-left"/>
+          <SelectedPrograms />
+          <div className={`search-container ${(!isWaitingArg && selectedProgramId !==undefined) ? 'left-space' : ''}`}>
             <ProgramCompleterContainer items={this.props.programs} query={this.props.query} isOpen={programCompleterIsOpen} onClick={this.addProgram} />
             <OptionCompleterContainer query={this.props.query} isOpen={optionCompleterIsOpen} onClick={this.addOption} />
             <input ref={(input) => {this.searchInput = input;}} className="search-input" type="text" value={this.state.query} onKeyDown={this.handleInputKeyDown} placeholder={this.state.inputPlaceholder} onClick={this.handleClick} onChange={this.handleInputChange}></input>
           </div>
           <div className="clearfix" style={({height: 0})}></div>
         </div>
+          <div className="actions-container">
+            <Button outline color="info"  onClick={this.copyCli}>Copy to clipboard!</Button>{' '}
+            <Button outline color="danger" onClick={this.resetCli}>Reset</Button>
+          </div>
       </div>
     );
   }

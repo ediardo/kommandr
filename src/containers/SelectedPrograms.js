@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import selectedProgramsSelector from '../selectors/selectedPrograms';
 import Program from '../components/Program';
 import SelectedOptions from './SelectedOptions';
+import Space from '../components/Space';
 
 class SelectedPrograms extends React.Component {
 
@@ -13,16 +14,17 @@ class SelectedPrograms extends React.Component {
       programList = programs.map(program => {
         return (
           <span key={program.id}>
-            <Program program={program} />
+            <Program program={program} className="float-left"/>
+            <Space className="float-left" />
             <SelectedOptions program={program} />
           </span>
         )
       });
     }
     return (
-      <span>
-      {programList}
-      </span>
+      <div className="float-left">
+        {programList}
+      </div>
     )
   }
 }

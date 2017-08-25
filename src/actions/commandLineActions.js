@@ -19,7 +19,12 @@ const setOptionValue = value => ({
     ...value
   }
 });
-
+const removeOption = option => ({
+  type: types.REMOVE_OPTION,
+  payload: {
+    ...option
+  }
+});
 const resetCli = () => ({
   type: types.RESET_CLI
 });
@@ -28,5 +33,6 @@ export default {
   addProgram,
   addOption,
   setOptionValue,
+  removeOption,
   resetCli
 }
