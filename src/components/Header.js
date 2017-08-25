@@ -1,29 +1,23 @@
-import React, { Component } from 'react';
-import { Nav, Navbar, NavItem } from 'react-bootstrap';
+import React from 'react';
+import {Collapse, Nav, Navbar, NavItem, NavLink, NavbarBrand} from 'reactstrap';
 
-class Header extends Component {
+class Header extends React.Component {
 
   render() {
     return (
       <header>
-        <Navbar fluid>
-          <Navbar.Header>
-            <Navbar.Brand>
-              <a href="#">kommandr</a>
-            </Navbar.Brand>
-            <Navbar.Toggle />
-          </Navbar.Header>
-          <Navbar.Collapse>
-            <Nav>
-              <NavItem eventKey={1} href="#">Create</NavItem>
-              <NavItem eventKey={2} href="#">Fork</NavItem>
-
+        <Navbar  toggleable>
+          <NavbarBrand>kommandr</NavbarBrand>
+          <Collapse isOpen={true} navbar>
+            <Nav navbar>
+              <NavItem>
+                <NavLink href="#">Create</NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink href="#">Fork</NavLink>
+              </NavItem>
             </Nav>
-            <Nav pullRight>
-              <NavItem eventKey={1} href="#">Sign in</NavItem>
-              <NavItem eventKey={2} href="#">Sign up</NavItem>
-            </Nav>
-          </Navbar.Collapse>
+          </Collapse>
         </Navbar>
       </header>
     );

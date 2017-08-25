@@ -1,32 +1,38 @@
 @import 'variables';
 
+html, body {
+  height: 100%;
+}
+
 body {
-  background-color: #F4F4F4;
+  background-color: #FDFDFD;
   font-size: 13px;
 }
 
-.well {
-    background-color: #FFF;
-    border-bottom: 1px solid #BBB;
-}
-
+/*
+ HEADER
+*/
 header {
-  background-color: #444;
-  color: #FFF;
+  background-color: #F0F0F0;
+  border-bottom: 1px solid #EEE;
+  color: #111;
+}
 
-  .navbar-brand {
-    font-size: 2em;
-  }
+.content {
+  margin-top: 2em;
+}
 
-  .navbar {
-    border-radius: 0px;
+.kommandr-container {
+  .actions-container {
+    text-align: right;
   }
 }
 
-#kommandr {
-  background-color: #FFF;
+.kommandr {
+  background-color: $kommandr-background;
   border: 1px solid #E1E4E5;
   border-radius: 4px;
+  color: $kommandr-font-color;
   font-family: consolas, "Liberation Mono", courier, monospace;
   font-size: 1.5em;
   margin: 1em 0;
@@ -34,15 +40,15 @@ header {
   position: relative;
   width: 100%;
 
-  .selected-program {
-    cursor: pointer;
-    display: inline;
+
+  .program {
+
   }
 
+  .prompt {
+    margin-right: 0.5em;
+  }
   .completer {
-
-    background-color: #FAFAFA;
-    border: 1px solid #AAA;
     display: none;;
     position: absolute;
     top: 2em;
@@ -57,6 +63,8 @@ header {
       font-size: 0.65em;
     }
     ul {
+      background-color: #FAFAFA;
+      border: 1px solid #AAA;
       font-family: monospace;
       list-style: none;
       margin: 0;
@@ -77,50 +85,44 @@ header {
   .search-container {
     min-width: 200px;
     overflow: hidden;
+    padding-left: 0;
+    &.left-space {
+      padding-left: 0.7em;
+    }
   }
+
   .search-input {
+    background-color: $kommandr-background;
     border: 0;
+    color: $kommandr-font-color;
     width: 100%;
+
     &:focus {
       outline: none;
     }
-
   }
 
   .selected-options {
     ul {
       padding: 0;
-      margin-left: 1em;
+      margin: 0;
     }
     li {
       display: inline;
       border-bottom: 1px dotted transparent;
-      padding: 0.1em 0.15em;
-      &:hover {
-        background-color: #F0F0F0;
-        border-color: #C0C0C0;
+      .option-container {
         transition: all 0.5s;
+        &:hover {
+          background-color: #F1F1F1;
+          border-color: #A0A0A0;
+          transition: all 0.5s;
+        }
       }
     }
   }
 }
-
-.group-options {
-
-  h2,h3 {
-    margin-top: 0px;
-  }
-
-  .option-param {
-    background: #FFF;
-    border: 1px solid #E1E4E5;
-    color: #E74C3C;
-    display: inline-block;
-    font-family: Consolas,"Andale Mono WT","Andale Mono","Lucida Console","Lucida Sans Typewriter","DejaVu Sans Mono","Bitstream Vera Sans Mono","Liberation Mono","Nimbus Mono L",Monaco,"Courier New",Courier,monospace;
-    padding:0.1em 0.5em;
-    &::after {
-
-    }
-  }
-
+.prompt {
+  user-select: none;
 }
+.show { display: block !important;}
+.hide { display: none !important;}

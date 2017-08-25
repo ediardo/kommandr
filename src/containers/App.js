@@ -8,9 +8,9 @@ import commandLineActions from '../actions/commandLineActions';
 import uiAction from '../actions/completerActions';
 
 const App = ({commandLine, programs, options, ui, actions}) => (
-  <div className="App">
+  <div className="app">
     <Header />
-    <div className='container-fluid'>
+    <div className='container-fluid content'>
       <CommandLine programs={programs} options={options} commandLine={commandLine} ui={ui} commandLineActions={actions.commandLineActions} uiActions={actions.uiActions}/>
     </div>
     <Footer />
