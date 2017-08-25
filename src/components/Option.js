@@ -4,7 +4,7 @@ const Option = (props) => {
   const {option, className} = props;
   return (
     <span className={`option ${className}`}>
-      {option.name}
+      {option}
     </span>
   )
 };
