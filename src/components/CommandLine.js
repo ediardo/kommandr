@@ -1,10 +1,13 @@
 import React from 'react';
-import {Button} from 'reactstrap';
+
+import { Button } from 'reactstrap';
+import copy from 'copy-to-clipboard';
+
+import Prompt from './Prompt';
+
 import ProgramCompleterContainer from '../containers/ProgramCompleter';
 import OptionCompleterContainer from '../containers/OptionCompleter';
 import SelectedPrograms from '../containers/SelectedPrograms';
-import copy from 'copy-to-clipboard';
-import Prompt from './Prompt';
 
 class CommandLine extends React.Component {
 
@@ -20,7 +23,6 @@ class CommandLine extends React.Component {
       inputPlaceholder: 'Select a program',
       lastOptionId: undefined,
       isWaitingArg: false,
-      lastProgramId: undefined,
       prompt: '$'
     }
 

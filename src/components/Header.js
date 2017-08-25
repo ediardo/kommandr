@@ -1,5 +1,5 @@
 import React from 'react';
-import {Collapse, Nav, Navbar, NavItem, NavLink, NavbarBrand} from 'reactstrap';
+import { Button, Collapse, Nav, Navbar, NavItem, NavLink, NavbarBrand } from 'reactstrap';
 
 class Header extends React.Component {
 
@@ -11,7 +11,7 @@ class Header extends React.Component {
           <Collapse isOpen={true} navbar>
             <Nav navbar>
               <NavItem>
-                <NavLink href="#">Create</NavLink>
+                <Button  color="primary">Create</Button>
               </NavItem>
               <NavItem>
                 <NavLink href="#">Fork</NavLink>
