@@ -12,6 +12,7 @@ class OptionCompleterContainer extends React.Component {
     this.onClickHandler = this.onClickHandler.bind(this);
   }
 
+  
   onClickHandler(item) {
     this.props.onClick(item);
   }

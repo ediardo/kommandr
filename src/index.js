@@ -9,6 +9,7 @@ import { Provider } from 'react-redux';
 import App from './containers/App';
 import reducer from './redux/reducers';
 
+import 'bootstrap/dist/css/bootstrap.css';
 import './style/main.scss';
 
 const middleware = [ thunkMiddleware ];
