@@ -26,11 +26,11 @@ const fetchPrograms = (state, action) => {
 const initialState = {
     1: {
       id: 1,
-      name: "xtrabackup"
+      name: "mysqldump",
     },
     2: {
       id: 2,
-      name: "mysqldump"
+      name: "git"
     },
     3: {
       id: 3,

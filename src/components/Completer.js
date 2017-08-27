@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-class Completer extends React.Component {
+class Completer extends Component {
 
   onClickHandler(item, e) {
     this.props.onClick(item);

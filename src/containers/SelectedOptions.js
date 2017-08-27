@@ -18,24 +18,24 @@ class SelectedOptions extends Component {
   }
 
   render() {
-    const {options, program, commandLine} = this.props;
+    const { options, program, commandLine } = this.props;
     return (
       <div className="selected-options float-left">
         <ul>
           {
             commandLine[program.id].allOptions.map((optionId, idx) => {
-
-
               return (
                 <li key={optionId} className="option-item">
                   {idx > 0 && <Space key={idx} />}
                   <span className="option-container">
                     <Option option={options[optionId].longOpt} />
+                    {options[optionId].takesArg ?
+                      <span>
                     <OptionSeparator separator={commandLine[program.id].options[optionId].separator} />
-                    <Argument argument={commandLine[program.id].options[optionId].value} />
+                    <Argument argument={commandLine[program.id].options[optionId].value} /></span>
+                    : null }
                   </span>
                 </li>
-
               )
             })
           }

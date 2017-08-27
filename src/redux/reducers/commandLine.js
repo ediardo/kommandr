@@ -1,5 +1,5 @@
 const addProgram = (state, action) => {
-  const {id} = action;
+  const { id } = action;
   const allPrograms = state.allPrograms || [];
   return {
     ...state,
@@ -14,7 +14,7 @@ const addProgram = (state, action) => {
 };
 
 const addOption = (state, action) => {
-  const {programId, id, displayFormat} = action;
+  const { programId, id, displayFormat } = action;
   const currentOptions = state[programId].options;
   return {
     ...state,
@@ -36,7 +36,7 @@ const addOption = (state, action) => {
 };
 
 const setOptionValue = (state, action) => {
-  const {programId, id, value} = action;
+  const { programId, id, value } = action;
   const currentOptions = state[programId].options || [];
   return {
     ...state,
@@ -55,9 +55,17 @@ const setOptionValue = (state, action) => {
   }
 };
 
+const setTitle = (state, action) => {
+    const { title } = action;
+    return {
+      ...state,
+      title
+    }
+};
+
 const removeOption = (state, action) => {
-  const {programId, id} = action;
-  const {options, allOptions} = state[programId];
+  const { programId, id } = action;
+  const { options, allOptions } = state[programId];
   const optionIdx = allOptions.indexOf(id);
   delete options[id];
   return {
@@ -83,6 +91,7 @@ const commandLineReducer = (state = {}, action) => {
     case 'ADD_PROGRAM': return addProgram(state, action.payload);
     case 'ADD_OPTION': return addOption(state, action.payload);
     case 'SET_OPTION_VALUE': return setOptionValue(state, action.payload);
+    case 'SET_TITLE': return setTitle(state, action.payload);
     case 'REMOVE_OPTION': return removeOption(state, action.payload);
     case 'RESET_CLI': return resetCli(state);
     /*

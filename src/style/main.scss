@@ -1,5 +1,7 @@
 @import 'variables';
-
+html {
+  box-sizing: content-box;
+}
 html, body {
   height: 100%;
 }
@@ -23,23 +25,39 @@ header {
 }
 
 .kommandr-container {
-  .actions-container {
-    text-align: right;
+  .kommandr-title {
+    h1 {
+      color: #6A6A6A;
+    }
+    input {
+      border: 0;
+      border-bottom: 1px solid #EEE;
+      font-size: 2.5rem;
+      transition: all 0.5s;
+      width: 100%;
+      &:hover {
+        background-color: #F0F0F0;
+        transition: all 0.5s;
+      }
+      &:focus {
+        background-color: #F5F5F5;
+        border-bottom: 1px solid #F0F0F0;
+        outline: none;
+        transition: all 0.5s;
+      }
+    }
   }
 }
-
 .kommandr {
   background-color: $kommandr-background;
   border: 1px solid #E1E4E5;
   border-radius: 4px;
   color: $kommandr-font-color;
-  font-family: consolas, "Liberation Mono", courier, monospace;
   font-size: 1.5em;
+  min-height: 60px;
   margin: 1em 0;
-  padding: 0.25em;
   position: relative;
   width: 100%;
-
 
   .program {
 
@@ -91,6 +109,13 @@ header {
     }
   }
 
+  .reset-kommandr {
+    cursor: pointer;
+    position: absolute;
+    right: 5px;
+    top: calc(50% - 15px);
+    width: 20px;
+  }
   .search-input {
     background-color: $kommandr-background;
     border: 0;
@@ -121,8 +146,12 @@ header {
     }
   }
 }
-.prompt {
+
+.prompt, .search-input {
   user-select: none;
 }
-.show { display: block !important;}
+.program, .prompt, .option, .argument, .separator {
+  font-family: consolas, "Liberation Mono", courier, monospace;
+}
+//.show { display: block !important;}
 .hide { display: none !important;}

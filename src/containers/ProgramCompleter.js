@@ -2,7 +2,7 @@ import React from 'react';
 
 import Completer from '../components/Completer';
 
-const toggleClass = isVisible => (isVisible) ? 'show' : 'hide';
+const toggleClass = isVisible => (isVisible) ? 'd-inline-block' : 'hide';
 
 class ProgramCompleterContainer extends React.Component {
   constructor(props) {

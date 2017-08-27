@@ -1,5 +1,15 @@
 const saveOption = (state, action) => {
-  const {id, name, shortOpt, longOpt, description, programId} = action.payload;
+  const {
+    description,
+    longOpt,
+    id,
+    name,
+    programId,
+    shortOpt,
+    separator = undefined,
+    takesArg = undefined,
+    argType = undefined
+  } = action.payload;
   return {
     ...state,
     [id]: {
@@ -8,7 +18,10 @@ const saveOption = (state, action) => {
       shortOpt,
       longOpt,
       description,
-      programId
+      programId,
+      separator,
+      takesArg,
+      argType
     }
   }
 }
@@ -24,7 +37,9 @@ const initialState = {
     shortOpt: "-u",
     description: "Sets the user name",
     programId: 1,
-    separator: '='
+    separator: '=',
+    takesArg: true,
+    argType: "string"
   },
   2: {
     id: 2,
@@ -33,7 +48,9 @@ const initialState = {
     shortOpt: "-p",
     description: "Sets the user password",
     programId: 1,
-    separator: '='
+    separator: '=',
+    takesArg: true,
+    argType: "string"
   },
   3: {
     id: 3,
@@ -42,7 +59,9 @@ const initialState = {
     shortOpt: "-h",
     description: "Sets the host name or ip address",
     programId: 1,
-    separator: '='
+    separator: '=',
+    takesArg: true,
+    argType: "string"
   },
   4: {
     id: 4,
@@ -51,7 +70,45 @@ const initialState = {
     shortOpt: "-P",
     description: "Sets the host port",
     programId: 1,
-    separator: '='
+    separator: '=',
+    takesArg: true,
+    argType: "integer"
+  },
+  5: {
+    id: 5,
+    name: "Version",
+    longOpt: "--version",
+    shortOpt: "-v",
+    description: "Shows the current version of mysqldump",
+    programId: 1,
+    takesArg: false
+  },
+  8: {
+    id: 8,
+    name: "Help",
+    longOpt: "--help",
+    shortOpt: "-h",
+    description: "Display help message and exit	",
+    programId: 1,
+    takesArg: false
+  },
+  6: {
+    id: 6,
+    name: "Help",
+    longOpt: "--help",
+    shortOpt: "-h",
+    description: "Prints the synopsis and a list of the most commonly used commands.",
+    programId: 2,
+    takesArg: false
+  },
+  7: {
+    id: 7,
+    name: "Version",
+    longOpt: "--version",
+    shortOpt: "-v",
+    description: "Shows the current version of git",
+    programId: 2,
+    takesArg: false
   }
 };
 

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Completer from '../components/Completer';
 import availableOptionsSelector from '../selectors/availableOptions';
 
-const toggleClass = isVisible => (isVisible) ? 'show' : 'hide';
+const toggleClass = isVisible => (isVisible) ? 'd-inline-block' : 'hide';
 
 class OptionCompleterContainer extends React.Component {
   constructor(props) {
@@ -12,7 +12,7 @@ class OptionCompleterContainer extends React.Component {
     this.onClickHandler = this.onClickHandler.bind(this);
   }
 
-  
+
   onClickHandler(item) {
     this.props.onClick(item);
   }

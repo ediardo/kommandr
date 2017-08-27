@@ -9,7 +9,7 @@ import Space from '../components/Space';
 class SelectedPrograms extends React.Component {
 
   render() {
-    const {programs} = this.props;
+    const { programs } = this.props;
     let programList = null;
     if (programs.length > 0) {
       programList = programs.map(program => {
@@ -17,14 +17,17 @@ class SelectedPrograms extends React.Component {
           <span key={program.id}>
             <Program program={program} className="float-left"/>
             <Space className="float-left" />
-            <SelectedOptions program={program} />
+            <SelectedOptions program={program} >
+
+            </SelectedOptions>
           </span>
         )
       });
     }
     return (
-      <div className="float-left">
+      <div className="flo">
         {programList}
+        {this.props.children}
       </div>
     )
   }

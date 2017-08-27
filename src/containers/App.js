@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import CommandLine from '../components/CommandLine';
+import CommandLineDetails from './CommandLineDetails';
 
 import commandLineActions from '../redux/actions/commandLineActions';
 import uiAction from '../redux/actions/completerActions';
@@ -14,6 +15,7 @@ const App = ({commandLine, programs, options, ui, actions}) => (
     <Header />
     <div className='container-fluid content'>
       <CommandLine programs={programs} options={options} commandLine={commandLine} ui={ui} commandLineActions={actions.commandLineActions} uiActions={actions.uiActions}/>
+      <CommandLineDetails />
     </div>
     <Footer />
   </div>

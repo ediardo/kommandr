@@ -19,6 +19,12 @@ const setOptionValue = value => ({
     ...value
   }
 });
+const setTitle = title => ({
+  type: types.SET_TITLE,
+  payload: {
+    ...title
+  }
+});
 const removeOption = option => ({
   type: types.REMOVE_OPTION,
   payload: {
@@ -33,6 +39,7 @@ export default {
   addProgram,
   addOption,
   setOptionValue,
+  setTitle,
   removeOption,
   resetCli
 }

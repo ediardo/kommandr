@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 
+import { Container, Row } from 'reactstrap';
+
 class Footer extends Component {
   render() {
     return (
-      <div className="footer">
-        <div className="container-fluid">
+      <Container fluid>
         kommandr.com
-        </div>
-      </div>
+      </Container>
     );
   }
 }
