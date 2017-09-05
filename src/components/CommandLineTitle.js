@@ -1,52 +1,40 @@
 import React, { Component } from 'react';
 
-const toggleClass = isVisible => (isVisible) ? 'd-inline-block' : 'hide';
+import ContentEditable from './ContentEditable';
 
 class CommandLineTitle extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      inputIsShown: false,
-      title: this.props.title || "Name this Kommandr"
-    }
-    this.focusInput = this.focusInput.bind(this);
-    this.keyUpHandler = this.keyUpHandler.bind(this);
-    this.onChangeInput = this.onChangeInput.bind(this);
-    this.setTitle = this.setTitle.bind(this);
+      isEditing: (this.props.content === undefined) ? true : false
+    };
+    this.handleOnClick = this.handleOnClick.bind(this);
+    this.handleOnUpdate = this.handleOnUpdate.bind(this);
   }
 
-  focusInput() {
-    this.titleInput.focus();
-  }
-
-  keyUpHandler(e) {
-    const { title } = this.state;
-    if (e.key === 'Enter') {
-      this.props.onChange(title);
-      this.titleInput.blur();
-    }
-  }
-
-  onChangeInput(e) {
+  handleOnClick() {
     this.setState({
-      title: e.target.value
+      isEditing: !this.state.isEditing
     });
   }
 
-  setTitle(e) {
-    const { inputIsShown, title } = this.state;
-    this.props.onChange(title);
+  handleOnUpdate(newValue) {
     this.setState({
-      inputIsShown: !inputIsShown
+      isEditing: !this.state.isEditing
     });
+    this.props.onChange(newValue);
   }
+
 
   render() {
-    const { inputIsShown, title} = this.state;
+    const { isEditing } = this.state;
+    const { content } = this.props;
 
     return (
       <div className="kommandr-title">
-        <input className="title" type="text" ref={(input) => {this.titleInput = input;}} value={title} onChange={this.onChangeInput} onBlur={this.setTitle} onKeyUp={this.keyUpHandler} />
+        <ContentEditable isEditing={isEditing} content={content} onUpdate={this.handleOnUpdate} placeholder="Name this kommandr">
+          <h2 onClick={this.handleOnClick}>{content}</h2>
+        </ContentEditable>
       </div>
     )
   }

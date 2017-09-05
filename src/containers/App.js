@@ -1,38 +1,67 @@
-import React from 'react';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import React, { Component } from 'react';
 
+import { Container, Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
+import classNames from 'classnames';
+
+import Content from './Content';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import CommandLine from '../components/CommandLine';
-import CommandLineDetails from './CommandLineDetails';
+import Sidebar from './Sidebar';
 
-import commandLineActions from '../redux/actions/commandLineActions';
-import uiAction from '../redux/actions/completerActions';
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeTab: '1'
+    };
+    this.toggleTab = this.toggleTab.bind(this);
+  }
 
-const App = ({commandLine, programs, options, ui, actions}) => (
-  <div className="app">
-    <Header />
-    <div className='container-fluid content'>
-      <CommandLine programs={programs} options={options} commandLine={commandLine} ui={ui} commandLineActions={actions.commandLineActions} uiActions={actions.uiActions}/>
-      <CommandLineDetails />
-    </div>
-    <Footer />
-  </div>
-);
-
-const mapStateToProps = state => ({
-  commandLine: state.commandLine,
-  programs: state.programs,
-  options: state.options,
-  ui: state.ui
-});
-
-const mapDispatchToProps = dispatch => ({
-    actions: {
-      commandLineActions: bindActionCreators(commandLineActions, dispatch),
-      uiActions: bindActionCreators(uiAction, dispatch)
+  toggleTab(tab) {
+    if (this.state.activeTab !== tab) {
+      this.setState({
+        activeTab: tab
+      });
     }
-});
+  }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+  render() {
+    return (
+      <div className="app">
+        <Header />
+        <Content>
+          <Container fluid>
+            <Nav tabs>
+              <NavItem>
+                <NavLink className={classNames({ active: this.state.activeTab === '1' })} onClick={() => { this.toggleTab('1'); }}>
+                  Tab1
+                </NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink className={classNames({ active: this.state.activeTab === '2' })} onClick={() => { this.toggleTab('2'); }}>
+                  +
+                </NavLink>
+              </NavItem>
+            </Nav>
+            <TabContent activeTab={this.state.activeTab}>
+              <TabPane tabId="1">
+                <CommandLine />
+
+              </TabPane>
+              <TabPane tabId="2">
+
+              </TabPane>
+            </TabContent>
+          </Container>
+        </Content>
+        <Sidebar>
+          Content
+        </Sidebar>
+        <Footer />
+      </div>
+    )
+  }
+}
+
+export default App;

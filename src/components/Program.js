@@ -1,12 +1,8 @@
 import React from 'react';
 
 const Program = (props) => {
-  const {program, className} = props;
-  return (
-    <span className={`program ${className}`}>
-      {program.name}
-    </span>
-  )
+  const { className, editable, onClick, content } = props;
+  return <span className={`program ${className}`}>{content}</span>
 };
 
 export default Program;

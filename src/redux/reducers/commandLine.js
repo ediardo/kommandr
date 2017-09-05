@@ -82,6 +82,28 @@ const removeOption = (state, action) => {
   }
 };
 
+const replaceProgram = (state, action) => {
+  const { position, oldId, newId } = action;
+  const { allPrograms } =  state.allPrograms.map((programId, idx) => {
+    if (idx !== position) return programId;
+    return {
+      ...programId,
+      newId
+    };
+  });
+  delete state[oldId];
+  return {
+    ...state,
+    [newId]: {
+      newId,
+      created: Date.now(),
+      allOptions: [],
+      options: {}
+    }
+
+  }
+}
+
 const resetCli = (state) => {
   return {};
 };
@@ -93,6 +115,7 @@ const commandLineReducer = (state = {}, action) => {
     case 'SET_OPTION_VALUE': return setOptionValue(state, action.payload);
     case 'SET_TITLE': return setTitle(state, action.payload);
     case 'REMOVE_OPTION': return removeOption(state, action.payload);
+    case 'REPLACE_PROGRAM': return replaceProgram(state, action.payload);
     case 'RESET_CLI': return resetCli(state);
     /*
     case 'RESET_OPTIONS':

@@ -11,22 +11,23 @@ import {
   DropdownItem,
   Nav,
   Navbar,
-  NavItem,
-  NavLink,
   NavbarBrand
 } from 'reactstrap';
 
 import CustomTooltip from './CustomTooltip';
+import SignInModal from './SignInModal';
 
 class Header extends React.Component {
 
   constructor(props) {
     super(props);
-    this.toggleSettingsMenu = this.toggleSettingsMenu.bind(this);
     this.state = {
       settingsMenuIsOpen: false,
-      helpMenuIsOpen: false
-    }
+      helpMenuIsOpen: false,
+      signInModalIsOpen: false
+    };
+    this.toggleSettingsMenu = this.toggleSettingsMenu.bind(this);
+    this.toggleSignInModal = this.toggleSignInModal.bind(this);
   }
 
   toggleSettingsMenu() {
@@ -38,26 +39,33 @@ class Header extends React.Component {
   toggleHelpMenu() {
     this.setState({
       helpMenuIsOpen: !this.state.helpMenuIsOpen
-    })
+    });
   }
+
+  toggleSignInModal() {
+    this.setState({
+      signInModalIsOpen: !this.state.signInModalIsOpen
+    });
+  }
+
   render() {
+    const { signInModalIsOpen } = this.state;
     return (
       <header>
-
         <Navbar  toggleable>
           <NavbarBrand>kommandr</NavbarBrand>
           <Collapse isOpen={true} navbar>
             <Nav navbar className="mr-auto">
-              <Button color="info" id="createKommandr" className="mr-2">
+              <Button color="success" id="createKommandr" className="mr-3">
                 <FontAwesome name="terminal" /> Create
               </Button>
               <CustomTooltip content="Create a new Kommandr" placement="bottom center" target="createKommandr" />
 
-              <Button outline color="secondary" id="forkKommandr" className="mr-2">
+              <Button  color="secondary" id="forkKommandr" className="mr-3" >
                 <FontAwesome name="code-fork" /> Fork
               </Button>
               <CustomTooltip content="Copy this Kommandr" placement="bottom center" target="forkKommandr" />
-              <Button outline color="secondary" id="forkHistory">
+              <Button  color="secondary" id="forkHistory">
                 <FontAwesome name="history" /> History
               </Button>
               <CustomTooltip content="View history of this Kommandr" placement="bottom center" target="forkHistory" />
@@ -78,8 +86,10 @@ class Header extends React.Component {
               </DropdownMenu>
             </Dropdown>
 
-            <Button color="link"><FontAwesome name="user" /> Sign in</Button>
-
+            <Button color="link" onClick={this.toggleSignInModal}>
+              <FontAwesome name="user" /> Sign in
+            </Button>
+            <SignInModal toggle={this.toggleSignInModal} isOpen={signInModalIsOpen} />
 
             <Button color="link">
                 <FontAwesome name="question-circle" />

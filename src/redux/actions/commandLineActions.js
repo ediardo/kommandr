@@ -31,6 +31,14 @@ const removeOption = option => ({
     ...option
   }
 });
+const replaceProgram = (pos, oldProgram, newProgram) => ({
+  type: types.REPLACE_PROGRAM,
+  payload: {
+    ...pos,
+    ...oldProgram,
+    ...newProgram
+  }
+})
 const resetCli = () => ({
   type: types.RESET_CLI
 });
@@ -41,5 +49,6 @@ export default {
   setOptionValue,
   setTitle,
   removeOption,
+  replaceProgram,
   resetCli
 }
