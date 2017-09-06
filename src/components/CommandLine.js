@@ -1,179 +1,116 @@
-import React from 'react';
-import {Button} from 'react-bootstrap';
-import ProgramCompleterContainer from '../containers/ProgramCompleter';
-import OptionCompleterContainer from '../containers/OptionCompleter';
-import SelectedPrograms from '../containers/SelectedPrograms';
+import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
+import { Col, Row } from 'reactstrap';
 import copy from 'copy-to-clipboard';
 
+import Comments from '../containers/CommentsContainer';
+import Info from '../containers/CommandLineInfoContainer';
 
-class CommandLine extends React.Component {
+import CommandLineActions from './CommandLineActions';
+import CustomCodeMirror from './CustomCodeMirror';
+import Description from './CommandLineDescription';
+import Title from './CommandLineTitle';
+import Stats from './CommandLineStats';
 
+import commandLineActions from '../redux/actions/commandLineActions';
+
+class CommandLine extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      query: '',
-      programCompleterIsOpen: false,
-      isProgramSelected: false,
-      optionCompleterIsOpen: false,
-      selectedProgramId: undefined,
-      selectedOptions: [],
-      inputPlaceholder: 'Select a program',
-      lastOptionId: undefined,
-      isWaitingForValue: false,
-      lastProgramId: undefined
+      autoSaveTimeout: undefined,
+      autoSaveDelay: 1000
     }
-
-    this.handleClick = this.handleClick.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.addProgram = this.addProgram.bind(this);
-    this.addOption = this.addOption.bind(this);
-    this.handleInputKeyDown = this.handleInputKeyDown.bind(this);
     this.copyCli = this.copyCli.bind(this);
-    this.cliToString = this.cliToString.bind(this);
-    this.resetCli = this.resetCli.bind(this);
-    this.focusSearchInput = this.focusSearchInput.bind(this);
+    this.setTitle = this.setTitle.bind(this);
+    this.setDescription = this.setDescription.bind(this);
+    this.setCli = this.setCli.bind(this);
+    this.autoSave = this.autoSave.bind(this);
   }
 
-  addProgram(program) {
-    const {commandLineActions} = this.props;
-    commandLineActions.addProgram({id: program.id});
+  setCli(cli) {
+    const { commandLineActions } = this.props.actions;
     this.setState({
-      programCompleterIsOpen: false,
-      isProgramSelected: true,
-      query: '',
-      inputPlaceholder: 'Add an option',
-      lastProgramId: program.id,
-      optionCompleterIsOpen: true
+      autoSaveTimeout: undefined
     });
-
+    commandLineActions.setCli({cli});
   }
 
-  addOption(option) {
-    const {commandLineActions} = this.props;
-    commandLineActions.addOption({
-      id: option.id,
-      programId: option.programId,
-      displayFormat: 'long'
-    });
-    this.setState({
-      optionCompleterIsOpen: false,
-      inputPlaceholder: 'Set a value',
-      isWaitingForValue: true,
-      lastOptionId: option.id
-    });
-    this.focusSearchInput();
-  }
-
-  addValue(option, value) {
-    const {commandLineActions} = this.props;
-    commandLineActions.addValue({
-
-    })
-  }
-
-  handleClick(e) {
-    const {isProgramSelected, programCompleterIsOpen, isWaitingForValue} = this.state;
-    e.preventDefault();
-    if (!isProgramSelected && !programCompleterIsOpen) {
-      this.setState({
-        programCompleterIsOpen: !this.state.programCompleterIsOpen
-      });
-    } else if (isProgramSelected && !isWaitingForValue) {
-      this.setState({
-        optionCompleterIsOpen: !this.state.optionCompleterIsOpen
-      });
+  autoSave(cli) {
+    const { autoSaveTimeout, autoSaveDelay } = this.state;
+    if (autoSaveTimeout !== undefined) {
+        clearTimeout(autoSaveTimeout);
     }
-  }
-
-  handleInputChange(e) {
+    let timeOutId = setTimeout(this.setCli, autoSaveDelay, cli);
     this.setState({
-      query: e.target.value
-    })
-  }
-
-  handleInputKeyDown(e) {
-    const {isWaitingForValue} = this.state;
-    const {commandLineActions} = this.props;
-    if (e.key === 'Escape') {
-      this.setState({
-        optionCompleterIsOpen: false,
-        programCompleterIsOpen: false,
-        isWaitingForValue: false
-      });
-    }
-    if (isWaitingForValue) {
-      if (e.key === 'Enter') {
-        commandLineActions.setOptionValue({
-          id: this.state.lastOptionId ,
-          programId: this.state.lastProgramId,
-          value: this.state.query
-        });
-        this.setState({
-          query: '',
-          inputPlaceholder: 'Add an option',
-          isWaitingForValue: false,
-          optionCompleterIsOpen: true
-        })
-      }
-    }
-  }
-
-  cliToString() {
-    const {commandLine, programs, options} = this.props;
-    let cli = [];
-    commandLine.allPrograms.map(programId => {
-      cli = [...cli, programs[programId].name];
-      commandLine[programId].allOptions.map(optionId => {
-        let opt = options[optionId].longOpt + commandLine[programId].options[optionId].separator + commandLine[programId].options[optionId].value;
-        return cli = [...cli, opt];
-      });
-      return cli;
+      autoSaveTimeout: timeOutId
     });
-    return cli.join(' ');
-  }
-
-  resetCli() {
-    const {commandLineActions} = this.props;
-    commandLineActions.resetCli();
-    this.setState({
-      inputPlaceholder: 'Select a program',
-      optionCompleterIsOpen: false,
-      programCompleterIsOpen: true
-    })
-  }
-
-  focusSearchInput() {
-    this.searchInput.focus();
   }
 
   copyCli() {
-    const str = this.cliToString();
-    copy(str);
+    const { cli } = this.props.commandLine;
+    copy(cli);
+  }
+
+  setTitle(title) {
+    const { commandLineActions } = this.props.actions;
+    commandLineActions.setTitle({title});
+  }
+
+  setDescription(description) {
+    const { commandLineActions } = this.props.actions;
+    commandLineActions.setDescription({description});
   }
 
   render() {
-    const {programCompleterIsOpen, optionCompleterIsOpen} = this.state;
+    const { title, description, cli } = this.props.commandLine;
     return (
-      <div id="kommandr-container">
-        <div className="actions-container">
-          <div>
-            <Button bsStyle="info" bsSize="small" onClick={this.copyCli}>Copy to clipboard!</Button>
-            <Button bsStyle="danger" bsSize="small" onClick={this.resetCli}>Reset</Button>
-          </div>
+      <div className="kommandr-container">
+        <Row className="mb-1">
+          <Col xs="12" sm="8">
+            <Title content={title} onChange={this.setTitle} />
+          </Col>
+          <Col xs="12" sm="4">
+            <CommandLineActions handleClickCopy={this.copyCli} />
+          </Col>
+        </Row>
+        <Row className="mb-3">
+          <Col xs="12">
+            <Stats stats={{views: 12, forks: 1, favs: 3, comments: 42}} />
+          </Col>
+        </Row>
+        <div className="kommandr">
+          <CustomCodeMirror value={cli} autoSave={this.autoSave} />
         </div>
-        <div id="kommandr">
-          <SelectedPrograms />
+        <Info>
+          <Row>
+            <Col xs="12" sm="8">
+              <Description content={description} author={{username: "ediardo"}} onChange={this.setDescription} />
+            </Col>
+            <Col xs="12" sm="4">
+            </Col>
+          </Row>
 
-          <div className="search-container">
-            <ProgramCompleterContainer items={this.props.programs} query={this.props.query} isOpen={programCompleterIsOpen} onClick={this.addProgram} />
-            <OptionCompleterContainer query={this.props.query} isOpen={optionCompleterIsOpen} onClick={this.addOption} />
-            <input ref={(input) => {this.searchInput = input;}} className="search-input" type="text" value={this.state.query} onKeyDown={this.handleInputKeyDown} placeholder={this.state.inputPlaceholder} onClick={this.handleClick} onChange={this.handleInputChange}></input>
-          </div>
-          <div className="clearfix" style={({height: 0})}></div>
-        </div>
+        </Info>
+        <Row>
+          <Comments comments={[]} />
+        </Row>
       </div>
     );
   }
 }
 
-export default CommandLine;
+
+const mapStateToProps = state => ({
+  commandLine: state.commandLine
+});
+
+const mapDispatchToProps = dispatch => ({
+    actions: {
+      commandLineActions: bindActionCreators(commandLineActions, dispatch)
+    }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(CommandLine);

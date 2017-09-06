@@ -1,29 +1,93 @@
-import React, { Component } from 'react';
-import { Nav, Navbar, NavItem } from 'react-bootstrap';
+import React from 'react';
 
-class Header extends Component {
+import FontAwesome from 'react-fontawesome';
+
+import {
+  Button,
+  Collapse,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+  Nav,
+  Navbar,
+  NavbarBrand
+} from 'reactstrap';
+
+import CustomTooltip from './CustomTooltip';
+import ModalHelp from './ModalHelp';
+import ModalSignIn from './ModalSignIn';
+
+class Header extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      settingsMenuIsOpen: false,
+      isOpenModalHelp: false,
+      isOpenModalSignIn: false
+    };
+    this.toggleSettingsMenu = this.toggleSettingsMenu.bind(this);
+    this.toggleModalHelp = this.toggleModalHelp.bind(this);
+    this.toggleModalSignIn = this.toggleModalSignIn.bind(this);
+  }
+
+  toggleSettingsMenu() {
+    this.setState({
+      settingsMenuIsOpen: !this.state.settingsMenuIsOpen
+    });
+  }
+
+  toggleModalHelp() {
+    this.setState({
+      isOpenModalHelp: !this.state.isOpenModalHelp
+    });
+  }
+
+  toggleModalSignIn() {
+    this.setState({
+      isOpenModalSignIn: !this.state.isOpenModalSignIn
+    });
+  }
 
   render() {
+    const { isOpenModalHelp, isOpenModalSignIn } = this.state;
     return (
       <header>
-        <Navbar fluid>
-          <Navbar.Header>
-            <Navbar.Brand>
-              <a href="#">kommandr</a>
-            </Navbar.Brand>
-            <Navbar.Toggle />
-          </Navbar.Header>
-          <Navbar.Collapse>
-            <Nav>
-              <NavItem eventKey={1} href="#">Create</NavItem>
-              <NavItem eventKey={2} href="#">Fork</NavItem>
+        <Navbar  toggleable>
+          <NavbarBrand>kommandr</NavbarBrand>
+          <Collapse isOpen={true} navbar>
+            <Nav navbar className="mr-auto">
+              <Button size="sm" color="success" id="createKommandr" className="mr-3">
+                <FontAwesome name="terminal" /> Create new
+              </Button>
+              <CustomTooltip content="Create a new Kommandr" placement="bottom center" target="createKommandr" />
+            </Nav>
 
-            </Nav>
-            <Nav pullRight>
-              <NavItem eventKey={1} href="#">Sign in</NavItem>
-              <NavItem eventKey={2} href="#">Sign up</NavItem>
-            </Nav>
-          </Navbar.Collapse>
+            <Dropdown isOpen={this.state.settingsMenuIsOpen} toggle={this.toggleSettingsMenu}>
+              <DropdownToggle  color="link" className="mr-2">
+                <FontAwesome name="cog" />
+              </DropdownToggle>
+              <DropdownMenu right>
+                <DropdownItem header>Themes</DropdownItem>
+                <DropdownItem>Light</DropdownItem>
+                <DropdownItem>Dark</DropdownItem>
+                <DropdownItem>Hacker</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+
+            <Button  color="link" onClick={this.toggleModalSignIn} className="mr-2">
+              <FontAwesome name="user" />
+            </Button>
+
+
+
+            <Button color="link" onClick={this.toggleModalHelp}>
+                <FontAwesome name="question-circle" />
+            </Button>
+            <ModalSignIn toggle={this.toggleModalSignIn} isOpen={isOpenModalSignIn} />
+            <ModalHelp toggle={this.toggleModalHelp} isOpen={isOpenModalHelp} />
+          </Collapse>
         </Navbar>
       </header>
     );

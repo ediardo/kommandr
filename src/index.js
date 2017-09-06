@@ -1,16 +1,21 @@
-import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { createStore, applyMiddleware } from 'redux';
+
 import thunkMiddleware from 'redux-thunk';
-import {createLogger} from 'redux-logger';
-import {Provider} from 'react-redux';
-import {createStore, applyMiddleware} from 'redux';
-import reducer from './reducers';
+import { createLogger } from 'redux-logger';
+import { Provider } from 'react-redux';
+
 import App from './containers/App';
-import './styles.scss';
+import reducer from './redux/reducers';
+
+import 'bootstrap/dist/css/bootstrap.css';
+import './style/main.scss';
+import 'codemirror/lib/codemirror.css';
 
 const middleware = [ thunkMiddleware ];
 middleware.push(createLogger());
+
 
 const store = createStore(reducer, applyMiddleware(...middleware));
 

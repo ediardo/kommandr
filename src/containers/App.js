@@ -1,34 +1,48 @@
-import React from 'react';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+
+import { Container } from 'reactstrap';
+
+import Content from './Content';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import CommandLine from '../components/CommandLine';
-import {bindActionCreators} from 'redux';
-import commandLineActions from '../actions/commandLineActions';
-import uiAction from '../actions/completerActions';
+import Sidebar from './Sidebar';
 
-const App = ({commandLine, programs, options, ui, actions}) => (
-  <div className="App">
-    <Header />
-    <div className='container-fluid'>
-      <CommandLine programs={programs} options={options} commandLine={commandLine} ui={ui} commandLineActions={actions.commandLineActions} uiActions={actions.uiActions}/>
-    </div>
-    <Footer />
-  </div>
-);
+import 'holderjs/holder.js';
 
-const mapStateToProps = state => ({
-  commandLine: state.commandLine,
-  programs: state.programs,
-  options: state.options,
-  ui: state.ui
-});
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeTab: '1'
+    };
+    this.toggleTab = this.toggleTab.bind(this);
+  }
 
-const mapDispatchToProps = dispatch => ({
-    actions: {
-      commandLineActions: bindActionCreators(commandLineActions, dispatch),
-      uiActions: bindActionCreators(uiAction, dispatch)
+  toggleTab(tab) {
+    if (this.state.activeTab !== tab) {
+      this.setState({
+        activeTab: tab
+      });
     }
-});
+  }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+  render() {
+    return (
+      <div className="app">
+        <Header />
+        <Content>
+          <Container fluid>
+            <CommandLine />
+          </Container>
+        </Content>
+        <Sidebar>
+          Content
+        </Sidebar>
+        <Footer />
+      </div>
+    )
+  }
+}
+
+export default App;

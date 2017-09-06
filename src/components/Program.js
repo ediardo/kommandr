@@ -1,13 +1,8 @@
 import React from 'react';
 
-class Program extends React.Component {
-  render() {
-    return (
-      <div className="selected-program pull-left">
-        {this.props.program.name}
-      </div>
-    )
-  }
-}
+const Program = (props) => {
+  const { className, editable, onClick, content } = props;
+  return <span className={`program ${className}`}>{content}</span>
+};
 
 export default Program;
