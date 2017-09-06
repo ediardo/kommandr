@@ -4,49 +4,54 @@ import { connect } from 'react-redux';
 
 import { Col, Row } from 'reactstrap';
 import copy from 'copy-to-clipboard';
-import CodeMirror from 'react-codemirror';
 
 import Comments from '../containers/CommentsContainer';
 import Info from '../containers/CommandLineInfoContainer';
 
 import CommandLineActions from './CommandLineActions';
+import CustomCodeMirror from './CustomCodeMirror';
 import Description from './CommandLineDescription';
 import Title from './CommandLineTitle';
 import Stats from './CommandLineStats';
 
 import commandLineActions from '../redux/actions/commandLineActions';
 
-import 'codemirror/addon/mode/simple';
-import 'codemirror/mode/kommandr/kommandr';
-
-
 class CommandLine extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      cli: '',
-      autoSave: false,
-      autoSaveInterval: 10000
-    };
+      autoSaveTimeout: undefined,
+      autoSaveDelay: 1000
+    }
     this.copyCli = this.copyCli.bind(this);
     this.setTitle = this.setTitle.bind(this);
     this.setDescription = this.setDescription.bind(this);
-    this.updateCli = this.updateCli.bind(this);
+    this.setCli = this.setCli.bind(this);
     this.autoSave = this.autoSave.bind(this);
-    this.saveCli = this.saveCli.bind(this);
   }
 
-  autoSave() {
+  setCli(cli) {
+    const { commandLineActions } = this.props.actions;
+    this.setState({
+      autoSaveTimeout: undefined
+    });
+    commandLineActions.setCli({cli});
+  }
 
+  autoSave(cli) {
+    const { autoSaveTimeout, autoSaveDelay } = this.state;
+    if (autoSaveTimeout !== undefined) {
+        clearTimeout(autoSaveTimeout);
+    }
+    let timeOutId = setTimeout(this.setCli, autoSaveDelay, cli);
+    this.setState({
+      autoSaveTimeout: timeOutId
+    });
   }
 
   copyCli() {
-    const str = this.cliToString();
-    copy(str);
-  }
-
-  saveCli() {
-
+    const { cli } = this.props.commandLine;
+    copy(cli);
   }
 
   setTitle(title) {
@@ -59,24 +64,8 @@ class CommandLine extends Component {
     commandLineActions.setDescription({description});
   }
 
-  setCli() {
-    const { cli } = this.state;
-    const { commandLineActions } = this.props.actions;
-    commandLineActions.setCli({cli})
-  }
-
-  updateCli(content) {
-    this.setState({
-      cli: content
-    });
-  }
-
-  componentWillUpdate(nextProps, nextState) {
-    console.log(nextProps, nextState);
-  }
-
   render() {
-    const { title, description } = this.props.commandLine;
+    const { title, description, cli } = this.props.commandLine;
     return (
       <div className="kommandr-container">
         <Row className="mb-1">
@@ -93,7 +82,7 @@ class CommandLine extends Component {
           </Col>
         </Row>
         <div className="kommandr">
-          <CodeMirror value={this.state.cli} onChange={this.updateCli} autoFocus={true} options={{lineNumbers: true, mode: "kommandrMode"}} />
+          <CustomCodeMirror value={cli} autoSave={this.autoSave} />
         </div>
         <Info>
           <Row>
