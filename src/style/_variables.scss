@@ -4,28 +4,31 @@ $body-bg:  #F4F4F4;
 // colors
 $dark: #151519;
 $light-gray: #EAEAEA;
+$ultra-light-gray: #F5F5F5;
 $green: #5cb85c;
 $green-dark: #449d44;
 
-$footer-bg: $dark;
-$footer-font-color: #DDDDDD;
+$footer-bg: $light-gray;
+$footer-font-color: #0A0A0A;
 $footer-height: 3rem;
 $footer-line-height: $footer-height;
 $footer-link-color: #EEEEEE;
 
-$header-bg: $dark;
-$header-font-color: #FAFAFA;
-$header-link-color: #FFFFFF;
-$header-link-color-hover: $green;
+$header-bg: $light-gray;
+$header-font-color: #0A0A0A;
+$header-link-color: #444444;
+$header-link-color-hover: #000000;
+$header-height: 54px;
 
 $kommandr-title-bg: $light-gray;
 $kommandr-title-font-color: $dark;
-$kommandr-title-font-size: 1.5rem;
+$kommandr-title-font-size: 1.3rem;
 $kommandr-title-height: 3rem;
 $kommandr-title-info-font-color: $dark;
 
 $kommandr-background: #E3E3E3;
 $kommandr-font-color: #000;
 
-$sidebar-bg: #25262C;
+$sidebar-bg: $ultra-light-gray;
+$sidebar-border-color: #F0F0F0;
 $sidebar-width: 18rem;
