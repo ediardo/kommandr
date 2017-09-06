@@ -26,11 +26,13 @@ class ContentEditable extends Component {
   }
 
   onBlur(e) {
-    this.updateContent();
+    const { value } = this.state;
+    if (value !== '') {
+      this.updateContent();
+    }
   }
 
   onChangeInput(e) {
-    const { value } = this.state;
     this.setState({
       value: e.target.value
     });
@@ -53,15 +55,15 @@ class ContentEditable extends Component {
     const { value } = this.state;
     let editableInput;
     if (type === 'textarea') {
-        editableInput = <textarea className="editable-input" ref={(input) => {this.input = input;}} value={value} onChange={this.onChangeInput} onKeyUp={this.keyUpHandler} onBlur={this.onBlur} placeholder={placeholder} />
+        editableInput = <textarea className="editable-input" ref={(input) => {this.input = input;}} value={value} onChange={this.onChangeInput} onBlur={this.onBlur} placeholder={placeholder} />
     } else {
       editableInput = <input className="editable-input" type="text" ref={(input) => {this.input = input;}} value={value} onChange={this.onChangeInput} onKeyUp={this.keyUpHandler} onBlur={this.onBlur} placeholder={placeholder} />
     }
     return (
       <div className={`content-editable ${className} ${(isEditing) ? 'editing' : ''}`}>
-        <span className="editable">
+        <div className="editable">
           {this.props.children}
-        </span>
+        </div>
         {editableInput}
       </div>
     )

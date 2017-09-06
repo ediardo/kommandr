@@ -2,14 +2,13 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { Col, Container, Row } from 'reactstrap';
+import { Col, Row } from 'reactstrap';
 import copy from 'copy-to-clipboard';
 import CodeMirror from 'react-codemirror';
 
 import Comments from '../containers/CommentsContainer';
 import Info from '../containers/CommandLineInfoContainer';
 
-import Authoring from './CommandLineAuthor';
 import CommandLineActions from './CommandLineActions';
 import Description from './CommandLineDescription';
 import Title from './CommandLineTitle';
@@ -25,12 +24,20 @@ class CommandLine extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      prompt: '$',
-      cli: ''
+      cli: '',
+      autoSave: false,
+      autoSaveInterval: 10000
     };
     this.copyCli = this.copyCli.bind(this);
     this.setTitle = this.setTitle.bind(this);
+    this.setDescription = this.setDescription.bind(this);
     this.updateCli = this.updateCli.bind(this);
+    this.autoSave = this.autoSave.bind(this);
+    this.saveCli = this.saveCli.bind(this);
+  }
+
+  autoSave() {
+
   }
 
   copyCli() {
@@ -38,6 +45,9 @@ class CommandLine extends Component {
     copy(str);
   }
 
+  saveCli() {
+
+  }
 
   setTitle(title) {
     const { commandLineActions } = this.props.actions;
@@ -46,7 +56,13 @@ class CommandLine extends Component {
 
   setDescription(description) {
     const { commandLineActions } = this.props.actions;
-    commandLineActions.setTitle({description});
+    commandLineActions.setDescription({description});
+  }
+
+  setCli() {
+    const { cli } = this.state;
+    const { commandLineActions } = this.props.actions;
+    commandLineActions.setCli({cli})
   }
 
   updateCli(content) {
@@ -55,24 +71,39 @@ class CommandLine extends Component {
     });
   }
 
+  componentWillUpdate(nextProps, nextState) {
+    console.log(nextProps, nextState);
+  }
+
   render() {
-    const { title, content, description, author, stats, comments } = this.props.commandLine;
+    const { title, description } = this.props.commandLine;
     return (
       <div className="kommandr-container">
+        <Row className="mb-1">
+          <Col xs="12" sm="8">
+            <Title content={title} onChange={this.setTitle} />
+          </Col>
+          <Col xs="12" sm="4">
+            <CommandLineActions handleClickCopy={this.copyCli} />
+          </Col>
+        </Row>
+        <Row className="mb-3">
+          <Col xs="12">
+            <Stats stats={{views: 12, forks: 1, favs: 3, comments: 42}} />
+          </Col>
+        </Row>
         <div className="kommandr">
-          <CodeMirror value={this.state.cli} onChange={this.updateCli} autoFocus={true} options={{mode: "kommandrMode"}} />
+          <CodeMirror value={this.state.cli} onChange={this.updateCli} autoFocus={true} options={{lineNumbers: true, mode: "kommandrMode"}} />
         </div>
         <Info>
-          <Title content={title} onChange={this.setTitle} />
           <Row>
-            <Col>
-              <Stats stats={{views: 12, forks: 1, favs: 3, comments: 42}} />
+            <Col xs="12" sm="8">
+              <Description content={description} author={{username: "ediardo"}} onChange={this.setDescription} />
             </Col>
-            <Col>
-              <CommandLineActions handleClickCopy={this.copyCli} />
+            <Col xs="12" sm="4">
             </Col>
           </Row>
-          <Description content={description} author={{username: "ediardo"}} onChange={this.setDescription} />
+
         </Info>
         <Row>
           <Comments comments={[]} />

@@ -16,7 +16,6 @@ import 'codemirror/lib/codemirror.css';
 const middleware = [ thunkMiddleware ];
 middleware.push(createLogger());
 
-window.React = React;
 
 const store = createStore(reducer, applyMiddleware(...middleware));
 

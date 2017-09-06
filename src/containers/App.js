@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 
-import { Container, Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
-import classNames from 'classnames';
+import { Container } from 'reactstrap';
 
 import Content from './Content';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import CommandLine from '../components/CommandLine';
 import Sidebar from './Sidebar';
+
+import 'holderjs/holder.js';
 
 class App extends Component {
   constructor(props) {
@@ -32,27 +33,7 @@ class App extends Component {
         <Header />
         <Content>
           <Container fluid>
-            <Nav tabs>
-              <NavItem>
-                <NavLink className={classNames({ active: this.state.activeTab === '1' })} onClick={() => { this.toggleTab('1'); }}>
-                  Tab1
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink className={classNames({ active: this.state.activeTab === '2' })} onClick={() => { this.toggleTab('2'); }}>
-                  +
-                </NavLink>
-              </NavItem>
-            </Nav>
-            <TabContent activeTab={this.state.activeTab}>
-              <TabPane tabId="1">
-                <CommandLine />
-
-              </TabPane>
-              <TabPane tabId="2">
-
-              </TabPane>
-            </TabContent>
+            <CommandLine />
           </Container>
         </Content>
         <Sidebar>

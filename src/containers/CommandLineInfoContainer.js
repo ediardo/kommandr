@@ -4,7 +4,7 @@ const CommandLineInfoContainer = (props) => {
   const { className, children } = props;
 
   return (
-    <div className={`kommandr-info ${className}`}>
+    <div className={`kommandr-info mt-3 ${(className === undefined) ? '' : className}`}>
       {children}
     </div>
   )

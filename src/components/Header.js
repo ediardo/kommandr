@@ -15,7 +15,8 @@ import {
 } from 'reactstrap';
 
 import CustomTooltip from './CustomTooltip';
-import SignInModal from './SignInModal';
+import ModalHelp from './ModalHelp';
+import ModalSignIn from './ModalSignIn';
 
 class Header extends React.Component {
 
@@ -23,11 +24,12 @@ class Header extends React.Component {
     super(props);
     this.state = {
       settingsMenuIsOpen: false,
-      helpMenuIsOpen: false,
-      signInModalIsOpen: false
+      isOpenModalHelp: false,
+      isOpenModalSignIn: false
     };
     this.toggleSettingsMenu = this.toggleSettingsMenu.bind(this);
-    this.toggleSignInModal = this.toggleSignInModal.bind(this);
+    this.toggleModalHelp = this.toggleModalHelp.bind(this);
+    this.toggleModalSignIn = this.toggleModalSignIn.bind(this);
   }
 
   toggleSettingsMenu() {
@@ -36,47 +38,39 @@ class Header extends React.Component {
     });
   }
 
-  toggleHelpMenu() {
+  toggleModalHelp() {
     this.setState({
-      helpMenuIsOpen: !this.state.helpMenuIsOpen
+      isOpenModalHelp: !this.state.isOpenModalHelp
     });
   }
 
-  toggleSignInModal() {
+  toggleModalSignIn() {
     this.setState({
-      signInModalIsOpen: !this.state.signInModalIsOpen
+      isOpenModalSignIn: !this.state.isOpenModalSignIn
     });
   }
 
   render() {
-    const { signInModalIsOpen } = this.state;
+    const { isOpenModalHelp, isOpenModalSignIn } = this.state;
     return (
       <header>
         <Navbar  toggleable>
           <NavbarBrand>kommandr</NavbarBrand>
           <Collapse isOpen={true} navbar>
             <Nav navbar className="mr-auto">
-              <Button color="success" id="createKommandr" className="mr-3">
-                <FontAwesome name="terminal" /> Create
+              <Button size="sm" color="success" id="createKommandr" className="mr-3">
+                <FontAwesome name="terminal" /> Create new
               </Button>
               <CustomTooltip content="Create a new Kommandr" placement="bottom center" target="createKommandr" />
-
-              <Button  color="secondary" id="forkKommandr" className="mr-3" >
-                <FontAwesome name="code-fork" /> Fork
-              </Button>
-              <CustomTooltip content="Copy this Kommandr" placement="bottom center" target="forkKommandr" />
-              <Button  color="secondary" id="forkHistory">
-                <FontAwesome name="history" /> History
-              </Button>
-              <CustomTooltip content="View history of this Kommandr" placement="bottom center" target="forkHistory" />
-
             </Nav>
 
-
+            <Button size="sm" color="primary" className="mr-2">
+              <FontAwesome name="floppy-o" /> Save
+            </Button>
 
             <Dropdown isOpen={this.state.settingsMenuIsOpen} toggle={this.toggleSettingsMenu}>
-              <DropdownToggle caret color="link">
-                <FontAwesome name="cog" /> Settings
+              <DropdownToggle  color="link" className="mr-2">
+                <FontAwesome name="cog" />
               </DropdownToggle>
               <DropdownMenu right>
                 <DropdownItem header>Themes</DropdownItem>
@@ -86,15 +80,17 @@ class Header extends React.Component {
               </DropdownMenu>
             </Dropdown>
 
-            <Button color="link" onClick={this.toggleSignInModal}>
-              <FontAwesome name="user" /> Sign in
+            <Button  color="link" onClick={this.toggleModalSignIn} className="mr-2">
+              <FontAwesome name="user" />
             </Button>
-            <SignInModal toggle={this.toggleSignInModal} isOpen={signInModalIsOpen} />
 
-            <Button color="link">
+
+
+            <Button color="link" onClick={this.toggleModalHelp}>
                 <FontAwesome name="question-circle" />
             </Button>
-
+            <ModalSignIn toggle={this.toggleModalSignIn} isOpen={isOpenModalSignIn} />
+            <ModalHelp toggle={this.toggleModalHelp} isOpen={isOpenModalHelp} />
           </Collapse>
         </Navbar>
       </header>

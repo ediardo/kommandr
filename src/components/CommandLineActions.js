@@ -1,22 +1,25 @@
 import React, { Component } from 'react';
 
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import FontAwesome from 'react-fontawesome';
 
 import CustomTooltip from './CustomTooltip';
-import SharePopover from './SharePopover';
+import ModalDelete from './ModalDelete';
+import ModalShare from './ModalShare';
 
 class CommandLineActions extends Component {
   constructor(props) {
     super(props);
     this.state = {
       copyButtonTxt: 'Copy to clipboard',
-      isOpenDeleteModal: false,
-      isOpenSharePopover: false
+      isOpenDropdown: false,
+      isOpenModalDelete: false,
+      isOpenModalShare: false
     };
     this.handleClickCopy = this.handleClickCopy.bind(this);
-    this.toggleDeleteModal = this.toggleDeleteModal.bind(this);
-    this.toggleSharePopover = this.toggleSharePopover.bind(this);
+    this.toggleModalDelete = this.toggleModalDelete.bind(this);
+    this.toggleModalShare = this.toggleModalShare.bind(this);
+    this.toggleDropdown = this.toggleDropdown.bind(this);
   }
 
   handleClickCopy() {
@@ -31,47 +34,45 @@ class CommandLineActions extends Component {
     }, 2000);
   }
 
-  toggleDeleteModal() {
+  toggleDropdown() {
     this.setState({
-      isOpenDeleteModal: !this.state.isOpenDeleteModal
+      isOpenDropdown: !this.state.isOpenDropdown
     });
   }
 
-  toggleSharePopover() {
+  toggleModalDelete() {
     this.setState({
-      isOpenSharePopover: !this.state.isOpenSharePopover
+      isOpenModalDelete: !this.state.isOpenModalDelete
+    });
+  }
+
+  toggleModalShare() {
+    this.setState({
+      isOpenModalShare: !this.state.isOpenModalShare
     });
   }
 
   render() {
-    const { copyButtonTxt, isOpenDeleteModal, isOpenSharePopover } = this.state;
+    const { copyButtonTxt, isOpenModalDelete, isOpenModalShare, isOpenDropdown } = this.state;
     return (
       <div className="d-flex justify-content-end">
-        <Button size="sm" className="mr-2" color="secondary" id="copyToClipboard" onClick={this.handleClickCopy} >
-          <FontAwesome name="clipboard" />{` ${copyButtonTxt}`}
-        </Button>
-        <CustomTooltip content="Copy Kommandr" placement="top center" target="copyToClipboard" />
 
-        <Button size="sm" className="mr-2"  color="primary" id="shareKommandr" onClick={this.toggleSharePopover}>
-          <FontAwesome name="share-alt" />{' '}Share
-        </Button>
-        <CustomTooltip content="Share/Embed" placement="top center" target="shareKommandr" />
-        <SharePopover isOpen={isOpenSharePopover} target="shareKommandr" toggle={this.toggleSharePopover} />
+        <ButtonDropdown isOpen={isOpenDropdown} toggle={this.toggleDropdown}>
+          <CustomTooltip content="Copy Kommandr" placement="top center" target="copyToClipboard" />
+          <Button size="sm" color="secondary" id="copyToClipboard" onClick={this.handleClickCopy} >
+            <FontAwesome name="clipboard" />{` ${copyButtonTxt}`}
+          </Button>
 
-        <Button size="sm" color="danger" id="deleteKommandr" onClick={this.toggleDeleteModal} >
-          <FontAwesome name="trash-o" />{' '}Delete
-        </Button>
-        <CustomTooltip content="Delete this kommandr" placement="top center" target="deleteKommandr" />
-        <Modal isOpen={isOpenDeleteModal} toggle={this.toggleDeleteModal}>
-          <ModalHeader toggle={this.toggleDeleteModal}>Delete kommandr</ModalHeader>
-          <ModalBody>
-            Are you sure you want to delete this kommandr?
-          </ModalBody>
-          <ModalFooter>
-            <Button color="danger" onClick={this.toggleDeleteModal}>Yes</Button>{' '}
-            <Button color="secondary" onClick={this.toggleDeleteModal}>No</Button>
-          </ModalFooter>
-        </Modal>
+          <DropdownToggle size="sm" caret color="secondary" />
+          <DropdownMenu right>
+            <DropdownItem onClick={this.toggleModalDelete}><FontAwesome name="trash-o" />{' '}Delete</DropdownItem>
+            <DropdownItem onClick={this.toggleModalShare}><FontAwesome name="share-alt" />{' '}Share</DropdownItem>
+            <DropdownItem><FontAwesome name="download" />{' '}Download</DropdownItem>
+            <DropdownItem color="danger"><FontAwesome name="flag" />{' '}Report abuse</DropdownItem>
+          </DropdownMenu>
+        </ButtonDropdown>
+        <ModalDelete isOpen={isOpenModalDelete} toggle={this.toggleModalDelete} />
+        <ModalShare isOpen={isOpenModalShare} toggle={this.toggleModalShare} />
       </div>
     )
   }

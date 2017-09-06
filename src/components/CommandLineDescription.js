@@ -38,7 +38,7 @@ class CommandLineDescription extends Component {
             <Media object data-src="holder.js/48x48" alt="Generic placeholder image" />
           </Media>
           <Media body className="ml-2">
-            {username}
+            <span className="username">{username}</span>
             <ContentEditable isEditing={isEditing} content={content} type="textarea" onUpdate={this.handleOnUpdate} placeholder="Add a useful description here...">
               <p onClick={this.handleOnClick}>{content}</p>
             </ContentEditable>
