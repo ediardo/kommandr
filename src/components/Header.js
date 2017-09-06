@@ -64,10 +64,6 @@ class Header extends React.Component {
               <CustomTooltip content="Create a new Kommandr" placement="bottom center" target="createKommandr" />
             </Nav>
 
-            <Button size="sm" color="primary" className="mr-2">
-              <FontAwesome name="floppy-o" /> Save
-            </Button>
-
             <Dropdown isOpen={this.state.settingsMenuIsOpen} toggle={this.toggleSettingsMenu}>
               <DropdownToggle  color="link" className="mr-2">
                 <FontAwesome name="cog" />
