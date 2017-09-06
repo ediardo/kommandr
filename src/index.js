@@ -11,9 +11,11 @@ import reducer from './redux/reducers';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import './style/main.scss';
+import 'codemirror/lib/codemirror.css';
 
 const middleware = [ thunkMiddleware ];
 middleware.push(createLogger());
+
 
 const store = createStore(reducer, applyMiddleware(...middleware));
 

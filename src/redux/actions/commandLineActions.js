@@ -1,38 +1,28 @@
 import * as types from '../constants/ActionTypes';
 
-const addProgram = program => ({
-  type: types.ADD_PROGRAM,
+const setCli = cli => ({
+  type: types.SET_CLI,
   payload: {
-    ...program
+    ...cli
   }
 });
 
-const addOption = option => ({
-  type: types.ADD_OPTION,
+const setTitle = title => ({
+  type: types.SET_TITLE,
   payload: {
-    ...option
+    ...title
   }
 });
-const setOptionValue = value => ({
-  type: types.SET_OPTION_VALUE,
+
+const setDescription = description => ({
+  type: types.SET_DESCRIPTION,
   payload: {
-    ...value
+    ...description
   }
-});
-const removeOption = option => ({
-  type: types.REMOVE_OPTION,
-  payload: {
-    ...option
-  }
-});
-const resetCli = () => ({
-  type: types.RESET_CLI
 });
 
 export default {
-  addProgram,
-  addOption,
-  setOptionValue,
-  removeOption,
-  resetCli
+  setCli,
+  setTitle,
+  setDescription
 }

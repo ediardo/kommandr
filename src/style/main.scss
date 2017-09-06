@@ -1,128 +1,170 @@
 @import 'variables';
-
-html, body {
+html {
+  //box-sizing: content-box;
+}
+html, body, #root, .app {
   height: 100%;
+  width: 100%;
 }
 
 body {
   background-color: #FDFDFD;
-  font-size: 13px;
+  overflow: hidden;
 }
 
 /*
  HEADER
 */
 header {
-  background-color: #F0F0F0;
-  border-bottom: 1px solid #EEE;
-  color: #111;
+  background-color: $header-bg;
+  color: $header-font-color;
+  height: $header-height;
+  .btn-link {
+    color: $header-link-color;
+    &:hover {
+      color: $header-link-color-hover;
+      text-decoration: none;
+    }
+  }
 }
 
 .content {
-  margin-top: 2em;
-}
+  height: calc(100% - #{$footer-height} - #{$header-height});
+  overflow-y: auto;
+  padding-top: 1rem;
+  position: relative;
+  width: calc(100% - #{$sidebar-width});
 
-.kommandr-container {
-  .actions-container {
-    text-align: right;
+}
+.ReactCodeMirror {
+  width: 100%;
+  .CodeMirror {
+    height: 100px;
   }
 }
-
-.kommandr {
-  background-color: $kommandr-background;
-  border: 1px solid #E1E4E5;
-  border-radius: 4px;
-  color: $kommandr-font-color;
-  font-family: consolas, "Liberation Mono", courier, monospace;
-  font-size: 1.5em;
-  margin: 1em 0;
-  padding: 0.25em;
-  position: relative;
+.kommandr-container {
+  padding-top: 15px;
   width: 100%;
 
-
-  .program {
-
-  }
-
-  .prompt {
-    margin-right: 0.5em;
-  }
-  .completer {
-    display: none;;
-    position: absolute;
-    top: 2em;
-    z-index: 10;
-
-    &.expand {
-      width: 1%;
-    }
-    small {
-      display: block;
-      font-family: sans-serif;
-      font-size: 0.65em;
-    }
-    ul {
-      background-color: #FAFAFA;
-      border: 1px solid #AAA;
-      font-family: monospace;
-      list-style: none;
+  .kommandr-title {
+    color: $kommandr-title-font-color;
+    font-family: 'Bitter', serif;
+    h2 {
+      display: inline-block;
+      font-size: $kommandr-title-font-size;
       margin: 0;
-      padding: 0em;
-      transition: 0.2s;
-      li {
-        list-style-type: none;
-        padding: 0.3em 0.45em;
-        transition: 0.1s background-color;
-        &:hover {
-          background-color: #DDD;
-          cursor: pointer;
-          transition: 0.2s background-color;
-        }
-      }
     }
-  }
-  .search-container {
-    min-width: 200px;
-    overflow: hidden;
-    padding-left: 0;
-    &.left-space {
-      padding-left: 0.7em;
-    }
-  }
-
-  .search-input {
-    background-color: $kommandr-background;
-    border: 0;
-    color: $kommandr-font-color;
-    width: 100%;
-
-    &:focus {
-      outline: none;
-    }
-  }
-
-  .selected-options {
-    ul {
+    .editable-input {
+      border: 0px;
+      font-size: $kommandr-title-font-size;
+      font-family: 'Bitter', serif;
       padding: 0;
-      margin: 0;
     }
+  }
+
+  .kommandr {
+    background-color: $kommandr-background;
+    border: 1px solid #E1E4E5;
+    border-radius: 4px;
+    color: $kommandr-font-color;
+    font-size: 1.5em;
+    width: 100%;
+  }
+  .kommandr-info {
+
+  }
+  .kommandr-stats {
+    box-sizing: content-box;
+    color: #999;
+
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
     li {
-      display: inline;
-      border-bottom: 1px dotted transparent;
-      .option-container {
-        transition: all 0.5s;
-        &:hover {
-          background-color: #F1F1F1;
-          border-color: #A0A0A0;
-          transition: all 0.5s;
-        }
+      display: inline-block;
+      text-align: center;
+      .metric {
+        font-size: 0.8rem;
       }
+    }
+  }
+
+  .kommandr-author {
+    border-top: 1px solid #EEEEEE;
+    margin-top: 1rem;
+    padding-top: 1rem;
+  }
+
+  .kommandr-description {
+    textarea, p {
+      width: 100%;
+      white-space: pre;
     }
   }
 }
-.prompt {
+
+.sidebar {
+  background-color: $sidebar-bg;
+  border-left: 1px solid $sidebar-border-color;
+  bottom: 0;
+  height: calc(100% - #{$footer-height} - #{$header-height});
+  position: relative;
+  top: 0;
+  width: $sidebar-width;
+
+  .sidebar-ad {
+    bottom: 0;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+  }
+}
+
+.footer {
+  background-color: $footer-bg;
+  bottom: 0;
+  color: $footer-font-color;
+  height: $footer-height;
+  line-height: $footer-line-height;
+  position: absolute;
+  width: 100%;
+}
+
+
+.content-editable {
+  .editable {
+     >:hover {
+      background-color: #F0F0F0;
+    }
+  }
+  .editable-input {
+    display: none;
+    border: 1px solid transparent;
+  }
+  &.editing {
+    .editable {
+      display: none;
+    }
+    .editable-input {
+      display: inline-block;
+      border: 1px solid $light-gray;
+      outline: 0;
+      padding: 0;
+      width: 100%;
+    }
+  }
+
+}
+
+
+.username {
+  font-weight: bold;
+}
+.prompt, .search-input {
   user-select: none;
 }
-.show { display: block !important;}
+.program, .prompt, .option, .argument, .separator {
+  font-family: consolas, "Liberation Mono", courier, monospace;
+}
+//.show { display: block !important;}
 .hide { display: none !important;}
