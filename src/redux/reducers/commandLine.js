@@ -1,129 +1,32 @@
-const addProgram = (state, action) => {
-  const { id } = action;
-  const allPrograms = state.allPrograms || [];
+const setCli = (state, action) => {
+  const { cli } = action;
   return {
     ...state,
-    allPrograms: [...allPrograms, id],
-    [id]: {
-      id,
-      created: Date.now(),
-      allOptions: [],
-      options: {}
-    }
-  }
-};
-
-const addOption = (state, action) => {
-  const { programId, id, displayFormat } = action;
-  const currentOptions = state[programId].options;
-  return {
-    ...state,
-    [programId]: {
-      ...state[programId],
-      updated: Date.now(),
-      allOptions: [...state[programId].allOptions, id],
-      options: {
-        ...currentOptions,
-        [id]: {
-          id,
-          displayFormat,
-          created: Date.now(),
-          separator: '='
-        }
-      }
-    }
-  }
-};
-
-const setOptionValue = (state, action) => {
-  const { programId, id, value } = action;
-  const currentOptions = state[programId].options || [];
-  return {
-    ...state,
-    [programId]: {
-      ...state[programId],
-      updated: Date.now(),
-      options: {
-        ...currentOptions,
-        [id]: {
-          ...state[programId].options[id],
-          value,
-          updated: Date.now()
-        }
-      }
-    }
+    cli
   }
 };
 
 const setTitle = (state, action) => {
-    const { title } = action;
-    return {
-      ...state,
-      title
-    }
-};
-
-const removeOption = (state, action) => {
-  const { programId, id } = action;
-  const { options, allOptions } = state[programId];
-  const optionIdx = allOptions.indexOf(id);
-  delete options[id];
+  const { title } = action;
   return {
     ...state,
-    [programId]: {
-      ...state[programId],
-      updated: Date.now(),
-      allOptions: [
-        ...allOptions.slice(0, optionIdx),
-        ...allOptions.slice(optionIdx + 1)
-      ],
-      options
-    }
+    title
   }
 };
 
-const replaceProgram = (state, action) => {
-  const { position, oldId, newId } = action;
-  const { allPrograms } =  state.allPrograms.map((programId, idx) => {
-    if (idx !== position) return programId;
-    return {
-      ...programId,
-      newId
-    };
-  });
-  delete state[oldId];
+const setDescription = (state, action) => {
+  const { description } = action;
   return {
     ...state,
-    [newId]: {
-      newId,
-      created: Date.now(),
-      allOptions: [],
-      options: {}
-    }
-
+    description
   }
-}
-
-const resetCli = (state) => {
-  return {};
 };
 
 const commandLineReducer = (state = {}, action) => {
   switch(action.type) {
-    case 'ADD_PROGRAM': return addProgram(state, action.payload);
-    case 'ADD_OPTION': return addOption(state, action.payload);
-    case 'SET_OPTION_VALUE': return setOptionValue(state, action.payload);
+    case 'SET_CLI': return setCli(state, action.payload);
     case 'SET_TITLE': return setTitle(state, action.payload);
-    case 'REMOVE_OPTION': return removeOption(state, action.payload);
-    case 'REPLACE_PROGRAM': return replaceProgram(state, action.payload);
-    case 'RESET_CLI': return resetCli(state);
-    /*
-    case 'RESET_OPTIONS':
-    case 'RESET_PROGRAMS':
-    case 'SAVE_COMMAND':
-    case 'FORK_COMMAND':
-    case 'DELETE_COMMAND':
-    */
+    case 'SET_DESCRIPTION': return setDescription(state, action.payload);
     default:
       return state;
   }
