@@ -9,6 +9,7 @@ import Content from '../containers/Content';
 import Comments from '../containers/CommentsContainer';
 import Info from '../containers/CommandLineInfoContainer';
 import Sidebar from '../containers/Sidebar';
+import SidebarMenu from '../components/SidebarMenu';
 
 import CommandLineActions from './CommandLineActions';
 import CustomCodeMirror from './CustomCodeMirror';
@@ -106,7 +107,7 @@ class CommandLine extends Component {
           </Container>
         </Content>
         <Sidebar>
-          Content
+          <SidebarMenu />
         </Sidebar>
       </span>
     );

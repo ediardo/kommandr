@@ -80,7 +80,6 @@ header {
   .kommandr-stats {
     box-sizing: content-box;
     color: #999;
-
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -117,6 +116,20 @@ header {
   top: 0;
   width: $sidebar-width;
 
+  .sidebar-menu {
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      padding: 8px;
+      font-size: 0.9rem;
+      &.parent {
+        background-color: darken($light-gray, 5%);
+        font-weight: bold;
+      }
+    }
+  }
   .sidebar-ad {
     bottom: 0;
     position: absolute;
