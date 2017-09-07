@@ -2,11 +2,14 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { Col, Row } from 'reactstrap';
+import { Col, Container, Row } from 'reactstrap';
 import copy from 'copy-to-clipboard';
 
+import Content from '../containers/Content';
 import Comments from '../containers/CommentsContainer';
 import Info from '../containers/CommandLineInfoContainer';
+import Sidebar from '../containers/Sidebar';
+import SidebarMenu from '../components/SidebarMenu';
 
 import CommandLineActions from './CommandLineActions';
 import CustomCodeMirror from './CustomCodeMirror';
@@ -67,37 +70,46 @@ class CommandLine extends Component {
   render() {
     const { title, description, cli } = this.props.commandLine;
     return (
-      <div className="kommandr-container">
-        <Row className="mb-1">
-          <Col xs="12" sm="8">
-            <Title content={title} onChange={this.setTitle} />
-          </Col>
-          <Col xs="12" sm="4">
-            <CommandLineActions handleClickCopy={this.copyCli} />
-          </Col>
-        </Row>
-        <Row className="mb-3">
-          <Col xs="12">
-            <Stats stats={{views: 12, forks: 1, favs: 3, comments: 42}} />
-          </Col>
-        </Row>
-        <div className="kommandr">
-          <CustomCodeMirror value={cli} autoSave={this.autoSave} />
-        </div>
-        <Info>
-          <Row>
-            <Col xs="12" sm="8">
-              <Description content={description} author={{username: "ediardo"}} onChange={this.setDescription} />
-            </Col>
-            <Col xs="12" sm="4">
-            </Col>
-          </Row>
+      <span>
+        <Content sidebarOffset>
+          <Container fluid>
+            <div className="kommandr-container">
+              <Row className="mb-1">
+                <Col xs="12" sm="8">
+                  <Title content={title} onChange={this.setTitle} />
+                </Col>
+                <Col xs="12" sm="4">
+                  <CommandLineActions handleClickCopy={this.copyCli} />
+                </Col>
+              </Row>
+              <Row className="mb-3">
+                <Col xs="12">
+                  <Stats stats={{views: 12, forks: 1, favs: 3, comments: 42}} />
+                </Col>
+              </Row>
+              <div className="kommandr">
+                <CustomCodeMirror value={cli} autoSave={this.autoSave} />
+              </div>
+              <Info>
+                <Row>
+                  <Col xs="12" sm="8">
+                    <Description content={description} author={{username: "ediardo"}} onChange={this.setDescription} />
+                  </Col>
+                  <Col xs="12" sm="4">
+                  </Col>
+                </Row>
 
-        </Info>
-        <Row>
-          <Comments comments={[]} />
-        </Row>
-      </div>
+              </Info>
+              <Row>
+                <Comments comments={[]} />
+              </Row>
+            </div>
+          </Container>
+        </Content>
+        <Sidebar>
+          <SidebarMenu />
+        </Sidebar>
+      </span>
     );
   }
 }
