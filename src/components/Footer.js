@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Container } from 'reactstrap';
+import { Link } from 'react-router-dom';
 
 const Footer = (props) => {
   return (
@@ -9,9 +10,9 @@ const Footer = (props) => {
         kommandr.com © {new Date().getFullYear()} |{' '}
         <a href="https://github.com/kommandr/kommandr/issues/new" target="_blank">report bugs</a> |{' '}
         <a href="https://github.com/kommandr/kommandr" target="_blank">source code</a> |{' '}
-        <a href="#">privacy</a> |{' '}
-        <a href="#">terms</a> |{' '}
-        <a href="#">contact us</a> |{' '}
+        <Link to="/privacy">privacy</Link> |{' '}
+        <Link to="/terms">terms & legal</Link> |{' '}
+        <Link to="/contact">contact</Link>
       </Container>
     </footer>
   )

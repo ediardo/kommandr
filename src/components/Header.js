@@ -2,6 +2,8 @@ import React from 'react';
 
 import FontAwesome from 'react-fontawesome';
 
+import { Link } from 'react-router-dom';
+
 import {
   Button,
   Collapse,
@@ -55,15 +57,18 @@ class Header extends React.Component {
     return (
       <header>
         <Navbar  toggleable>
-          <NavbarBrand>kommandr</NavbarBrand>
+          <NavbarBrand tag='span'>
+            <Link to="/">kommandr</Link>
+          </NavbarBrand>
           <Collapse isOpen={true} navbar>
             <Nav navbar className="mr-auto">
-              <Button size="sm" color="success" id="createKommandr" className="mr-3">
+              <Link to="/new">
+              <Button color="success" id="createKommandr" className="mr-3">
                 <FontAwesome name="terminal" /> Create new
               </Button>
+            </Link>
               <CustomTooltip content="Create a new Kommandr" placement="bottom center" target="createKommandr" />
             </Nav>
-
             <Dropdown isOpen={this.state.settingsMenuIsOpen} toggle={this.toggleSettingsMenu}>
               <DropdownToggle  color="link" className="mr-2">
                 <FontAwesome name="cog" />

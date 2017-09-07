@@ -1,44 +1,33 @@
 import React, { Component } from 'react';
 
+import { Route } from 'react-router-dom';
+
 import { Container } from 'reactstrap';
 
-import Content from './Content';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
 import CommandLine from '../components/CommandLine';
+import Contact from '../components/Contact';
+import Content from './Content';
+import Footer from '../components/Footer';
+import Header from '../components/Header';
+import Main from './Main';
+import Privacy from '../components/Privacy';
 import Sidebar from './Sidebar';
-
-import 'holderjs/holder.js';
+import Terms from '../components/Terms';
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      activeTab: '1'
-    };
-    this.toggleTab = this.toggleTab.bind(this);
-  }
-
-  toggleTab(tab) {
-    if (this.state.activeTab !== tab) {
-      this.setState({
-        activeTab: tab
-      });
-    }
   }
 
   render() {
     return (
       <div className="app">
         <Header />
-        <Content>
-          <Container fluid>
-            <CommandLine />
-          </Container>
-        </Content>
-        <Sidebar>
-          Content
-        </Sidebar>
+        <Route path="/" exact component={Main} />
+        <Route exact path="/new" component={CommandLine} />
+        <Route path="/privacy" component={Privacy} />
+        <Route path="/terms" component={Terms} />
+        <Route path="/contact" component={Contact} />
         <Footer />
       </div>
     )
