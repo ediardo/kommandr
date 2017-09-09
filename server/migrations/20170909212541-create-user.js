@@ -14,11 +14,14 @@ module.exports = {
       email: {
         type: Sequelize.STRING
       },
-      password: {
-        type: Sequelize.STRING
-      },
       lastSignedIn: {
         type: Sequelize.DATE
+      },
+      github: {
+        type: Sequelize.STRING
+      },
+      password: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
