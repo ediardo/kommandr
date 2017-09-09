@@ -4,14 +4,15 @@ module.exports = function(sequelize, DataTypes) {
     username: DataTypes.STRING,
     email: DataTypes.STRING,
     password: DataTypes.STRING,
+    github: DataTypes.STRING,
     lastSignedIn: DataTypes.DATE
-  }, {
-    classMethods: {
-      associate: function(models) {
-        User.hasMany(models.Kommandr);
-        User.hasMany(models.Comment);
-      }
-    }
   });
+
+  User.associate = models => {
+    User.hasMany(models.Kommandr);
+    User.hasMany(models.Comment);
+    User.belongsTo(models.Group);
+  }
+
   return User;
 };

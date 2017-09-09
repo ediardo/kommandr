@@ -4,14 +4,13 @@ module.exports = function(sequelize, DataTypes) {
     title: DataTypes.STRING,
     cli: DataTypes.STRING,
     description: DataTypes.STRING
-  }, {
-    classMethods: {
-      associate: function(models) {
-        Kommandr.belongsTo(models.User);
-        Kommandr.hasMany(models.Comment);
-        Kommandr.belongsTo(models.Collection);
-      }
-    }
   });
+
+  Kommandr.associate = models => {
+    Kommandr.belongsTo(models.User);
+    Kommandr.hasMany(models.Comment);
+    Kommandr.belongsTo(models.Collection);
+  };
+
   return Kommandr;
 };
