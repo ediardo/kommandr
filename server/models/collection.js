@@ -5,8 +5,8 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   Collection.associate = models => {
-    Collection.hasMany(models.Kommandr);
-    Collection.belongsTo(models.User);
+    Collection.hasMany(models.Kommandr, { foreignKey: 'collectionId' });
+    Collection.belongsTo(models.User, { foreignKey: 'userId' });
   };
 
   return Collection;

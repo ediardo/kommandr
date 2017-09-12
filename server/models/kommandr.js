@@ -7,9 +7,9 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   Kommandr.associate = models => {
-    Kommandr.belongsTo(models.User);
-    Kommandr.hasMany(models.Comment);
-    Kommandr.belongsTo(models.Collection);
+    Kommandr.belongsTo(models.User, { foreignKey: 'userId' });
+    Kommandr.hasMany(models.Comment, { foreignKey: 'kommandrId' });
+    Kommandr.belongsTo(models.Collection, { foreignKey: 'collectionId' });
   };
 
   return Kommandr;
