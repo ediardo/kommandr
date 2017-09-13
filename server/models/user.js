@@ -11,6 +11,7 @@ module.exports = function(sequelize, DataTypes) {
   User.associate = models => {
     User.hasMany(models.Kommandr, { foreignKey: 'userId' });
     User.hasMany(models.Comment, {  foreignKey: 'userId' });
+    User.hasMany(models.Collection, { foreignKey: 'userId' });
     User.belongsTo(models.Group, { foreignKey: 'groupId'});
   }
 

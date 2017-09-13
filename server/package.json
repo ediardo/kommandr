@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "./node_modules/.bin/nodemon  index.js --exec babel-node --presets es2015,stage-2"
   },
   "dependencies": {
     "babel-eslint": "^7.2.3",
@@ -11,13 +11,21 @@
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.3",
     "express": "~4.15.2",
+    "express-graphql": "^0.6.11",
+    "graphql-relay": "^0.5.2",
+    "graphql-sequelize": "^5.4.2",
+    "graphql-server-express": "^1.1.2",
     "jade": "~1.11.0",
+    "lodash": "^4.17.4",
     "morgan": "~1.8.1",
     "passport": "^0.4.0",
+    "password-hash": "^1.2.2",
     "sequelize-cli": "^3.0.0-0",
     "serve-favicon": "~2.4.2"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "nodemon": "^1.12.0"
