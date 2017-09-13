@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import CodeMirror from 'react-codemirror';
 
 import 'codemirror/addon/mode/simple';
-import 'codemirror/mode/kommandr/kommandr';
+import 'codemirror/mode/shell/shell';
 
 class CustomCodeMirror extends Component {
   constructor(props) {
