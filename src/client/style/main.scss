@@ -1,0 +1,226 @@
+@import 'variables';
+html {
+  //box-sizing: content-box;
+}
+html, body, #root, .app {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  background-color: #FDFDFD;
+  overflow: hidden;
+}
+
+h1, h2, h3, h4 {
+      font-family: 'Bitter', serif;
+}
+/*
+ HEADER
+*/
+header {
+  background-color: $header-bg;
+  border-bottom: 1px solid $header-border-color;
+  color: $header-font-color;
+  height: $header-height;
+  .btn-link {
+    color: $header-link-color;
+    &:hover {
+      color: $header-link-color-hover;
+      text-decoration: none;
+    }
+  }
+
+  .header-links {
+    .fa {
+      font-size: 1.3rem;
+    }
+  }
+}
+
+.content {
+  height: calc(100% - #{$footer-height} - #{$header-height});
+  overflow-y: auto;
+  padding-top: 1rem;
+  position: relative;
+  &.sidebar-offset {
+    width: calc(100% - #{$sidebar-width});
+  }
+}
+.ReactCodeMirror {
+  width: 100%;
+  .CodeMirror {
+    height: 100px;
+  }
+}
+.kommandr-container {
+  padding-top: 15px;
+  width: 100%;
+
+  .kommandr-title {
+    color: $kommandr-title-font-color;
+
+    h2 {
+      display: inline-block;
+      font-size: $kommandr-title-font-size;
+      margin: 0;
+    }
+    .editable-input {
+      border: 0px;
+      font-size: $kommandr-title-font-size;
+      font-family: 'Bitter', serif;
+      padding: 0;
+    }
+  }
+
+  .kommandr {
+    background-color: $kommandr-background;
+    border: 1px solid #E1E4E5;
+    border-radius: 4px;
+    color: $kommandr-font-color;
+    font-size: 1.5em;
+    width: 100%;
+  }
+  .kommandr-info {
+
+  }
+  .kommandr-stats {
+    box-sizing: content-box;
+    color: #999;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    li {
+      display: inline-block;
+      text-align: center;
+      .metric {
+        font-size: 0.8rem;
+      }
+    }
+  }
+
+  .kommandr-author {
+    border-top: 1px solid #EEEEEE;
+    margin-top: 1rem;
+    padding-top: 1rem;
+  }
+
+  .kommandr-description {
+    textarea, p {
+      width: 100%;
+      white-space: pre;
+    }
+  }
+}
+
+.sidebar {
+  background-color: $sidebar-bg;
+  border-left: 1px solid $sidebar-border-color;
+  bottom: 0;
+  box-shadow: inset 2px 0px 10px #EEEEEE;
+  height: calc(100% - #{$footer-height} - #{$header-height});
+  position: relative;
+  top: 0;
+  width: $sidebar-width;
+
+  .sidebar-menu {
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      padding: 8px;
+      font-size: 0.9rem;
+      &.parent {
+        background-color: darken($light-gray, 5%);
+        font-weight: bold;
+      }
+    }
+  }
+  .sidebar-ad {
+    bottom: 0;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+  }
+}
+
+.footer {
+  background-color: $footer-bg;
+  border-top: 1px solid $footer-border-color;
+  bottom: 0;
+  color: $footer-font-color;
+  height: $footer-height;
+  line-height: $footer-line-height;
+  position: absolute;
+  width: 100%;
+}
+
+
+.content-editable {
+  .editable {
+     >:hover {
+      background-color: #F0F0F0;
+    }
+  }
+  .editable-input {
+    display: none;
+    border: 1px solid transparent;
+  }
+  &.editing {
+    .editable {
+      display: none;
+    }
+    .editable-input {
+      display: inline-block;
+      border: 1px solid $light-gray;
+      outline: 0;
+      padding: 0;
+      width: 100%;
+    }
+  }
+
+}
+
+
+.my-list {
+  list-style-type: none;
+  padding-left: 0;
+  .list-item {
+    border-bottom: 1px solid $light-gray;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+}
+
+.placeholder {
+  background: #DDD;
+}
+
+.user-avatar {
+  &.sm-avatar {
+    height: 48px;
+    width: 48px;
+  }
+  &.lg-avatar {
+  height: 255px;
+  width: 255px;
+  }
+}
+
+.profile {
+
+}
+
+.username {
+  font-weight: bold;
+}
+
+.prompt, .search-input {
+  user-select: none;
+}
+.program, .prompt, .option, .argument, .separator {
+  font-family: consolas, "Liberation Mono", courier, monospace;
+}
+//.show { display: block !important;}
+.hide { display: none !important;}
