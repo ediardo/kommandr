@@ -4,43 +4,24 @@ module.exports = {
   up: function (queryInterface, Sequelize) {
     return queryInterface.bulkInsert('Users', [
       {
-        id: 1,
-        name: 'Demo User',
-        username: 'demo',
-        email: 'demo@demo.com',
-        password: 'demo123',
+        id: 0,
+        name: 'Anonymous',
+        username: 'anon',
+        isPasswordSet: 0,
+        enableLogin: false,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
-        id: 2,
+        id: 1,
         name: 'Eddie Ramirez',
         username: 'ediardo',
+        isPasswordSet: 0,
         email: 'djedir@gmail.com',
-        password: 'demo123',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        github: 'ediardo'
-      },
-      {
-        id: 3,
-        name: 'Important User',
-        username: 'fulanito',
-        email: 'fulanito@gmail.com',
-        password: 'fulanito',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
-      {
-        id: 4,
-        name: 'Ianeta Hutchinson',
-        username: 'fulanita',
-        email: 'fulanita@gmail.com',
-        password: 'fulanita',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      }
-    ]);
+    ], { skip: ['password', 'username']});
   },
 
   down: function (queryInterface, Sequelize) {

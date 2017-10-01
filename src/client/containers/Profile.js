@@ -5,7 +5,7 @@ import {
   Col
 } from 'reactstrap';
 
-import getProfileQuery from '../queries/getProfile';
+import getProfile from '../queries/getProfile';
 
 import Content from './Content';
 import ProfileSidebar from '../components/Profile/ProfileSidebar';
@@ -14,19 +14,20 @@ import ProfileContent from '../components/Profile/ProfileContent';
 class Profile extends Component {
 
   render() {
-    const { user, loading } = this.props.data;
+    const { profile, loading } = this.props.data;
     //temp solution
     if (loading) {
       return null;
     } else {
+      console.log("From profile ", this.props.data);
       return (
         <Container>
           <Content className="profile row">
             <Col xs="12" sm="3">
-              <ProfileSidebar data={user} />
+              <ProfileSidebar data={profile} />
             </Col>
             <Col xs="12" sm="9">
-              <ProfileContent data={user}/>
+              <ProfileContent data={profile}/>
             </Col>
           </Content>
         </Container>
@@ -36,7 +37,7 @@ class Profile extends Component {
 }
 
 
-export default graphql(getProfileQuery, {
+export default graphql(getProfile, {
   options: (props) => {
     return { variables: {
       username: props.match.params.username

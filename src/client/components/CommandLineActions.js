@@ -10,28 +10,33 @@ import ModalShare from './ModalShare';
 class CommandLineActions extends Component {
   constructor(props) {
     super(props);
+    const { mode } = this.props;
     this.state = {
-      copyButtonTxt: 'Copy to clipboard',
+      saveButtonTxt: (mode === 'create') ? 'Create Kommandr' : 'Update Kommandr',
       isOpenDropdown: false,
       isOpenModalDelete: false,
       isOpenModalShare: false
     };
-    this.handleClickCopy = this.handleClickCopy.bind(this);
+    this.handleClickSave = this.handleClickSave.bind(this);
     this.toggleModalDelete = this.toggleModalDelete.bind(this);
     this.toggleModalShare = this.toggleModalShare.bind(this);
     this.toggleDropdown = this.toggleDropdown.bind(this);
   }
 
-  handleClickCopy() {
-    this.props.handleClickCopy();
-    this.setState({
-      copyButtonTxt: 'Copied!'
-    });
-    setTimeout(() => {
+  handleClickSave() {
+    this.props.handleOnClickSave();
+    const { mode } = this.props;
+    if (mode !== 'create') {
       this.setState({
-        copyButtonTxt: 'Copy to clipboard'
+        saveButtonTxt: 'Saved!!'
       });
-    }, 2000);
+      setTimeout(() => {
+        this.setState({
+          saveButtonTxt: 'Save Kommandr'
+        });
+      }, 2000);
+    }
+    
   }
 
   toggleDropdown() {
@@ -53,16 +58,15 @@ class CommandLineActions extends Component {
   }
 
   render() {
-    const { copyButtonTxt, isOpenModalDelete, isOpenModalShare, isOpenDropdown } = this.state;
+    const { saveButtonTxt, isOpenModalDelete, isOpenModalShare, isOpenDropdown } = this.state;
     return (
       <div className="d-flex justify-content-end">
 
         <ButtonDropdown isOpen={isOpenDropdown} toggle={this.toggleDropdown}>
-          <CustomTooltip content="Copy Kommandr" placement="top center" target="copyToClipboard" />
-          <Button size="sm" color="secondary" id="copyToClipboard" onClick={this.handleClickCopy} >
-            <FontAwesome name="clipboard" />{` ${copyButtonTxt}`}
+          <CustomTooltip content="Copy Kommandr" placement="top center" target="saveKommandr" />
+          <Button size="sm" color="primary" id="saveKommandr" onClick={this.handleClickSave} >
+            <FontAwesome name="save" />{` ${saveButtonTxt}`}
           </Button>
-
           <DropdownToggle size="sm" caret color="secondary" />
           <DropdownMenu right>
             <DropdownItem onClick={this.toggleModalDelete}><FontAwesome name="trash-o" />{' '}Delete</DropdownItem>

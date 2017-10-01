@@ -8,7 +8,7 @@ import kommandrById from '../queries/kommandrById';
 
 const CommandLineWithNoData = props => {
   return (
-    <CommandLine data={{kommandr:{}}} {...props} />
+    <CommandLine mode="create" data={{kommandr:{}}} {...props} />
   )
 }
 export default CommandLineWithNoData;

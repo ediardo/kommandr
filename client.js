@@ -19,7 +19,6 @@ import App from './containers/App';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import './style/main.scss';
-import 'codemirror/lib/codemirror.css';
 
 //import 'holderjs/holder.js';
 
@@ -30,9 +29,9 @@ const store = createStore(reducer, applyMiddleware(...middleware));
 */
 
 const networkInterface = createNetworkInterface({
-  uri: 'http://api.kommandr.com:5001/graphql',
+  uri: '/graphql',
   opts: {
-    credentials: 'include'
+    credentials: 'same-origin'
   },
 });
 

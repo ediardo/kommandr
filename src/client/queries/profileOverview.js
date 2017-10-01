@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 export default gql`
-query getProfile($username: String!) {
+query userProfile($username: String!) {
   user(username: $username) {
     username
     email

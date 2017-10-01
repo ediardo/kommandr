@@ -31,41 +31,6 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date()
       },
-      {
-        id: 5,
-        userId: 2,
-        kommandrId: 7,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        id: 6,
-        userId: 3,
-        kommandrId: 1,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        id: 7,
-        userId: 3,
-        kommandrId: 2,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        id: 8,
-        userId: 2,
-        kommandrId: 1,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        id: 9,
-        userId: 2,
-        kommandrId: 4,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      }
     ]);
   },
 

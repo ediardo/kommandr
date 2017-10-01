@@ -2,8 +2,10 @@ import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import path from 'path';
 import autoprefixer from 'autoprefixer';
+/*
+
+*/
 module.exports = {
-  entry: './src/client/index.js',
   output: {
     path: '/',
     filename: 'bundle.js'

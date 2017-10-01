@@ -20,13 +20,15 @@ class CustomCodeMirror extends Component {
     this.setState({
       cli: newCli
     });
-    this.props.autoSave(this.state.cli);
+    this.props.onChange(this.state.cli);
   }
 
   render() {
     const { cli } = this.state;
     return (
-      <CodeMirror value={cli} onChange={this.updateCli} autoFocus={true} options={{lineNumbers: true, mode: "kommandrMode"}} />
+      <div>
+        <CodeMirror value={cli} onChange={this.updateCli} autoFocus={true} options={{lineNumbers: true, mode: "kommandrMode"}} />
+        </div>
     )
   }
 }

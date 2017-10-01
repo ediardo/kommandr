@@ -1,11 +1,11 @@
 import React from 'react';
 
 const ProfileSidebar = props => {
-  const { name, username, email, createdAt } = props.data;
+  const { name, username, email, createdAt, externalAvatarUrl } = props.data;
   return (
     <div className="user-card">
-      <div className="user-avatar lg-avatar placeholder">
-
+      <div className="user-avatar lg-avatar">
+        <img src={`${externalAvatarUrl}`} />
       </div>
       <div className="user-info mt-2">
           <h4 className="user-display-name">{name}</h4>

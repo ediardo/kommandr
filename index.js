@@ -1,3 +1,3 @@
 import server from './src/server/index.js';
 
-server.listen(5000, () => console.log('Listening'));
+server.listen(5001, () => console.log('Listening'));

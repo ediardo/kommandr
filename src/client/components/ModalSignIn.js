@@ -111,7 +111,7 @@ class ModalSignIn extends Component {
       <Modal isOpen={isOpen} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>Can I see some ID?</ModalHeader>
         <ModalBody>
-        <a href="/login/github">
+        <a href="http://api.kommandr.com:5001/login/github">
           <Button size="big" color="primary" >
             <FontAwesome name="github" /> Log in with your GitHub account
           </Button>

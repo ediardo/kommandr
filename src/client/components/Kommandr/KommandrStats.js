@@ -2,9 +2,9 @@ import React from 'react';
 
 import FontAwesome from 'react-fontawesome';
 
-import CustomTooltip from './CustomTooltip';
+import CustomTooltip from '../CustomTooltip';
 
-const CommandLineStats = props => {
+const CommandLineStats = (props) => {
   const { hashId, totalComments, totalForks, totalViews, totalFavs } = props.data;
   return (
     <ul className="kommandr-stats">

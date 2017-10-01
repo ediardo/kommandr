@@ -47,19 +47,32 @@ header {
     width: calc(100% - #{$sidebar-width});
   }
 }
+
 .ReactCodeMirror {
   width: 100%;
   .CodeMirror {
     height: 100px;
   }
 }
-.kommandr-container {
-  padding-top: 15px;
-  width: 100%;
 
+.kommandr-item, .kommandr-container {
+  .kommandr-stats {
+    box-sizing: content-box;
+    color: #999;
+    font-size: 1rem;
+    list-style-type: none;
+    margin: 0;
+    padding: 0; 
+    
+    li {
+      display: inline-block;
+      text-align: center;
+    }
+  }
+}
+.kommandr-container {
   .kommandr-title {
     color: $kommandr-title-font-color;
-
     h2 {
       display: inline-block;
       font-size: $kommandr-title-font-size;
@@ -72,7 +85,6 @@ header {
       padding: 0;
     }
   }
-
   .kommandr {
     background-color: $kommandr-background;
     border: 1px solid #E1E4E5;
@@ -81,21 +93,24 @@ header {
     font-size: 1.5em;
     width: 100%;
   }
-  .kommandr-info {
+}
 
+.kommandr-item {
+  padding: 0.5rem 1rem;
+  width: 100%;
+  &:hover {
+    background-color: $ultra-light-gray;
   }
-  .kommandr-stats {
-    box-sizing: content-box;
-    color: #999;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    li {
-      display: inline-block;
-      text-align: center;
-      .metric {
-        font-size: 0.8rem;
-      }
+  h6 { 
+    font-size: 0.9rem;
+    margin-bottom: 0.15rem;
+  }
+  code {
+    font-size: 0.8rem;
+  }
+  &.compact {
+    .kommandr-stats {
+      font-size: 0.75rem;
     }
   }
 
@@ -117,12 +132,14 @@ header {
   background-color: $sidebar-bg;
   border-left: 1px solid $sidebar-border-color;
   bottom: 0;
-  box-shadow: inset 2px 0px 10px #EEEEEE;
   height: calc(100% - #{$footer-height} - #{$header-height});
   position: relative;
   top: 0;
   width: $sidebar-width;
 
+  .sidebar-search {
+    border-bottom: 1px solid $sidebar-border-color;
+  }
   .sidebar-menu {
     ul {
       list-style-type: none;
@@ -132,7 +149,6 @@ header {
       padding: 8px;
       font-size: 0.9rem;
       &.parent {
-        background-color: darken($light-gray, 5%);
         font-weight: bold;
       }
     }
@@ -142,6 +158,14 @@ header {
     position: absolute;
     text-align: center;
     width: 100%;
+  }
+}
+
+.sidebar-search-results {
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
   }
 }
 
@@ -156,7 +180,9 @@ header {
   width: 100%;
 }
 
-
+input.search-input {
+  background-color: $ultra-light-gray;
+}
 .content-editable {
   .editable {
      >:hover {
@@ -203,8 +229,11 @@ header {
     width: 48px;
   }
   &.lg-avatar {
-  height: 255px;
-  width: 255px;
+    width: 100%;
+  }
+
+  img {
+    width: 100%;
   }
 }
 

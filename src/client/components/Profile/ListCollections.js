@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import Kommandr from '../Kommandr';
+import Kommandr from '../Kommandr/Kommandr';
 
 const ListKommandrs = ({ kommandrs }) => {
   const listKommandrs = kommandrs.map(kommandr => {

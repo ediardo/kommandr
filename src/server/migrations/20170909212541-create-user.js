@@ -14,17 +14,56 @@ module.exports = {
       username: {
         type: Sequelize.STRING
       },
+      password: {
+        type: Sequelize.STRING
+      },
+      isPasswordSet: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0,
+      },
       email: {
         type: Sequelize.STRING
+      },
+      website: {
+        type: Sequelize.STRING
+      },
+      enableLogin: {
+        type: Sequelize.INTEGER
       },
       lastSignedIn: {
         type: Sequelize.DATE
       },
-      github: {
+      lastSignedInIp: {
         type: Sequelize.STRING
       },
-      password: {
+      githubId: {
         type: Sequelize.STRING
+      },
+      googleId: {
+        type: Sequelize.STRING
+      },
+      slackId: {
+        type: Sequelize.STRING
+      },
+      facebookId: {
+        type: Sequelize.STRING
+      },
+      forgotPasswordToken: {
+        type: Sequelize.STRING
+      },
+      forgotPasswordExpires: {
+        type: Sequelize.STRING
+      },
+      externalAvatarUrl: {
+        type: Sequelize.STRING
+      },
+      status: {
+        type: Sequelize.INTEGER,
+        defaultValue: 1,
+      },
+      hasSeenWelcome: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0,
       },
       createdAt: {
         allowNull: false,

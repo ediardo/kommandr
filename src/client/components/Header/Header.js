@@ -13,9 +13,10 @@ import {
   NavbarBrand
 } from 'reactstrap';
 
-import CustomTooltip from './CustomTooltip';
-import ModalHelp from './ModalHelp';
-import ModalSignIn from './ModalSignIn';
+import ProfileLink from './ProfileLink';
+import CustomTooltip from '../CustomTooltip';
+import ModalHelp from '../ModalHelp';
+import ModalSignIn from '../ModalSignIn';
 
 class Header extends React.Component {
 
@@ -51,6 +52,8 @@ class Header extends React.Component {
 
   render() {
     const { isOpenModalHelp, isOpenModalSignIn } = this.state;
+    const { currentUser } = this.props.data;
+
     return (
       <header>
         <Navbar  toggleable>
@@ -59,34 +62,34 @@ class Header extends React.Component {
           </NavbarBrand>
           <Collapse isOpen={true} navbar>
             <Nav navbar className="mr-auto">
-              <Link to="/new">
+            <Link to="/">
               <Button color="success" id="createKommandr" className="mr-3">
                 <FontAwesome name="terminal" /> Create new
               </Button>
             </Link>
               <CustomTooltip content="Create a new Kommandr" placement="bottom center" target="createKommandr" />
             </Nav>
-              <Dropdown isOpen={this.state.settingsMenuIsOpen} toggle={this.toggleSettingsMenu}>
-                <DropdownToggle  color="link" className="mr-2">
-                  <FontAwesome name="cog" />
-                </DropdownToggle>
-                <DropdownMenu right>
-                  <DropdownItem header>Themes</DropdownItem>
-                  <DropdownItem>Light</DropdownItem>
-                  <DropdownItem>Dark</DropdownItem>
-                  <DropdownItem>Hacker</DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
+            { currentUser 
+              ? <ProfileLink data={currentUser} />
+              : <Button  color="link" onClick={this.toggleModalSignIn} className="mr-2">
+                  <FontAwesome name="user" />
+                </Button>
+            }
+            <Dropdown isOpen={this.state.settingsMenuIsOpen} toggle={this.toggleSettingsMenu}>
+              <DropdownToggle  color="link" className="mr-2">
+                <FontAwesome name="cog" />
+              </DropdownToggle>
+              <DropdownMenu right>
+                <DropdownItem header>Themes</DropdownItem>
+                <DropdownItem>Light</DropdownItem>
+                <DropdownItem>Dark</DropdownItem>
+                <DropdownItem>Hacker</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
 
-              <Button  color="link" onClick={this.toggleModalSignIn} className="mr-2">
-                <FontAwesome name="user" />
-              </Button>
-
-
-
-              <Button color="link" onClick={this.toggleModalHelp}>
-                  <FontAwesome name="question-circle" />
-              </Button>
+            <Button color="link" onClick={this.toggleModalHelp}>
+                <FontAwesome name="question-circle" />
+            </Button>
             <ModalSignIn toggle={this.toggleModalSignIn} isOpen={isOpenModalSignIn} />
             <ModalHelp toggle={this.toggleModalHelp} isOpen={isOpenModalHelp} />
           </Collapse>

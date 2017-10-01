@@ -10,13 +10,13 @@ import classNames from 'classnames';
 
 import ProfileOverview from './ProfileOverview';
 import ListCollections from './ListCollections';
-import ListComments from './ListComments';
 //import ListFavs from './ListFavs';
-import ListKommandrs from './ListKommandrs';
+import MyKommandrs from './MyKommandrs';
 
 class ProfileContent extends Component {
   constructor(props) {
     super(props);
+    console.log(props);
     this.state = {
       activeTab: 'profile'
     };
@@ -46,13 +46,13 @@ class ProfileContent extends Component {
             </Link>
           </NavItem>
           <NavItem>
-            <Link to={`/u/${user.username}/collections`} className={'nav-link ' + classNames({ active: activeTab === 'collections' })} onClick={() => this.toggleTab('collections') }>
+            <Link to={`/u/${user.username}/c`} className={'nav-link ' + classNames({ active: activeTab === 'collections' })} onClick={() => this.toggleTab('collections') }>
               Collections
             </Link>
           </NavItem>
           <NavItem>
-            <Link to={`/u/${user.username}/comments`} className={'nav-link ' + classNames({ active: activeTab === 'comments' })}onClick={() => this.toggleTab('comments') }>
-              Comments
+            <Link to={`/u/${user.username}/f`} className={'nav-link ' + classNames({ active: activeTab === 'favs' })}onClick={() => this.toggleTab('favs') }>
+              Favs
             </Link>
           </NavItem>
         </Nav>
@@ -61,11 +61,11 @@ class ProfileContent extends Component {
             <ProfileOverview user={user} />
           </TabPane>
           <TabPane tabId="kommandrs">
-            <ListKommandrs user={user}/>
+            <MyKommandrs user={user}/>
           </TabPane>
           <TabPane tabId="collections">
           </TabPane>
-          <TabPane tabId="comments">
+          <TabPane tabId="favs">
           </TabPane>
         </TabContent>
       </div>

@@ -21,27 +21,19 @@ import mutations from './mutations';
 const RootQueryType = new GraphQLObjectType({
   name: 'RootQueryType',
   fields: {
-    loginUser: {
+    loggedInUser: {
       type: userType,
-      args: {
-        email: {
-          type: new GraphQLNonNull(GraphQLString)
-        },
-        password: {
-          type: new GraphQLNonNull(GraphQLString)
-        }
-      },
-      resolve(root, { email, password }) {
-        // EXTREMELY INSECURE: Temporary using clear-text passwords.
-        return models.User.findOne({
-          where: { email, password }
-        })
+      resolve(root, args, ctx) {
+        if (ctx.user === undefined)  return null;
+        const { id } = ctx.user;
+        return models.User.findById(id).then(user => {
+          return user;
+        });
       }
     },
     allUsers: {
       type: new GraphQLList(userType),
-      resolve(root, args) {
-        console.log(root);
+      resolve(root, args, ctx) {
         return models.User.findAll()
       }
     },
@@ -53,8 +45,22 @@ const RootQueryType = new GraphQLObjectType({
     },
     allKommandrs: {
       type: new GraphQLList(kommandrType),
-      resolve(root, args) {
-        return models.Kommandr.findAll();
+      args: {
+        title: {
+          description: 'Title of Kommandr',
+          type: GraphQLString
+        },
+        cli: {
+          description: 'Content of the CLI',
+          type: GraphQLString
+        },
+      },
+      resolve(root, { title, cli }, ctx) {
+        return models.Kommandr.findAll({
+          where: { 
+            $or: [ { title: { $like: `${title}%` } }, { cli: { $like: `${cli}%` } } ]
+          }
+        });
       }
     },
     allKommandrsByUser: {
@@ -72,6 +78,40 @@ const RootQueryType = new GraphQLObjectType({
             where: { username }
           }]
         })
+      }
+    },
+    allUsers: {
+      type: new GraphQLList(userType),
+      args: {
+        username: {
+          description: 'User name',
+          type: GraphQLString,
+        }
+      },
+      resolve(root, { username }, ctx) {
+        return models.User.findAll({
+          where: {
+            status: 1,
+            id: { ne: 0 },
+            name: { $like: `${name}%` }
+          }
+        })
+      }
+    },
+    allCollections: {
+      type: new GraphQLList(collectionType),
+      args: {
+        name: {
+          description: 'Name of the collection',
+          type: GraphQLString,
+        }
+      },
+      resolve(root, { name }, ctx) {
+        return models.Collection.findAll({
+          where: {
+            name: { $like: `${name}%` }
+          }
+        });
       }
     },
     allCommentsByUser: {
@@ -159,10 +199,12 @@ const RootQueryType = new GraphQLObjectType({
           type: new GraphQLNonNull(GraphQLString)
         }
       },
-      resolve(root, { id }) {
-        console.log('here');
+      resolve(root, { id }, ctx) {
         return models.Kommandr.findOne({
           where: { hashId: id }
+        }).then(kommandr => {
+          kommandr.increment('totalViews');
+          return kommandr;
         });
       }
     },
@@ -181,25 +223,6 @@ const RootQueryType = new GraphQLObjectType({
   }
 });
 
-/*
-const MutationType = new GraphQLObjectType({
-  name: 'MutationType',
-  description: 'These are the things we can change',
-  fields: () => ({
-    deleteArticle: {
-      type: ArticleType,
-      description: 'Delete an article with id and return the article that was deleted.',
-      args: {
-        id: { type: new GraphQLNonNull(GraphQLInt) }
-      },
-      resolve: (value, { id }) => {
-        return ArticleServices.delete(id);
-      }
-    }
-  }),
-});
-
-*/
 const schema = new GraphQLSchema({
   query: RootQueryType,
   mutation: mutations
