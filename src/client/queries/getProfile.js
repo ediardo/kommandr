@@ -9,7 +9,6 @@ query getProfile($username: String!) {
     email
     externalAvatarUrl
     createdAt
-    updatedAt
   }
 }
 `;

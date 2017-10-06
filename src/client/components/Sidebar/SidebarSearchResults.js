@@ -1,17 +1,11 @@
 import React, { Component } from 'react';
 import { graphql } from 'react-apollo';
 
-import { Col, Input } from 'reactstrap';
-
 import KommandrList from '../Kommandr/KommandrList';
 
 import searchKommandr from '../../queries/searchKommandr';
 
 class SidebarSearchResults extends Component {
-
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     const { loading, kommandrs } = this.props.data;
@@ -20,7 +14,7 @@ class SidebarSearchResults extends Component {
     return (
       <div className="sidebar-search-results">
         <ul className="results-group">
-          <KommandrList data={this.props.data.kommandrs} compact={true} />
+          <KommandrList data={kommandrs} compact={true} />
         </ul>
       </div>
     )

@@ -67,6 +67,16 @@ header {
     li {
       display: inline-block;
       text-align: center;
+      margin-right: 1rem;
+    }
+    
+    button {
+      color: inherit;
+      font-size: inherit;
+      padding: 0;
+      &:hover {
+        text-decoration: none;
+      }
     }
   }
 }
@@ -83,6 +93,20 @@ header {
       font-size: $kommandr-title-font-size;
       font-family: 'Bitter', serif;
       padding: 0;
+    }
+  }
+  .kommandr-stats {
+    li {
+      &.forks:hover {
+        .fa {
+          color: #000000;
+        }
+      }
+      &.favs:hover {
+        .fa {
+          color: #FF0000;
+        }
+      }
     }
   }
   .kommandr {
@@ -110,7 +134,7 @@ header {
   }
   &.compact {
     .kommandr-stats {
-      font-size: 0.75rem;
+      font-size: 0.8rem;
     }
   }
 
@@ -127,7 +151,10 @@ header {
     }
   }
 }
-
+.list-kommandrs { 
+  list-style-type: none;
+  padding: 0;
+}
 .sidebar {
   background-color: $sidebar-bg;
   border-left: 1px solid $sidebar-border-color;
@@ -141,10 +168,7 @@ header {
     border-bottom: 1px solid $sidebar-border-color;
   }
   .sidebar-menu {
-    ul {
-      list-style-type: none;
-      padding: 0;
-    }
+
     li {
       padding: 8px;
       font-size: 0.9rem;
@@ -237,10 +261,6 @@ input.search-input {
   }
 }
 
-.profile {
-
-}
-
 .username {
   font-weight: bold;
 }
@@ -253,3 +273,12 @@ input.search-input {
 }
 //.show { display: block !important;}
 .hide { display: none !important;}
+
+.loading-tag {
+  border: 1px solid #CFB025;
+  color: #000000;
+  left: 50%;
+  position: absolute;
+  top: 0; 
+  padding: 0.15rem 0.5rem 0.25rem 0.5rem;
+}

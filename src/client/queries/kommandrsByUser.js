@@ -11,7 +11,6 @@ query kommandrsByUser($username: String!) {
     totalViews
     totalFavs
     totalForks
-    totalComments
   }
 }
 `;

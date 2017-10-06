@@ -1,4 +1,8 @@
 import {
+  GraphQLID,
+  GraphQLInt,
+  GraphQLBoolean,
+  GraphQLString,
   GraphQLObjectType,
   GraphQLNonNull,
   GraphQLList
@@ -14,25 +18,47 @@ import collectionType from './collection';
 
 const userType = new GraphQLObjectType({
   name: 'User',
-  fields: assign(attributeFields(models.User), {
-    comments: {
-      type: new GraphQLList(commentType),
-      resolve(user) {
-        return user.getComments();
-      }
+  fields: () => ({
+    id: {
+      type: GraphQLID,
+      resolve: user => user.id
     },
-    kommandrs: {
-      type: new GraphQLList(kommandrType),
-      resolve(user) {
-        return user.getKommandrs();
-      }
+    name: {
+      type: GraphQLString,
+      resolve: user => user.name
     },
-    collections: {
-      type: new GraphQLList(collectionType),
-      resolve(user) {
-        return user.getCollections();
-      }
-    }
+    username: {
+      type: GraphQLString,
+      resolve: user => user.username
+    },
+    email: {
+      type: GraphQLString,
+      resolve: user => user.email
+    },
+    isPasswordSet: {
+      type: GraphQLBoolean,
+      resolve: user => user.isPasswordSet
+    },
+    website: {
+      type: GraphQLString,
+      resolve: user => user.website
+    },
+    externalAvatarUrl: {
+      type: GraphQLString,
+      resolve: user => user.externalAvatarUrl
+    },
+    hasSeenWelcome: {
+      type: GraphQLBoolean,
+      resolve: user => user.hasSeenWelcome
+    },
+    createdAt: {
+      type: GraphQLString,
+      resolve: user => user.createdAt
+    },
+    status: {
+      type: GraphQLInt,
+      resolve: user => user.status
+    },
   })
 });
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Container, Col, Row, Input } from 'reactstrap';
+import { Col, Row, Input } from 'reactstrap';
 
 import SidebarSearchResults from './SidebarSearchResults';
 

@@ -1,39 +1,40 @@
 import React from 'react';
-
+import { graphql, compose } from 'react-apollo';
+import { Button } from 'reactstrap';
 import FontAwesome from 'react-fontawesome';
 
-import CustomTooltip from '../CustomTooltip';
+import saveAction from '../../queries/saveAction';
 
-const CommandLineStats = (props) => {
-  const { hashId, totalComments, totalForks, totalViews, totalFavs } = props.data;
+
+const KommandrStats = (props) => {
+  const { data: { views, forks, favs }, saveAction } = props;
+  
+  const handleOnClick = (action) => {
+    saveAction(action);
+  }
+
   return (
-    <ul className="kommandr-stats">
-      <li id={`statsViews_${hashId}`} className="mr-4">
-        <FontAwesome name="eye"  className="mr-1"/>
-        <span className="metric">{totalViews}</span>
+    <ul className="kommandr-stats views">
+      <li className="metric-container views">
+        <FontAwesome name="eye" className="mr-2" />
+        <span className="metric">{views}</span>
       </li>
-      <CustomTooltip content="Views" placement="top center" target={`statsViews_${hashId}`} />
-
-      <li id={`statsFavs_${hashId}`} className="mr-4">
-        <FontAwesome name="heart"  className="mr-1"/>
-        <span className="metric">{totalFavs}</span>
+      <li className="metric-container forks">
+        <Button color="link" onClick={handleOnClick('fork')}>
+          <FontAwesome name="code-fork" className="mr-2" />
+          <span className="metric">{forks}</span>
+        </Button>
       </li>
-      <CustomTooltip content="Favorites" placement="top center" target={`statsFavs_${hashId}`} />
-
-      <li id={`statsComments_${hashId}`} className="mr-4">
-        <FontAwesome name="comments" className="mr-1"/>
-        <span className="metric">{totalComments}</span>
+      <li className="metric-container favs">
+        <Button color="link" onClick={handleOnClick('fav')}>
+          <FontAwesome name="heart" className="mr-2" />
+          <span className="metric">{favs}</span>
+        </Button>
       </li>
-      <CustomTooltip content="Comments" placement="top center" target={`statsComments_${hashId}`} />
-
-      <li id={`statsForks_${hashId}`}>
-        <FontAwesome name="code-fork" className="mr-1"/>
-        <span className="metric">{totalForks}</span>
-      </li>
-      <CustomTooltip content="Forks" placement="top center" target={`statsForks_${hashId}`} />
-
     </ul>
   )
-}
+};
 
-export default CommandLineStats;
+export default compose(
+  graphql(saveAction, { name: 'saveAction' })
+)(KommandrStats);

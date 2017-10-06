@@ -2,42 +2,37 @@ import React, { Component } from 'react';
 
 import { compose, graphql } from 'react-apollo';
 import { Col, Container, Row } from 'reactstrap';
-import copy from 'copy-to-clipboard';
+//import copy from 'copy-to-clipboard';
 
 import Content from '../containers/Content';
-import Comments from '../containers/CommentsContainer';
 import Info from '../containers/CommandLineInfoContainer';
 import Sidebar from '../containers/Sidebar';
 import SidebarSearch from './Sidebar/SidebarSearch';
 
-import CommandLineActions from './CommandLineActions';
+import Actions from './Kommandr/KommandrActions';
 import CustomCodeMirror from './CustomCodeMirror';
 import Description from './CommandLineDescription';
-import Title from './CommandLineTitle';
 import Stats from './Kommandr/KommandrStats';
+import Title from './CommandLineTitle';
 
 import addKommandr from '../queries/addKommandr';
 import updateKommandr from '../queries/updateKommandr';
 import kommandrById from '../queries/kommandrById';
+import currentUser from '../queries/currentUser';
 
 class CommandLine extends Component {
   constructor(props) {
     super(props);
-    const { mode } = this.props;
     this.state = {
-      autoSaveTimeout: undefined,
-      autoSaveDelay: 1000,
-      title: (mode === 'create') ? '' : this.props.data.kommandr.title,
-      cli: (mode === 'create') ? '' : this.props.data.kommandr.cli,
-      description: (mode === 'create') ? '' : this.props.data.kommandr.description,
+      title: '',
+      cli: '',
+      description: '',
       editing: false,
-      mode,
     }
     this.saveKommandr = this.saveKommandr.bind(this);
     this.setTitle = this.setTitle.bind(this);
     this.setDescription = this.setDescription.bind(this);
     this.setCli = this.setCli.bind(this);
-    //this.autoSave = this.autoSave.bind(this);
   }
 
 
@@ -66,19 +61,6 @@ class CommandLine extends Component {
       });
     }
   }
-  
-  /*
-  autoSave(cli) {
-    const { autoSaveTimeout, autoSaveDelay } = this.state;
-    if (autoSaveTimeout !== undefined) {
-        clearTimeout(autoSaveTimeout);
-    }
-    let timeOutId = setTimeout(this.setCli, autoSaveDelay, cli);
-    this.setState({
-      autoSaveTimeout: timeOutId
-    });
-  }
-  */
 
   setCli(cli) {
     console.log('Save CLI', this.state);
@@ -102,7 +84,9 @@ class CommandLine extends Component {
   }
 
   render() {
-    const { editing, mode } = this.state;
+    const { mode, data: { loading, currentUser } }=  this.props;
+    if (loading) return <span>loading...</span>;
+    const { editing } = this.state;
     const {
       hashId,
       userId,
@@ -112,46 +96,40 @@ class CommandLine extends Component {
       createdAt,
       updatedAt,
       totalViews,
-      totalComments,
       totalForks,
-      totalFavs
-    } = this.props.data.kommandr;
-
+      totalFavs,
+      author
+    } = this.props.data.kommandr || {};
+    const stats = {
+      views: (mode === 'create') ? 0 : totalViews,
+      forks: (mode === 'create') ? 0 : totalForks,
+      favs: (mode === 'create') ? 0 : totalFavs,
+    };
     return (
       <span>
         <Content sidebarOffset>
-          <Container fluid>
-            <div className="kommandr-container">
-              <Row className="mb-1">
-                <Col xs="12" sm="8">
-                  <Title content={(editing) ? this.state.title : title} onChange={this.setTitle} />
-                </Col>
-                <Col xs="12" sm="4">
-                  <CommandLineActions handleOnClickSave={this.saveKommandr} mode={mode}  />
-                </Col>
-              </Row>
-              <Row className="mb-3">
-                <Col xs="12">
-                  <Stats data={{ hashId, totalViews, totalComments, totalForks, totalFavs }} />
-                </Col>
-              </Row>
-              <div className="kommandr">
-                <CustomCodeMirror value={(editing) ? this.state.cli : cli} onChange={this.setCli} />
-              </div>
+          <Container fluid className="kommandr-container">
+            <Title editing={editing} mode={mode} data={(mode === 'create' || editing) ? this.state.title : title} onChange={this.setTitle} />
+            <Row>
+              <Col xs="12" sm="8">
+              <Stats mode={mode} kommandrId={hashId} data={stats} />
+              </Col>
+              <Col xs="12" sm="4">
+                <Actions />
+              </Col>
+            </Row>
+            <div className="kommandr">
+              <CustomCodeMirror mode={mode} value={(mode === 'create' || editing) ? this.state.cli : cli} onChange={this.setCli} />
+            </div>
               <Info>
                 <Row>
                   <Col xs="12" sm="8">
-                    <Description content={(editing) ? this.state.description : description} author={{username: "ediardo"}} onChange={this.setDescription} />
+                    <Description content={(mode === 'create' || editing) ? this.state.description : description} author={(mode === 'view') ? author : currentUser} onChange={this.setDescription} />
                   </Col>
                   <Col xs="12" sm="4">
                   </Col>
                 </Row>
-
               </Info>
-              <Row>
-                <Comments comments={[]} />
-              </Row>
-            </div>
           </Container>
         </Content>
         <Sidebar>
@@ -163,6 +141,21 @@ class CommandLine extends Component {
 }
 
 export default compose(
+  graphql(currentUser, {
+    props: ({ ownProps, data }) => ({
+      mode: (ownProps.match.params.hasOwnProperty('hashId')) ? 'view' : 'create',
+      data: data
+    })   
+  }),
+  graphql(kommandrById, {
+    options: (props) => ({ variables: { id: props.match.params.hashId } }),
+    props: ({ ownProps, data }) => ({
+      mode: (ownProps.match.params.hasOwnProperty('hashId')) ? 'view' : 'create',
+      data: data
+    }),
+    skip: (ownProps) => !ownProps.match.params.hasOwnProperty('hashId')
+  }),
   graphql(addKommandr, { name: 'addKommandr' }),
-  graphql(updateKommandr, { name: 'updateKommandr' })
+  graphql(updateKommandr, { name: 'updateKommandr' }),
+  
 )(CommandLine);

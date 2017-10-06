@@ -1,17 +1,12 @@
 import {
-  GraphQLSchema,
   GraphQLObjectType,
-  GraphQLID,
   GraphQLInt,
   GraphQLNonNull,
-  GraphQLList,
   GraphQLString,
 } from 'graphql';
-
 import Hashids from 'hashids';
-import bcrypt from 'bcrypt';
 
-import reservedUsernames from '../../config/reservedUsernames';
+import favType from './types/fav';
 import models from '../../models';
 import kommandrType from './types/kommandr';
 import userType from './types/user';
@@ -84,22 +79,74 @@ const mutation = new GraphQLObjectType({
       },
       resolve(parent, { username, password }, ctx) {
         if (!ctx.user) return null;
-        console.log(username, password);
         let userFields = {};
-        console.log('UpdateUser');
         if (username) {
           userFields = { ...userFields, username };
         }
         if (password) {
           userFields = { ...userFields, password };
         }
-        
+        // NOTE (ediardo):
+        // must create a separate mutation to turn on/off notification and one-time off moddals
+        userFields = { 
+          ...userFields,
+          hasSeenWelcome: 1,
+          isPasswordSet: 1
+        };
         return models.User.update(userFields, { where: { id: ctx.user.id } })
           .then(count => {
             return models.User.findById(ctx.user.id);
           });
       }
-    }
+    },
+    addFav: {
+      type: favType,
+      args: {
+        kommandrId: { type: GraphQLString },
+      },
+      resolve(parent, { kommandrId }, ctx) {
+        if (!ctx.user) return null;
+        return models.Kommandr.findOne({
+          where: { hashId: kommandrId },
+        }).then(kommandr => {
+          return models.Fav.findOrCreate({ 
+            where: { kommandrId: kommandr.id, userId: ctx.user.id },
+            defaults: {
+              userId: ctx.user.id,
+              kommandrId: kommandr.id,
+            }
+          }).spread((fav, created) => {
+            if (created) {
+              console.log('Created fav');0
+            }
+            return fav;
+          });
+        });
+        
+      }
+    },
+
+    /*
+    saveAction: {
+      type: actionType,
+      args: {
+        targetId: { type: new GraphQLNonNull(GraphQLInt) },
+        targetType: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      resolve(parent, { targetId, targetType }, ctx) {
+        if (!ctx.user) return null;
+        switch (targetType) {
+          case 'fav':
+            break;
+          case 'fork':
+            break;
+          case 'report':
+            break;
+          default:
+            return null;
+        }
+      }
+    }*/
   }
 });
 

@@ -79,11 +79,13 @@ app.use('/graphql',
 app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql',
 }));
-
+app.get('/logout', (req, res) => {
+  req.logout();
+  res.redirect('http://kommandr.com:5000/');
+});
 app.get('/login/github', passport.authenticate('github'));
 app.get('/login/github/return',
-  passport.authenticate('github', { failureRedirect: '/login' }),
-  (req, res) => {
+  passport.authenticate('github', { failureRedirect: '/login' }), (req, res) => {
     res.redirect('http://kommandr.com:5000/');
   }
 );

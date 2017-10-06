@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
-import CommandLineStats from './KommandrStats';
+import Stats from './KommandrStats';
 
 const Kommandr = props => {
   const {
@@ -13,30 +13,20 @@ const Kommandr = props => {
       totalViews,
       totalFavs,
       totalForks,
-      totalComments,
-      createdAt,
-      updatedAt,
     },
     compact
   } = props;
-  if (!compact) {
-    return (
-      <span>
-        <h4><Link to={`/k/${hashId}`}>{title}</Link></h4>
-        <p>{description}</p>
-        <code>{cli}</code>
-        <CommandLineStats data={{ hashId, totalViews, totalForks, totalComments, totalFavs }} small />
-      </span>
-    )
-  } else {
-    return (
-      <span>
-        <h6><Link to={`/k/${hashId}`}>{title}</Link></h6>
-        <code>{cli}</code>
-        <CommandLineStats data={{ hashId, totalViews, totalForks, totalComments, totalFavs }} small />
-      </span>
-    )
-  }
+  return (
+    <span>
+      {!compact
+        ? <h4><Link to={`/k/${hashId}`}>{title}</Link></h4>
+        : <h6><Link to={`/k/${hashId}`}>{title}</Link></h6>
+      }
+      {!compact && <p>{description}</p>}
+      <code>{cli}</code>
+      <Stats mode="view" kommandrId={hashId} data={{views: totalViews, forks: totalForks, favs: totalFavs }} small />
+    </span>
+  )
 }
 
 export default Kommandr;

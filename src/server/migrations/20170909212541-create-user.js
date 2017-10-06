@@ -27,7 +27,7 @@ module.exports = {
       website: {
         type: Sequelize.STRING
       },
-      enableLogin: {
+      isLoginEnabled: {
         type: Sequelize.INTEGER
       },
       lastSignedIn: {

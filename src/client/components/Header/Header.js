@@ -4,10 +4,6 @@ import { Link } from 'react-router-dom';
 import {
   Button,
   Collapse,
-  Dropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
   Nav,
   Navbar,
   NavbarBrand
@@ -15,8 +11,8 @@ import {
 
 import ProfileLink from './ProfileLink';
 import CustomTooltip from '../CustomTooltip';
-import ModalHelp from '../ModalHelp';
-import ModalSignIn from '../ModalSignIn';
+import ModalHelp from '../Modal/ModalHelp';
+import ModalSignIn from '../Modal/ModalSignIn';
 
 class Header extends React.Component {
 
@@ -75,17 +71,6 @@ class Header extends React.Component {
                   <FontAwesome name="user" />
                 </Button>
             }
-            <Dropdown isOpen={this.state.settingsMenuIsOpen} toggle={this.toggleSettingsMenu}>
-              <DropdownToggle  color="link" className="mr-2">
-                <FontAwesome name="cog" />
-              </DropdownToggle>
-              <DropdownMenu right>
-                <DropdownItem header>Themes</DropdownItem>
-                <DropdownItem>Light</DropdownItem>
-                <DropdownItem>Dark</DropdownItem>
-                <DropdownItem>Hacker</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
 
             <Button color="link" onClick={this.toggleModalHelp}>
                 <FontAwesome name="question-circle" />

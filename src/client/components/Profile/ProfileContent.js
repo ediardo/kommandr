@@ -57,15 +57,15 @@ class ProfileContent extends Component {
           </NavItem>
         </Nav>
         <TabContent activeTab={activeTab}>
-          <TabPane tabId="profile">
+          <TabPane tabId="profile" className="profile-overview">
             <ProfileOverview user={user} />
           </TabPane>
-          <TabPane tabId="kommandrs">
+          <TabPane tabId="kommandrs" className="my-kommandrs">
             <MyKommandrs user={user}/>
           </TabPane>
-          <TabPane tabId="collections">
+          <TabPane tabId="collections" className="my-collections">
           </TabPane>
-          <TabPane tabId="favs">
+          <TabPane tabId="favs" className="my-favs">
           </TabPane>
         </TabContent>
       </div>

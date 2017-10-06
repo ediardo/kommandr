@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { compose, graphql } from 'react-apollo';
 
 import {
-  Alert,
-  Form,
   FormGroup,
   Label,
   Input,
@@ -25,11 +23,25 @@ import updateUser from '../../queries/updateUser';
 
 const usernameRegex = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){3,38}$/i;
 
+const ModalMessage = (props) => { 
+  const { isOpen, toggle } = props;
+  return (
+    <Modal isOpen={isOpen} toggle={toggle}>
+      <ModalHeader>You are all set!</ModalHeader>
+      <ModalBody>
+        <p>Welcome to Kommandr. I hope you find it useful :)</p>
+      </ModalBody>
+      <ModalFooter>
+        <Button color="primary" onClick={toggle}>Ok</Button>
+      </ModalFooter>
+    </Modal>
+  )
+};
+
 class ModalWelcome extends Component {
   constructor(props) {
     super(props);
     const { currentUser } = this.props.data;
-    console.log(currentUser);
     this.state = {
       username: currentUser.username,
       usernameValid: currentUser.username.match(usernameRegex),
@@ -37,11 +49,13 @@ class ModalWelcome extends Component {
       passwordValid: currentUser.username > 5,
       revealPassword: false,
       isOpen: (currentUser) ? !currentUser.hasSeenWelcome : false,
+      showMessage: false,
     };
     this.onChangeUsername = this.onChangeUsername.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
     this.submit = this.submit.bind(this);
     this.toggle = this.toggle.bind(this);
+    this.showMessage = this.showMessage.bind(this);
     this.revealPassword = this.revealPassword.bind(this);
   }
 
@@ -66,7 +80,7 @@ class ModalWelcome extends Component {
     this.props.updateUser({
       variables: { username, password }
     }).then(({data}) =>{
-      console.log(data);
+      this.showMessage();
     }).catch(error => {
       console.log('there was an error ', error);
     });
@@ -78,6 +92,12 @@ class ModalWelcome extends Component {
     });
   }
 
+  showMessage() {
+    this.setState({
+      showMessage: !this.state.showMessage
+    });
+  }
+
   revealPassword() {
     this.setState({
       revealPassword: !this.state.revealPassword
@@ -85,11 +105,18 @@ class ModalWelcome extends Component {
   }
 
   render() {
-    const { isOpen, username, usernameValid, password, passwordValid, revealPassword } = this.state;
+    const { 
+      isOpen,
+      username,
+      usernameValid,
+      password,
+      passwordValid,
+      showMessage,
+      revealPassword,
+    } = this.state;
     const { currentUser } = this.props.data;
     if (currentUser === undefined || currentUser === null) return null;
-    const { name, email, externalAvatarUlr } = currentUser;
-    console.log(this.state.username);
+    const { name } = currentUser;
     return (
       <Modal isOpen={isOpen} toggle={this.toggle} backdrop="static">
         <ModalHeader toggle={this.toggle}>Nice to meet you, { name }</ModalHeader>
@@ -126,6 +153,7 @@ class ModalWelcome extends Component {
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={this.submit} disabled={!(usernameValid && passwordValid)} >Save changes</Button>
+          <ModalMessage isOpen={showMessage} toggle={this.toggle} />
           <Button color="secondary" onClick={this.toggle}>I'll do this later</Button>
         </ModalFooter>
       </Modal>

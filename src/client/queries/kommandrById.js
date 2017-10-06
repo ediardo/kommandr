@@ -12,9 +12,11 @@ query KommandrById($id: String!) {
     createdAt
     updatedAt
     totalViews
-    totalComments
     totalForks
     totalFavs
+    author {
+      username
+    }
   }
 }
 `;

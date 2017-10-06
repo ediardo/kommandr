@@ -8,20 +8,22 @@ module.exports = {
         name: 'Anonymous',
         username: 'anon',
         isPasswordSet: 0,
-        enableLogin: false,
+        isLoginEnabled: 0,
         createdAt: new Date(),
         updatedAt: new Date(),
+        status: 1
       },
       {
         id: 1,
-        name: 'Eddie Ramirez',
-        username: 'ediardo',
+        name: 'test',
+        username: 'test',
         isPasswordSet: 0,
-        email: 'djedir@gmail.com',
+        isLoginEnabled: 0,
+        status: 1,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
-    ], { skip: ['password', 'username']});
+    ], { skip: ['password', 'username', 'email']});
   },
 
   down: function (queryInterface, Sequelize) {

@@ -30,17 +30,28 @@ class CommandLineDescription extends Component {
 
   render() {
     const { isEditing } = this.state;
-    const { content } = this.props, { username } = this.props.author;
-
+    const { mode, content, author } = this.props;
+    let isAnonymous;
+    if (author === null || author.username === 'anon') {
+      isAnonymous = true;
+    }
     return (
       <div className="kommandr-description ">
         <Media>
           <Media left href="#">
-            <div className="user-avatar sm-avatar placeholder"></div>
+            <div className="user-avatar sm-avatar placeholder">
+              { isAnonymous
+                ? ''
+                : <img src={author.externalAvatarUrl} />
+              }
+            </div>
           </Media>
           <Media body className="ml-2">
             <span className="username">
-              <Link to={`/u/${username}`}>{username}</Link>
+              { isAnonymous
+                ? 'anonymous user'
+                : <Link to={`/u/${author.username}`}>{author.username}</Link> 
+              }
             </span>
             <ContentEditable isEditing={isEditing} content={content} type="textarea" onUpdate={this.handleOnUpdate} placeholder="Add a useful description here...">
               <p onClick={this.handleOnClick}>{content}</p>

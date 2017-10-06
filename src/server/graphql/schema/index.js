@@ -1,21 +1,19 @@
 import {
   GraphQLSchema,
   GraphQLObjectType,
-  GraphQLID,
   GraphQLInt,
   GraphQLNonNull,
   GraphQLList,
   GraphQLString
 } from 'graphql';
 
-import userType from './types/user';
-import commentType from './types/comment';
-import kommandrType from './types/kommandr';
+import actionType from './types/action';
 import collectionType from './types/collection';
+import commentType from './types/comment';
 import favType from './types/fav';
-
+import kommandrType from './types/kommandr';
+import userType from './types/user';
 import models from '../../models';
-
 import mutations from './mutations';
 
 const RootQueryType = new GraphQLObjectType({
@@ -29,12 +27,6 @@ const RootQueryType = new GraphQLObjectType({
         return models.User.findById(id).then(user => {
           return user;
         });
-      }
-    },
-    allUsers: {
-      type: new GraphQLList(userType),
-      resolve(root, args, ctx) {
-        return models.User.findAll()
       }
     },
     allComments: {

@@ -33,7 +33,7 @@ module.exports = function(sequelize, DataTypes) {
       },
       isPasswordSet: DataTypes.INTEGER,
       website: DataTypes.STRING,
-      enableLogin: DataTypes.INTEGER,
+      isLoginEnabled: DataTypes.INTEGER,
       githubId: DataTypes.STRING,
       googleId: DataTypes.STRING,
       facebookId: DataTypes.STRING,
@@ -45,8 +45,12 @@ module.exports = function(sequelize, DataTypes) {
       externalAvatarUrl: DataTypes.STRING,
       hasSeenWelcome: DataTypes.INTEGER,
       status: DataTypes.INTEGER,
-      createdAt: DataTypes.DATE,
-      updatedAt: DataTypes.DATE,
+      createdAt: {
+        type: DataTypes.DATE
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+      } 
     }
   );
 
@@ -70,6 +74,7 @@ module.exports = function(sequelize, DataTypes) {
     User.hasMany(models.Comment, {  foreignKey: 'userId' });
     User.hasMany(models.Collection, { foreignKey: 'userId' });
     User.hasMany(models.Fav, { foreignKey: 'userId' });
+    User.hasMany(models.Action, { foreignKey: 'userId' });
   };
 
   return User;

@@ -10,7 +10,6 @@ query searchKommandr($query: String!) {
     totalViews
     totalFavs
     totalForks
-    totalComments
     createdAt
     updatedAt
   }
