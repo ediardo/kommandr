@@ -10,5 +10,11 @@ query currentUser {
     hasSeenWelcome
     status
   }
+  myKommandrs: myKommandrs {
+    id
+  }
+  myFavs: myFavs {
+    id
+  }
 }
 `;

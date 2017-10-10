@@ -6,7 +6,7 @@ import Stats from './KommandrStats';
 const Kommandr = props => {
   const {
     data: {
-      hashId,
+      id,
       title,
       description,
       cli,
@@ -19,12 +19,12 @@ const Kommandr = props => {
   return (
     <span>
       {!compact
-        ? <h4><Link to={`/k/${hashId}`}>{title}</Link></h4>
-        : <h6><Link to={`/k/${hashId}`}>{title}</Link></h6>
+        ? <h4><Link to={`/k/${id}`}>{title}</Link></h4>
+        : <h6><Link to={`/k/${id}`}>{title}</Link></h6>
       }
       {!compact && <p>{description}</p>}
       <code>{cli}</code>
-      <Stats mode="view" kommandrId={hashId} data={{views: totalViews, forks: totalForks, favs: totalFavs }} small />
+      <Stats mode="view" kommandrId={id} data={{views: totalViews, forks: totalForks, favs: totalFavs }} small />
     </span>
   )
 }

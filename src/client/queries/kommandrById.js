@@ -4,7 +4,6 @@ export default gql`
 query KommandrById($id: String!) {
   kommandr: kommandrById(id: $id) {
     id
-    hashId
     userId
     title
     description

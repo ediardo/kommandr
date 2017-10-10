@@ -4,7 +4,6 @@ import {
   GraphQLNonNull,
   GraphQLString,
 } from 'graphql';
-import Hashids from 'hashids';
 
 import favType from './types/fav';
 import models from '../../models';
@@ -26,14 +25,12 @@ const mutation = new GraphQLObjectType({
         let userId = 0;
         if (ctx.user) userId = ctx.user.id;
         return models.Kommandr.max('id').then(max => {
-          var hashId = new Hashids('kommandr', 6);          
-          return models.Kommandr.create({ 
-            hashId: hashId.encode(max),
+          return models.Kommandr.create({
             title,
             cli,
             description,
             userId
-          });          
+          }, { nextId: max + 1 }).then(kommandr => kommandr);
         });
       }
     },
@@ -99,8 +96,8 @@ const mutation = new GraphQLObjectType({
           });
       }
     },
-    addFav: {
-      type: favType,
+    favKommandr: {
+      type: kommandrType,
       args: {
         kommandrId: { type: GraphQLString },
       },
@@ -117,36 +114,73 @@ const mutation = new GraphQLObjectType({
             }
           }).spread((fav, created) => {
             if (created) {
-              console.log('Created fav');0
+              return kommandr.increment('totalFavs').then(kommandr => kommandr);
+            } else {
+              return kommandr;
             }
-            return fav;
           });
         });
         
       }
     },
-
-    /*
-    saveAction: {
-      type: actionType,
+    unfavKommandr: {
+      type: kommandrType,
       args: {
-        targetId: { type: new GraphQLNonNull(GraphQLInt) },
-        targetType: { type: new GraphQLNonNull(GraphQLString) },
+        kommandrId: { type: GraphQLString },
       },
-      resolve(parent, { targetId, targetType }, ctx) {
+      resolve(parent, { kommandrId }, ctx) {
         if (!ctx.user) return null;
-        switch (targetType) {
-          case 'fav':
-            break;
-          case 'fork':
-            break;
-          case 'report':
-            break;
-          default:
-            return null;
-        }
+        return models.Kommandr.findOne({
+          where: { hashId: kommandrId }
+        }).then(kommandr => {
+          return models.Fav.findOne({
+            where: { kommandrId: kommandr.id, userId: ctx.user.id },
+          }).then(fav => {
+            fav.destroy();
+            return kommandr.decrement('totalFavs').then(kommandr => kommandr);            
+          });
+        });
       }
-    }*/
+    },
+    forkKommandr: {
+      type: kommandrType,
+      args: {
+        kommandrId: { type: GraphQLString },
+      },
+      resolve(parent, { kommandrId }, ctx) {
+        if (!ctx.user) return null;
+        return models.Kommandr.findOne({
+          where: { hashId: kommandrId, userId: ctx.user.id },
+        }).then(kommandr => {
+          const { title, cli, description } = kommandr;
+          return models.Kommandr.max('id').then(max => {
+            return models.Kommandr.create({
+              title,
+              cli,
+              description,
+              userId: ctx.user.id,
+            }, { nextId: max + 1 }).then(newKommandr => {
+              kommandr.increment('totalForks');
+              return newKommandr;
+            });
+          });
+        });
+      }
+    },
+    deleteKommandr: {
+      type: kommandrType,
+      args: {
+        kommandrId: { type: GraphQLString },
+      },
+      resovle(parent, { kommandrId }, ctx) {
+        if (!ctx.user) return null;
+        return models.Kommandr.findOne({
+          where: { hashId: kommandrId, userId: ctx.user.id },
+        }).then(kommandr => {
+          kommandr.destroy();
+        });
+      }
+    }
   }
 });
 

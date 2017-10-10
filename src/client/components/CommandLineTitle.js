@@ -6,7 +6,7 @@ class CommandLineTitle extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isEditing: (this.props.content === undefined) ? true : false
+      isEditing: this.props.editing
     };
     this.handleOnClick = this.handleOnClick.bind(this);
     this.handleOnUpdate = this.handleOnUpdate.bind(this);
@@ -28,12 +28,12 @@ class CommandLineTitle extends Component {
 
   render() {
     const { isEditing } = this.state;
-    const { content } = this.props;
+    const { data } = this.props;
 
     return (
       <div className="kommandr-title">
-        <ContentEditable isEditing={isEditing} content={content} onUpdate={this.handleOnUpdate} placeholder="Name this kommandr">
-          <h2 onClick={this.handleOnClick}>{content}</h2>
+        <ContentEditable isEditing={isEditing} content={data} onUpdate={this.handleOnUpdate} placeholder="Name this kommandr">
+          <h2 onClick={this.handleOnClick}>{data}</h2>
         </ContentEditable>
       </div>
     )

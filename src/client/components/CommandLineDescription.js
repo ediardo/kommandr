@@ -30,7 +30,7 @@ class CommandLineDescription extends Component {
 
   render() {
     const { isEditing } = this.state;
-    const { mode, content, author } = this.props;
+    const { mode, data, author } = this.props;
     let isAnonymous;
     if (author === null || author.username === 'anon') {
       isAnonymous = true;
@@ -53,8 +53,8 @@ class CommandLineDescription extends Component {
                 : <Link to={`/u/${author.username}`}>{author.username}</Link> 
               }
             </span>
-            <ContentEditable isEditing={isEditing} content={content} type="textarea" onUpdate={this.handleOnUpdate} placeholder="Add a useful description here...">
-              <p onClick={this.handleOnClick}>{content}</p>
+            <ContentEditable isEditing={isEditing} content={data} type="textarea" onUpdate={this.handleOnUpdate} placeholder="Add a useful description here...">
+              <p onClick={this.handleOnClick}>{data}</p>
             </ContentEditable>
           </Media>
         </Media>

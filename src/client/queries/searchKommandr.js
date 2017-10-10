@@ -4,14 +4,18 @@ export default gql`
 query searchKommandr($query: String!) {
   kommandrs: allKommandrs(title: $query, cli: $query) {
     id
-    hashId
+    userId
     title
+    description
     cli
-    totalViews
-    totalFavs
-    totalForks
     createdAt
     updatedAt
+    totalViews
+    totalForks
+    totalFavs
+    author {
+      username
+    }
   }
   collections: allCollections(name: $query) {
     id

@@ -10,7 +10,6 @@ class SidebarSearchResults extends Component {
   render() {
     const { loading, kommandrs } = this.props.data;
     if (loading) return <span>Loading...</span>;
-    console.log(this.props.data);
     return (
       <div className="sidebar-search-results">
         <ul className="results-group">

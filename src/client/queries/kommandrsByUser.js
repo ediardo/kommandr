@@ -4,7 +4,6 @@ export default gql`
 query kommandrsByUser($username: String!) {
   myKommandrs: allKommandrsByUser(username: $username) {
     id
-    hashId
     title
     description
     cli

@@ -3,15 +3,24 @@ import { graphql, compose } from 'react-apollo';
 import { Button } from 'reactstrap';
 import FontAwesome from 'react-fontawesome';
 
-import saveAction from '../../queries/saveAction';
-
+import favKommandr from '../../queries/favKommandr';
+import unfavKommandr from '../../queries/unfavKommandr';
+import forkKommandr from '../../queries/forkKommandr';
 
 const KommandrStats = (props) => {
-  const { data: { views, forks, favs }, saveAction } = props;
+  const { kommandrId, data: { views, forks, favs } } = props;
   
-  const handleOnClick = (action) => {
-    saveAction(action);
-  }
+  const handleFavKommandr = () => {
+    props.favKommandr({
+      variables: { kommandrId }
+    }).then(({ data }) => {
+      console.log(data);
+    });
+  };
+
+  const handleForkKommandr = () => {
+    
+  };
 
   return (
     <ul className="kommandr-stats views">
@@ -20,13 +29,13 @@ const KommandrStats = (props) => {
         <span className="metric">{views}</span>
       </li>
       <li className="metric-container forks">
-        <Button color="link" onClick={handleOnClick('fork')}>
+        <Button color="link" onClick={handleFavKommandr}>
           <FontAwesome name="code-fork" className="mr-2" />
           <span className="metric">{forks}</span>
         </Button>
       </li>
       <li className="metric-container favs">
-        <Button color="link" onClick={handleOnClick('fav')}>
+        <Button color="link" onClick={handleForkKommandr}>
           <FontAwesome name="heart" className="mr-2" />
           <span className="metric">{favs}</span>
         </Button>
@@ -36,5 +45,9 @@ const KommandrStats = (props) => {
 };
 
 export default compose(
-  graphql(saveAction, { name: 'saveAction' })
+  graphql(favKommandr, { name: 'favKommandr' }),
+  graphql(unfavKommandr, { name: 'unfavKommandr' }),
+  graphql(forkKommandr, { name: 'forkKommandr' }),
 )(KommandrStats);
+
+//export default KommandrStats;

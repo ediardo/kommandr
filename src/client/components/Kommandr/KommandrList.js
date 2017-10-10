@@ -5,7 +5,6 @@ import Kommandr from './Kommandr';
 
 const KommandrList = (props) => {
   const { compact, data } = props;
-  console.log(props);
   const kommandrList = data.map((kommandr, idx) => {
     return (
       <li key={idx} className={classNames('kommandr-item', { compact: compact })}>

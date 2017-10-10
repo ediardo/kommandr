@@ -4,12 +4,8 @@ import { Link } from 'react-router-dom';
 const CustomLink = (props) => {
   const { type, resource } = props;
   switch (type) {
-    case 'user':
-      return <Link to={`/u/${resource}`}>{props.children}</Link>
     case 'kommandr':
-      return <Link to={`/k/${resource}`}>{props.children}</Link>
-    case 'collection':
-      return <Link to={`/c/${resource}`}>{props.children}</Link>
+      return <Link to={`/k/${resource}`} onClick={(e) => {e.preventDefault(); props.history.push(`/k/${resource}`)}}>{props.children}</Link>
   }
 };
 

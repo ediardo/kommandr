@@ -13,14 +13,9 @@ const kommandrType = new GraphQLObjectType({
   name: 'Kommandr',
   fields: () => ({
     id: {
-      type: new GraphQLNonNull(GraphQLID),
+      type: new GraphQLNonNull(GraphQLString),
       description: 'ID of the Kommandr',
       resolve: (kommandr) => kommandr.id
-    },
-    hashId: {
-      type: GraphQLString,
-      description: 'Hashed ID of the Kommandr',
-      resolve: (kommandr) => kommandr.hashId
     },
     userId: {
       type: new GraphQLNonNull(GraphQLInt),

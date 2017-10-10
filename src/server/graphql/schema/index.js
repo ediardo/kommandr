@@ -7,7 +7,6 @@ import {
   GraphQLString
 } from 'graphql';
 
-import actionType from './types/action';
 import collectionType from './types/collection';
 import commentType from './types/comment';
 import favType from './types/fav';
@@ -46,12 +45,14 @@ const RootQueryType = new GraphQLObjectType({
           description: 'Content of the CLI',
           type: GraphQLString
         },
+        
       },
       resolve(root, { title, cli }, ctx) {
         return models.Kommandr.findAll({
           where: { 
             $or: [ { title: { $like: `${title}%` } }, { cli: { $like: `${cli}%` } } ]
-          }
+          },
+          attributes: ['userId', 'title', 'cli', 'createdAt', 'updatedAt', 'description', ['hashId', 'id']]          
         });
       }
     },
@@ -193,7 +194,8 @@ const RootQueryType = new GraphQLObjectType({
       },
       resolve(root, { id }, ctx) {
         return models.Kommandr.findOne({
-          where: { hashId: id }
+          where: { hashId: id },
+          attributes: ['userId', 'title', 'cli', 'createdAt', 'updatedAt', 'description', ['hashId', 'id']]
         }).then(kommandr => {
           kommandr.increment('totalViews');
           return kommandr;
@@ -210,6 +212,25 @@ const RootQueryType = new GraphQLObjectType({
       },
       resolve(root, args) {
         return models.Collection.findById(args.id);
+      }
+    },
+    myFavs: {
+      type: new GraphQLList(favType),
+      resolve(root, args, ctx) {
+        if (!ctx.user) return null;
+        return models.Fav.findAll({
+          where: { userId: ctx.user.id }
+        }).then(myFavorited => myFavorited);
+      }
+    },
+    myKommandrs: {
+      type: new GraphQLList(kommandrType),
+      resolve(root, args, ctx) {
+        if (!ctx.user) return null;
+        return models.Kommandr.findAll({
+          where: { userId: ctx.user.id },
+          attributes: [['hashId', 'id']]
+        })
       }
     }
   }

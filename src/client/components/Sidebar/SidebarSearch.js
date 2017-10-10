@@ -11,7 +11,6 @@ class SidebarSearch extends Component {
     this.state = {
       query: ''
     };
-
     this.onKeyUpHandler = this.onKeyUpHandler.bind(this);
     this.onChangeInput = this.onChangeInput.bind(this);
   }
@@ -28,16 +27,6 @@ class SidebarSearch extends Component {
     });
   }
 
-  doSearch() {
-    const { query } = this.state;
-    this.props.searchKommandr({
-      variables: { query: query }
-    }).then(({data}) =>{
-      console.log(data);
-    }).catch(error => {
-      console.log('there was an error ', error);
-    });
-  }
 
   render() {
     const { query } = this.state;
@@ -49,7 +38,7 @@ class SidebarSearch extends Component {
           </Col>
         </Row>
         <Row>
-          <SidebarSearchResults query={query} />
+          <SidebarSearchResults {...this.props} query={query}/>
         </Row>
       </div>
     )

@@ -74,7 +74,6 @@ module.exports = function(sequelize, DataTypes) {
     User.hasMany(models.Comment, {  foreignKey: 'userId' });
     User.hasMany(models.Collection, { foreignKey: 'userId' });
     User.hasMany(models.Fav, { foreignKey: 'userId' });
-    User.hasMany(models.Action, { foreignKey: 'userId' });
   };
 
   return User;
