@@ -1,9 +1,0 @@
-{
-  "programs": [
-    {"id": 1, "name": "xtrabackup"},
-    {"id": 1, "name": "mysqldump"},
-    {"id": 1, "name": "openstack"},
-    {"id": 2, "name": "ls"},
-    {"id": 3, "name": "ssh"}
-  ]
-}
