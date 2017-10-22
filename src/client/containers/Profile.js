@@ -19,7 +19,6 @@ class Profile extends Component {
     if (loading) {
       return null;
     } else {
-      console.log("From profile ", this.props.data);
       return (
         <Container>
           <Content className="profile row">

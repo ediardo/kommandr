@@ -115,6 +115,7 @@ class ModalWelcome extends Component {
       revealPassword,
     } = this.state;
     const { currentUser } = this.props.data;
+    console.log(currentUser);
     if (currentUser === undefined || currentUser === null) return null;
     const { name } = currentUser;
     return (

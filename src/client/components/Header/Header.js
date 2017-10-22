@@ -54,16 +54,11 @@ class Header extends React.Component {
       <header>
         <Navbar  toggleable>
           <NavbarBrand tag='span'>
-            <Link to="/">kommandr</Link>
+            <Link to={{ pathname: '/', state: 'createNew' }}>kommandr</Link>
           </NavbarBrand>
           <Collapse isOpen={true} navbar>
             <Nav navbar className="mr-auto">
-            <Link to="/">
-              <Button color="success" id="createKommandr" className="mr-3">
-                <FontAwesome name="terminal" /> Create new
-              </Button>
-            </Link>
-              <CustomTooltip content="Create a new Kommandr" placement="bottom center" target="createKommandr" />
+
             </Nav>
             { currentUser 
               ? <ProfileLink data={currentUser} />

@@ -1,8 +1,9 @@
 import gql from 'graphql-tag';
 
 export default gql`
-mutation forkKommandr($kommandrId: String!) {
-  kommandr: forkKommandr(kommandrId: $kommandrId) {
+mutation forkKommandr($id: String!) {
+  kommandr: forkKommandr(id: $id) {
+    id
     hashId
   }
 }`;

@@ -204,9 +204,7 @@ header {
   width: 100%;
 }
 
-input.search-input {
-  background-color: $ultra-light-gray;
-}
+
 .content-editable {
   .editable {
      >:hover {
@@ -232,6 +230,28 @@ input.search-input {
 
 }
 
+.container-search-input {
+  background-color: $search-input-bg;
+  border: 1px solid $search-input-border-color;
+  line-height: $search-input-line-height;
+  font-size: $search-input-font-size;
+  padding: 0.5rem 0.75rem;
+  label {
+    color: $search-input-icon-color;
+    position: absolute;
+  }
+  input {
+    border: 0;
+    margin-left: 28px;
+    padding: 0;
+    &focus::-webkit-input-placeholder {
+      color: $light-gray;
+    }
+    &::-webkit-input-placeholder {
+      color: $search-input-placeholder-color;
+    }
+  }
+}
 
 .my-list {
   list-style-type: none;

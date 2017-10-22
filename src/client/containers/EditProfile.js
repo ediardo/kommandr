@@ -14,7 +14,7 @@ import getProfile from '../queries/getProfile';
 class EditProfile extends Component {
 
   render() {
-    const { profile, loading } = this.props.data;
+    const { loading } = this.props.data;
     //temp solution
     if (loading) {
       return null;

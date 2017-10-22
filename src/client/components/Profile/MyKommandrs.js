@@ -1,22 +1,34 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import { graphql } from 'react-apollo';
 
-import KommandrList from '../Kommandr/KommandrList';
+import InputSearch from '../Form/InputSearch';
+import MyKommandrList from './MyKommandrList';
 
-import kommandrsByUser from '../../queries/kommandrsByUser';
-
-const MyKommandrs = (props) => {
-  const { myKommandrs, loading } = props.data;
-  if (loading) return <p>Loading...</p>;
-  return (
-    <KommandrList data={myKommandrs} />
-  )
-}
-export default graphql(kommandrsByUser, {
-  options: (props) => {
-    return { variables: {
-      username: props.user.username
-    }}
+class MyKommandrs extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      query: ''
+    }
+    this.onChangeSearch = this.onChangeSearch.bind(this);
   }
-})(MyKommandrs);
+
+  onChangeSearch(query) {
+    this.setState({ query });
+  }
+
+  render() {
+    const { user } = this.props;
+    return (
+      <div>
+        <div className="m-3">
+          <InputSearch value={this.state.query} onChange={this.onChangeSearch} />
+        </div>
+        <MyKommandrList username={user.username} query={this.state.query} />
+      </div>
+    )
+  }
+}
+
+export default MyKommandrs;

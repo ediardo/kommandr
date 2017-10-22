@@ -5,14 +5,12 @@ mutation addKommandr($title: String!, $cli: String!, $description: String) {
   kommandr: addKommandr(title: $title, cli: $cli, description: $description) {
     id
     hashId
-    userId
+    author {
+      username
+    }
     title
     cli
     description
-    totalViews
-    totalForks
-    totalComments
-    totalFavs
     createdAt
     updatedAt
   }

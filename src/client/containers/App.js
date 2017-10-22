@@ -7,6 +7,7 @@ import Contact from '../components/Contact';
 import EditProfile from './EditProfile';
 import Footer from '../components/Footer';
 import Header from '../components/Header/Header';
+import Loading from '../components/Loading';
 import Privacy from '../components/Privacy';
 import Profile from './Profile';
 import Terms from '../components/Terms';
@@ -20,7 +21,7 @@ const App = (props) => {
   const { loading, currentUser } = props.data;
   return (
     <div className="app">
-      { loading && <div className="loading-tag bg-warning">Loading...</div>}
+      { loading && <Loading />}
       { !loading && currentUser && <ModalWelcome data={{ currentUser }} /> }
       <Header data={{ currentUser }} />
         <Switch>

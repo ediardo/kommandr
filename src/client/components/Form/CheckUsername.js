@@ -17,7 +17,6 @@ const CheckUsername = ({ currentUsername, newUsername, data: { loading, userExis
   }
 }
 
-
 export default graphql(userExists, {
   options: (props) => {
     return { 
@@ -30,6 +29,3 @@ export default graphql(userExists, {
     }
   }
 })(CheckUsername);
-
-
-//export default CheckUsername;

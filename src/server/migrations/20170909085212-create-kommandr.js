@@ -23,6 +23,9 @@ module.exports = {
       forkFrom: {
         type: Sequelize.STRING
       },
+      source: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

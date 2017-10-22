@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export default gql`
-query kommandrsByUser($username: String!) {
-  myKommandrs: allKommandrsByUser(username: $username) {
+query allKommandrsByUser($username: String, $query: String) {
+  kommandrs: allKommandrs(username: $username, title: $query, cli: $query) {
     id
     title
     description

@@ -8,15 +8,12 @@ import {
 } from 'reactstrap';
 import classNames from 'classnames';
 
-import ProfileOverview from './ProfileOverview';
-import ListCollections from './ListCollections';
-//import ListFavs from './ListFavs';
+import MyActivity from './MyActivity';
 import MyKommandrs from './MyKommandrs';
 
 class ProfileContent extends Component {
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = {
       activeTab: 'profile'
     };
@@ -58,7 +55,7 @@ class ProfileContent extends Component {
         </Nav>
         <TabContent activeTab={activeTab}>
           <TabPane tabId="profile" className="profile-overview">
-            <ProfileOverview user={user} />
+            <MyActivity user={user} />
           </TabPane>
           <TabPane tabId="kommandrs" className="my-kommandrs">
             <MyKommandrs user={user}/>

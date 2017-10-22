@@ -1,12 +1,11 @@
 import React from 'react';
-import Timestamp from 'react-timestamp';
 
 const ProfileSidebar = props => {
-  const { name, username, email, createdAt, externalAvatarUrl } = props.data;
+  const { name, username, email, externalAvatarUrl } = props.data;
   return (
     <div className="user-card">
       <div className="user-avatar lg-avatar">
-        <img src={`${externalAvatarUrl}`} alt="profile picture"/>
+        <img src={`${externalAvatarUrl}`} alt="profile" />
       </div>
       <div className="user-info mt-2">
           <h4 className="user-display-name">{name}</h4>

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 
-import { Col, Row, Input } from 'reactstrap';
+import { Col, Row } from 'reactstrap';
 
+import InputSearch from '../Form/InputSearch';
 import SidebarSearchResults from './SidebarSearchResults';
 
 class SidebarSearch extends Component {
@@ -12,7 +13,7 @@ class SidebarSearch extends Component {
       query: ''
     };
     this.onKeyUpHandler = this.onKeyUpHandler.bind(this);
-    this.onChangeInput = this.onChangeInput.bind(this);
+    this.onChange = this.onChange.bind(this);
   }
 
   onKeyUpHandler(e) {
@@ -21,12 +22,11 @@ class SidebarSearch extends Component {
     }
   }
 
-  onChangeInput(e) {
+  onChange(query) {
     this.setState({
-      query: e.target.value
+      query
     });
   }
-
 
   render() {
     const { query } = this.state;
@@ -34,7 +34,7 @@ class SidebarSearch extends Component {
       <div>
         <Row className="sidebar-search">
           <Col xs="12" className="pt-3 pb-3">
-            <Input type="text" className="search-input" name="sidebarSearchInput" value={query} onChange={this.onChangeInput} placeholder="Search Kommandr" onKeyUp={this.onKeyUpHandler} ref={(input) => {this.input = input;}}  />
+            <InputSearch value={query} onChange={this.onChange} />
           </Col>
         </Row>
         <Row>
