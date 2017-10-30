@@ -3,9 +3,9 @@ import { graphql, compose } from 'react-apollo';
 import { Button } from 'reactstrap';
 import FontAwesome from 'react-fontawesome';
 
-import favKommandr from '../../queries/favKommandr';
-import unfavKommandr from '../../queries/unfavKommandr';
-import forkKommandr from '../../queries/forkKommandr';
+import favKommandr from '../../graphql/mutations/favKommandr.gql';
+import unfavKommandr from '../../graphql/mutations/unfavKommandr.gql';
+import forkKommandr from '../../graphql/mutations/forkKommandr.gql';
 
 const KommandrStats = (props) => {
   const { kommandrId, data: { views, forks, favs } } = props;

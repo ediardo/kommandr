@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { graphql } from 'react-apollo';
+import { graphql, compose } from 'react-apollo';
+import PropTypes from 'prop-types';
 
 import Main from './Main';
 import Contact from '../components/Contact';
@@ -12,13 +13,13 @@ import Privacy from '../components/Privacy';
 import Profile from './Profile';
 import Terms from '../components/Terms';
 import ModalWelcome from '../components/Modal/ModalWelcome';
-import currentUser from '../queries/currentUser';
+
+import currentUser from '../graphql/queries/currentUser.gql';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import '../style/main.scss';
 
-const App = (props) => {
-  const { loading, currentUser } = props.data;
+const App = ({ data: { loading, currentUser } }) => {
   return (
     <div className="app">
       { loading && <Loading />}
@@ -38,4 +39,10 @@ const App = (props) => {
   )
 };
 
-export default graphql(currentUser)(App);
+App.propTypes = {
+  data: PropTypes.object,
+};
+
+export default compose(
+  graphql(currentUser),
+)(App);

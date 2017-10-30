@@ -1,42 +1,34 @@
 import React, { Component }  from 'react';
 import { graphql } from 'react-apollo';
-import {
-  Container,
-  Col
-} from 'reactstrap';
-
-import getProfile from '../queries/getProfile';
+import { Container, Col } from 'reactstrap';
 
 import Content from './Content';
 import ProfileSidebar from '../components/Profile/ProfileSidebar';
 import ProfileContent from '../components/Profile/ProfileContent';
 
-class Profile extends Component {
+import getUser from '../graphql/queries/getUser.gql';
 
-  render() {
-    const { profile, loading } = this.props.data;
-    //temp solution
-    if (loading) {
-      return null;
-    } else {
-      return (
-        <Container>
-          <Content className="profile row">
-            <Col xs="12" sm="3">
-              <ProfileSidebar data={profile} />
-            </Col>
-            <Col xs="12" sm="9">
-              <ProfileContent data={profile}/>
-            </Col>
-          </Content>
-        </Container>
-      )
-    }
+const Profile = ({ data: { user, loading} }) => {
+  //temp solution
+  if (loading) {
+    return null;
+  } else {
+    return (
+      <Container>
+        <Content className="profile row">
+          <Col xs="12" sm="3">
+            <ProfileSidebar data={user} />
+          </Col>
+          <Col xs="12" sm="9">
+            <ProfileContent data={user}/>
+          </Col>
+        </Content>
+      </Container>
+    )
   }
-}
+};
 
-
-export default graphql(getProfile, {
+export default graphql(getUser, {
   options: (props) => {
     return { variables: {
       username: props.match.params.username

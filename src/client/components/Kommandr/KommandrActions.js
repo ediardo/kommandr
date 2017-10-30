@@ -2,9 +2,7 @@ import React from 'react';
 import { graphql } from 'react-apollo';
 import { Button } from 'reactstrap';
 import FontAwesome from 'react-fontawesome';
-
-import currentUser from '../../queries/currentUser';
-
+import currentUser from '../../graphql/queries/currentUser.gql';
 const KommandrActions = (props) => {
 
   const handleOnClickSave = () => {

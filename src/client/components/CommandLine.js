@@ -11,13 +11,13 @@ import Actions from './Kommandr/KommandrActions';
 import Stats from './Kommandr/KommandrStats';
 //import Title from './CommandLineTitle';
 
-import addKommandr from '../queries/addKommandr';
-import forkKommandr from '../queries/forkKommandr';
-import deleteKommandr from '../queries/deleteKommandr';
-import updateKommandr from '../queries/updateKommandr';
-import kommandrById from '../queries/kommandrById';
-import allKommandrs from '../queries/allKommandrs';
-import currentUser from '../queries/currentUser';
+import addKommandr from '../graphql/mutations/addKommandr.gql';
+import forkKommandr from '../graphql/mutations/forkKommandr.gql';
+import deleteKommandr from '../graphql/mutations/deleteKommandr.gql';
+import updateKommandr from '../graphql/mutations/updateKommandr.gql';
+import kommandrById from '../graphql/queries/kommandrById.gql';
+import allKommandrs from '../graphql/queries/allKommandrs.gql';
+import currentUser from '../graphql/queries/currentUser.gql';
 
 import 'codemirror/addon/mode/simple';
 import 'codemirror/mode/shell/shell';
@@ -35,6 +35,7 @@ const initialState = {
 class CommandLine extends Component {
   constructor(props) {
     super(props);
+    console.log(props);
     this.state = initialState;
     this.flagKommandr = this.flagKommandr.bind(this);
     this.forkKommandr = this.forkKommandr.bind(this);

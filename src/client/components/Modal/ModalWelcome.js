@@ -19,7 +19,7 @@ import FontAwesome from 'react-fontawesome';
 
 import CheckUsername from '../Form/CheckUsername';
 import CustomTooltip from '../CustomTooltip';
-import updateUser from '../../queries/updateUser';
+import updateUser from '../../graphql/mutations/updateUser.gql';
 
 const usernameRegex = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){3,38}$/i;
 

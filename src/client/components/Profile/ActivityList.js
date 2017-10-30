@@ -5,7 +5,7 @@ import _ from  'lodash';
 import hdate from 'human-date';
 import FontAwesome from 'react-fontawesome';
 
-import { ListGroup, ListGroupItem, ListGroupItemHeading, ListGroupItemText } from 'reactstrap';
+import { ListGroup, ListGroupItem } from 'reactstrap';
 
 const Activity = data => {
   var icon, title, info;

@@ -1,9 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import classNames from 'classnames';
 import Kommandr from './Kommandr';
 
-const KommandrList = (props) => {
+const KommandrList = props => {
   const { compact, data } = props;
   const kommandrList = data.map((kommandr, idx) => {
     return (
@@ -18,5 +19,10 @@ const KommandrList = (props) => {
     </ul>
   )
 }
+
+KommandrList.propTypes = {
+  compact: PropTypes.bool,
+  data: PropTypes.object,
+};
 
 export default KommandrList;

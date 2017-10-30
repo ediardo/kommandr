@@ -3,7 +3,7 @@ import { graphql } from 'react-apollo';
 
 import KommandrList from '../Kommandr/KommandrList';
 
-import allKommandrsByUser from '../../queries/allKommandrsByUser';
+import allKommandrsByUser from '../../graphql/queries/allKommandrsByUser.gql';
 
 const MyKommandrList = props => {
   const { loading, kommandrs } = props.data;

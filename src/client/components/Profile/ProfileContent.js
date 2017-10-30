@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import {
   Nav,
@@ -8,8 +9,10 @@ import {
 } from 'reactstrap';
 import classNames from 'classnames';
 
-import MyActivity from './MyActivity';
+import MyActivities from './MyActivities';
 import MyKommandrs from './MyKommandrs';
+import MyCollections from './MyCollections';
+import MyFavs from './MyFavs';
 
 class ProfileContent extends Component {
   constructor(props) {
@@ -20,21 +23,19 @@ class ProfileContent extends Component {
     this.toggleTab = this.toggleTab.bind(this);
   }
 
-  toggleTab(tab) {
-    this.setState({
-      activeTab: tab
-    });
+  toggleTab(activeTab) {
+    this.setState({ activeTab });
   }
 
   render() {
     const { activeTab } = this.state;
-    const user = this.props.data;
+    const { data: user } = this.props;
     return (
       <div>
         <Nav tabs>
           <NavItem>
             <Link to={`/u/${user.username}`} className={'nav-link ' + classNames({ active: activeTab === 'profile' })} onClick={() => this.toggleTab('profile') }>
-              Profile
+              Activity
             </Link>
           </NavItem>
           <NavItem>
@@ -55,19 +56,25 @@ class ProfileContent extends Component {
         </Nav>
         <TabContent activeTab={activeTab}>
           <TabPane tabId="profile" className="profile-overview">
-            <MyActivity user={user} />
+            <MyActivities data={user.allActivities} />
           </TabPane>
           <TabPane tabId="kommandrs" className="my-kommandrs">
-            <MyKommandrs user={user}/>
+            <MyKommandrs data={user.allKommandrs} />
           </TabPane>
           <TabPane tabId="collections" className="my-collections">
+            <MyCollections data={user.allCollections} />
           </TabPane>
           <TabPane tabId="favs" className="my-favs">
+            <MyFavs data={user.allFavs} />
           </TabPane>
         </TabContent>
       </div>
     )
   }
 }
+
+ProfileContent.propTypes = {
+  data: PropTypes.object,
+};
 
 export default ProfileContent;

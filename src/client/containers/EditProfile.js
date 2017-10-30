@@ -9,7 +9,7 @@ import {
   Row,
 } from 'reactstrap';
 
-import getProfile from '../queries/getProfile';
+import getUser from '../graphql/queries/getUser.gql';
 
 class EditProfile extends Component {
 
@@ -40,7 +40,7 @@ class EditProfile extends Component {
 }
 
 
-export default graphql(getProfile, {
+export default graphql(getUser, {
   options: (props) => {
     return { variables: {
       username: props.match.params.username

@@ -23,9 +23,7 @@ class SidebarSearch extends Component {
   }
 
   onChange(query) {
-    this.setState({
-      query
-    });
+    this.setState({ query });
   }
 
   render() {
@@ -44,6 +42,5 @@ class SidebarSearch extends Component {
     )
   }
 }
-
 
 export default SidebarSearch;
