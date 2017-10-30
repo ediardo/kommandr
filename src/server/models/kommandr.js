@@ -6,7 +6,10 @@ module.exports = function(sequelize, DataTypes) {
     title: DataTypes.STRING,
     cli: DataTypes.STRING,
     description: DataTypes.STRING,
-    forkFrom: DataTypes.INTEGER,
+    forkFrom: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
     totalViews: DataTypes.INTEGER,
     totalFavs: DataTypes.INTEGER,
     totalComments: DataTypes.INTEGER,
@@ -19,6 +22,7 @@ module.exports = function(sequelize, DataTypes) {
     Kommandr.belongsTo(models.User, { foreignKey: 'userId' });
     Kommandr.hasMany(models.Comment, { foreignKey: 'kommandrId', onDelete: 'cascade' });
     Kommandr.hasMany(models.Fav, { foreignKey: 'kommandrId', onDelete: 'cascade' });
+    Kommandr.hasMany(models.Kommandr, { foreignKey: 'forkFrom', as: 'Forks', onDelete: 'set null' })
     Kommandr.belongsTo(models.Collection, { foreignKey: 'collectionId' });
   };
 
