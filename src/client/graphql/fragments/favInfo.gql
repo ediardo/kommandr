@@ -1,0 +1,6 @@
+fragment favInfo on Fav {
+  id
+  userId
+  kommandrId
+  createdAt
+}

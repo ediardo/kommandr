@@ -1,0 +1,8 @@
+fragment userActivity on Activity {
+  id
+  userId
+  targetType
+  targetId
+  isPublic
+  createdAt
+}

@@ -1,0 +1,21 @@
+#import "../fragments/userInfo.gql"
+
+query currentUser {
+  currentUser {
+    ...userInfo
+    isPasswordSet
+    hasSeenWelcome
+    allKommandrs {
+      id
+    }
+    allComments {
+      id
+    }
+    allFavs {
+      id
+    }
+    allCollections {
+      id
+    }
+  }
+}

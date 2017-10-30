@@ -1,0 +1,5 @@
+fragment collectionInfo on Collection {
+  id
+  userId
+  name
+}

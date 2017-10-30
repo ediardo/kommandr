@@ -1,0 +1,10 @@
+fragment kommandrInfo on Kommandr {
+  id
+  userId
+  forkFrom
+  title
+  description
+  cli
+  createdAt
+  updatedAt
+}
