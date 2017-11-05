@@ -173,8 +173,11 @@ const userType = new GraphQLObjectType({
       resolve: user => models.Activity.findAll({
         include: [{
           model: models.User,
-          where: { id: user.id }
-        }]
+          where: { id: user.id },
+        }],
+        order: [
+          [ 'createdAt', 'DESC' ]
+        ],
       })
     },
     allComments: {
@@ -186,6 +189,9 @@ const userType = new GraphQLObjectType({
             model: models.User,
             where: { id: user.id },
           }],
+          order: [
+            [ 'createdAt', 'DESC' ]
+          ],
         });
       }
     },
@@ -197,6 +203,9 @@ const userType = new GraphQLObjectType({
             model: models.User,
             where: { id: user.id },
           }],
+          order: [
+            [ 'createdAt', 'DESC' ]
+          ],
         });
       }
     },
@@ -208,6 +217,9 @@ const userType = new GraphQLObjectType({
             model: models.User,
             where: { id: user.id },
           }],
+          order: [
+            [ 'createdAt', 'DESC' ]
+          ],
         });
       }
     },
@@ -218,7 +230,10 @@ const userType = new GraphQLObjectType({
           include: [{
             model: models.User,
             where: { id: user.id },
-          }]
+          }],
+          order: [
+            [ 'createdAt', 'DESC' ]
+          ],
         });
       }
     }

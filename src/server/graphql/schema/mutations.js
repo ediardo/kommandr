@@ -7,6 +7,7 @@ import {
 
 import models from '../../models';
 import kommandrType from './types/kommandr';
+import collectionType from './types/collection';
 import userType from './types/user';
 import commentType from './types/comment';
 
@@ -34,7 +35,7 @@ const mutation = new GraphQLObjectType({
           cli,
           description,
           userId
-        }).then(kommandr => kommandr);
+        });
       }
     },
 
@@ -88,7 +89,7 @@ const mutation = new GraphQLObjectType({
             description,
             forkFrom: id,
             userId: ctx.user.id,
-          }, { isForked: true }).then(newKommandr => newKommandr);
+          }, { isForked: true });
         });
       }
     },
@@ -104,92 +105,6 @@ const mutation = new GraphQLObjectType({
           where: { hashId: id, userId: ctx.user.id },
         }).then(affectedRows => {
           return (affectedRows > 0) ? ({ id }) : ({ id: null});
-        });
-      }
-    },
-
-    addComment: {
-      type: commentType,
-      args: {
-        kommandrId: { type: new GraphQLNonNull(GraphQLInt) },
-        userId: { type: new GraphQLNonNull(GraphQLInt) },
-        comment: { type: GraphQLString }
-      },
-      resolve(parent, { kommandrId, userId, comment }) {
-        return models.Comment.create({ kommandrId, userId, comment })
-      }
-    },
-
-    deleteComment: {
-      type: commentType,
-      args: {
-        commentId: { type: new GraphQLNonNull(GraphQLInt) },
-      },
-      resolve(parent, { commentId }, ctx) {
-        if (!ctx.user) return null;
-        return models.Comment.destroy({
-          where: { userId: ctx.user.id, id: commentId },
-        }).then(affectedRows => {
-          return (affectedRows > 0) ? ({ id: commentId }) : ({ id: null });
-        });
-      }
-    },
-
-    addUser: {
-      type: userType,
-      args: {
-        email: { type: new GraphQLNonNull(GraphQLString) },
-        password: { type: new GraphQLNonNull(GraphQLString) }
-      },
-      resolve(parent, { email, password }) {
-        // Temporary using clear-text passwords :(
-        return models.User.create({ email, password })
-      }
-    },
-
-    updateUser: {
-      type: userType,
-      args: {
-        username: { type: GraphQLString },
-        password: { type: GraphQLString }
-      },
-      resolve(parent, { username, password }, ctx) {
-        if (!ctx.user) return null;
-        let userFields = {};
-        if (username) {
-          userFields = { ...userFields, username };
-        }
-        if (password) {
-          userFields = { ...userFields, password };
-        }
-        // NOTE (ediardo):
-        // must create a separate mutation to turn on/off notification and one-time off modals
-        userFields = { 
-          ...userFields,
-          hasSeenWelcome: 1,
-          isPasswordSet: 1
-        };
-        return models.User.update(userFields, { where: { id: ctx.user.id } })
-          .then(count => {
-            return models.User.findById(ctx.user.id);
-          });
-      }
-    },
-
-    deleteUser: {
-      type: userType,
-      args: {
-        id: { 
-          description: 'User ID',
-          type: new GraphQLNonNull(GraphQLString) ,
-        }
-      },
-      resolve(parent, { id }, ctx) {
-        if (!ctx.user || ctx.user.id !== id) return null;
-        return models.User.destroy({
-          where: { id },
-        }).then(affectedRows => {
-          return (affectedRows > 0) ? { id } : { id: -1 };
         });
       }
     },
@@ -239,11 +154,116 @@ const mutation = new GraphQLObjectType({
         });
       }
     },
-   /*
-    addCollection: {
 
+    addComment: {
+      type: commentType,
+      args: {
+        kommandrId: { type: new GraphQLNonNull(GraphQLInt) },
+        userId: { type: new GraphQLNonNull(GraphQLInt) },
+        comment: { type: GraphQLString }
+      },
+      resolve(parent, { kommandrId, userId, comment }) {
+        return models.Comment.create({ kommandrId, userId, comment })
+      }
+    },
+
+    deleteComment: {
+      type: commentType,
+      args: {
+        commentId: { type: new GraphQLNonNull(GraphQLInt) },
+      },
+      resolve(parent, { commentId }, ctx) {
+        if (!ctx.user) return null;
+        return models.Comment.destroy({
+          where: { userId: ctx.user.id, id: commentId },
+        }).then(affectedRows => {
+          return (affectedRows > 0) ? ({ id: commentId }) : ({ id: null });
+        });
+      }
+    },
+
+    addUser: {
+      type: userType,
+      args: {
+        email: { type: new GraphQLNonNull(GraphQLString) },
+        password: { type: new GraphQLNonNull(GraphQLString) }
+      },
+      resolve(parent, { email, password }) {
+        // Temporary using clear-text passwords :(
+        return models.User.create({ email, password });
+      }
+    },
+
+    updateUser: {
+      type: userType,
+      args: {
+        username: { type: GraphQLString },
+        password: { type: GraphQLString }
+      },
+      resolve(parent, { username, password }, ctx) {
+        if (!ctx.user) return null;
+        let userFields = {};
+        if (username) {
+          userFields = { ...userFields, username };
+        }
+        if (password) {
+          userFields = { ...userFields, password };
+        }
+        // NOTE (ediardo):
+        // must create a separate mutation to turn on/off notification and one-time off modals
+        userFields = { 
+          ...userFields,
+          hasSeenWelcome: 1,
+          isPasswordSet: 1
+        };
+        return models.User.update(userFields, { where: { id: ctx.user.id } })
+          .then(count => {
+            return models.User.findById(ctx.user.id);
+          });
+      }
+    },
+
+    deleteUser: {
+      type: userType,
+      args: {
+        id: { 
+          description: 'User ID',
+          type: new GraphQLNonNull(GraphQLString),
+        }
+      },
+      resolve(parent, { id }, ctx) {
+        if (!ctx.user || ctx.user.id !== id) return null;
+        return models.User.destroy({
+          where: { id },
+        }).then(affectedRows => {
+          return (affectedRows > 0) ? { id } : { id: -1 };
+        });
+      }
+    },
+
+    
+   
+    addCollection: {
+      type: collectionType,
+      args: {
+        name: {
+          type: new GraphQLNonNull(GraphQLString),
+        },
+        description: {
+          type: GraphQLString,
+        },
+      },
+      resolve(parent, { name, description }, ctx) {
+        if (!ctx.user) return null;
+        return models.Collection.create({
+          name,
+          description,
+          userId: ctx.user.id,
+        });
+      }
     },
     
+    /*
     updateCollection: {
 
     },
