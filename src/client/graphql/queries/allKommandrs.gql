@@ -1,0 +1,11 @@
+#import "../fragments/kommandrInfo.gql"
+#import "../fragments/kommandrStats.gql"
+#import "../fragments/kommandrForks.gql"
+
+query allKommandrs {
+  allKommandrs {
+    ...kommandrInfo
+    ...kommandrForks
+    ...kommandrStats
+  }
+}

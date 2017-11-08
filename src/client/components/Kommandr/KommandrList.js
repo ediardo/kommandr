@@ -1,22 +1,62 @@
 import React from 'react';
-
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import { ListGroup, ListGroupItem } from 'reactstrap';
+import hdate from 'human-date';
+import CodeMirror from 'react-codemirror';
 import classNames from 'classnames';
-import Kommandr from './Kommandr';
+import Humanize from 'humanize-plus';
 
-const KommandrList = (props) => {
-  const { compact, data } = props;
+import 'codemirror/addon/display/placeholder.js';
+import 'codemirror/addon/display/autorefresh.js';
+import 'codemirror/addon/mode/simple';
+import 'codemirror/mode/shell/shell';
+
+import { Stats, StatComment, StatView, StatFork, StatStar } from '../Stats';
+
+const KommandrList = ({ data, compact }) => {
+  const codemirrorOpts = {
+    readOnly: true,
+    lineNumbers: false,
+    mode: "shell",
+    autoRefresh: true,
+    lineWrapping: true,
+    height: 'auto',
+    viewportMargin: Infinity,
+  };
   const kommandrList = data.map((kommandr, idx) => {
+    const itemClassnames = classNames({
+      'kommandr-item': true,
+      'compact': compact === true,
+    });
+    const cli = (compact) ? Humanize.truncate(kommandr.cli, 20) : kommandr.cli;
     return (
-      <li key={idx} className={classNames('kommandr-item', { compact: compact })}>
-        <Kommandr data={kommandr} compact={compact} />
-      </li>
+      <ListGroupItem key={idx} className={itemClassnames}>
+      {!compact
+        ? <h4><Link to={`/k/${kommandr.id}`}>{kommandr.title}</Link></h4>
+        : <h6><Link to={`/k/${kommandr.id}`}>{kommandr.title}</Link></h6>
+      }
+        <CodeMirror defaultValue={cli} options={codemirrorOpts} id={idx}/>
+        <Stats>
+          <StatView value={kommandr.totalViews} compact />
+          <StatComment value={kommandr.totalComments} compact />
+          <StatFork value={kommandr.totalForks} compact />
+          <StatStar value={kommandr.totalStars} compact />
+          <span>{hdate.relativeTime(kommandr.updatedAt)}</span>
+        </Stats>
+      </ListGroupItem>
     )
   });
   return (
-    <ul className="list-kommandrs">
+    <ListGroup className="list-kommandrs">
       {kommandrList}
-    </ul>
+    </ListGroup>
   )
 }
+
+KommandrList.propTypes = {
+  compact: PropTypes.bool,
+  data: PropTypes.array,
+};
 
 export default KommandrList;

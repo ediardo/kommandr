@@ -1,0 +1,13 @@
+mutation addKommandr($title: String!, $cli: String!, $description: String) {
+  kommandr: addKommandr(title: $title, cli: $cli, description: $description) {
+    id
+    author {
+      username
+    }
+    title
+    cli
+    description
+    createdAt
+    updatedAt
+  }
+}

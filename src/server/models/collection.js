@@ -5,6 +5,7 @@ module.exports = function(sequelize, DataTypes) {
     description: DataTypes.STRING,
     userId: DataTypes.INTEGER,
     totalKommandrs: DataTypes.INTEGER,
+    matchPattern: DataTypes.STRING,
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
   });

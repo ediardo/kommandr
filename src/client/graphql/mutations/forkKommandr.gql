@@ -1,0 +1,5 @@
+mutation forkKommandr($id: String!) {
+  kommandr: forkKommandr(id: $id) {
+    id
+  }
+}

@@ -21,8 +21,6 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './style/main.scss';
 import 'codemirror/lib/codemirror.css';
 
-//import 'holderjs/holder.js';
-
 /*
 const middleware = [ thunkMiddleware ];
 middleware.push(createLogger());
@@ -30,13 +28,16 @@ const store = createStore(reducer, applyMiddleware(...middleware));
 */
 
 const networkInterface = createNetworkInterface({
-  uri: 'http://api.kommandr.com:5001/graphql',
+  uri: 'http://kommandr.com:5001/graphql',
   opts: {
     credentials: 'include'
   },
 });
 
-const client = new ApolloCLient({ networkInterface: networkInterface })
+const client = new ApolloCLient({ 
+  networkInterface: networkInterface,
+  dataIdFromObject: o => o.__typename + ':' +  o.id
+});
 
 ReactDOM.render(
   <ApolloProvider client={client}>

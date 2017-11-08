@@ -6,11 +6,11 @@ import {
   Collapse,
   Nav,
   Navbar,
+  NavItem,
   NavbarBrand
 } from 'reactstrap';
 
 import ProfileLink from './ProfileLink';
-import CustomTooltip from '../CustomTooltip';
 import ModalHelp from '../Modal/ModalHelp';
 import ModalSignIn from '../Modal/ModalSignIn';
 
@@ -48,32 +48,29 @@ class Header extends React.Component {
 
   render() {
     const { isOpenModalHelp, isOpenModalSignIn } = this.state;
-    const { currentUser } = this.props.data;
-
+  
     return (
       <header>
-        <Navbar  toggleable>
-          <NavbarBrand tag='span'>
+        <Navbar  color="faded" light expand="md">
+          <NavbarBrand tag="span">
             <Link to={{ pathname: '/', state: 'createNew' }}>kommandr</Link>
           </NavbarBrand>
-          <Collapse isOpen={true} navbar>
-            <Nav navbar className="mr-auto">
-
-            </Nav>
-            { currentUser 
-              ? <ProfileLink data={currentUser} />
-              : <Button  color="link" onClick={this.toggleModalSignIn} className="mr-2">
-                  <FontAwesome name="user" />
+          <Collapse navbar>
+            <Nav navbar className="ml-auto">
+              <NavItem>
+                <ProfileLink onClickLoginHandler={this.toggleModalSignIn} />
+              </NavItem>
+              <NavItem>
+                <Button color="link" onClick={this.toggleModalHelp}>
+                  <FontAwesome name="question-circle" />
                 </Button>
-            }
-
-            <Button color="link" onClick={this.toggleModalHelp}>
-                <FontAwesome name="question-circle" />
-            </Button>
-            <ModalSignIn toggle={this.toggleModalSignIn} isOpen={isOpenModalSignIn} />
-            <ModalHelp toggle={this.toggleModalHelp} isOpen={isOpenModalHelp} />
+              </NavItem>
+              <ModalSignIn toggle={this.toggleModalSignIn} isOpen={isOpenModalSignIn} />
+              <ModalHelp toggle={this.toggleModalHelp} isOpen={isOpenModalHelp} />
+            </Nav>
           </Collapse>
         </Navbar>
+        
       </header>
     );
   }

@@ -18,11 +18,10 @@ class ModalHelp extends Component {
       <Modal isOpen={isOpen} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>Help</ModalHeader>
         <ModalBody>
-          <img data-src="holder.js/400x600" alt="Ad"/>
-
+          Trying to get some help?
         </ModalBody>
         <ModalFooter>
-          <Button color="secondary" onClick={this.toggle}>Exit</Button>
+          <Button outline color="secondary" onClick={this.toggle}>Exit</Button>
         </ModalFooter>
       </Modal>
     )

@@ -2,10 +2,12 @@ import bcrypt from 'bcrypt';
 import { reservedUsernames } from '../config/reservedUsernames';
 
 const hashPassword = (password) => bcrypt.hashSync(password, 1);
+
+/* TO BE DEPRECATED
 const comparePassword = (password, hash) => bcrypt.compare(password, hash);
 const usernameIsReserved = (username) => reservedUsernames.includes(username);
 const usernameIsValid = (username) => username.match(/^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){3,38}$/i);
-
+*/
 module.exports = function(sequelize, DataTypes) {
   var User = sequelize.define('User', {
       name: DataTypes.STRING,
@@ -73,7 +75,7 @@ module.exports = function(sequelize, DataTypes) {
     User.hasMany(models.Kommandr, { foreignKey: 'userId' });
     User.hasMany(models.Comment, {  foreignKey: 'userId' });
     User.hasMany(models.Collection, { foreignKey: 'userId' });
-    User.hasMany(models.Fav, { foreignKey: 'userId' });
+    User.hasMany(models.Star, { foreignKey: 'userId' });
   };
 
   return User;

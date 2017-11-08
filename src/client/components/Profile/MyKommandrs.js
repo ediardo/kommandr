@@ -1,34 +1,37 @@
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
+import _  from 'lodash';
 
-import { graphql } from 'react-apollo';
+import KommandrList from '../Kommandr/KommandrList';
+import ListWithFilters from '../List/ListWithFilters';
 
-import InputSearch from '../Form/InputSearch';
-import MyKommandrList from './MyKommandrList';
+const MyKommandrs = ({ filteredItems, query, filters, sort }) => {
+  return (
+    <KommandrList data={filteredItems} /> 
+  )
+};
 
-class MyKommandrs extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      query: ''
-    }
-    this.onChangeSearch = this.onChangeSearch.bind(this);
-  }
+MyKommandrs.propTypes = {
+  data: PropTypes.array,
+  query: PropTypes.string,
+  filters: PropTypes.object,
+  sort: PropTypes.object,
+  isCurrentUser: PropTypes.bool,
+};
 
-  onChangeSearch(query) {
-    this.setState({ query });
-  }
-
-  render() {
-    const { user } = this.props;
-    return (
-      <div>
-        <div className="m-3">
-          <InputSearch value={this.state.query} onChange={this.onChangeSearch} />
-        </div>
-        <MyKommandrList username={user.username} query={this.state.query} />
-      </div>
-    )
-  }
-}
-
-export default MyKommandrs;
+export default ListWithFilters(MyKommandrs, {
+  filterFields: ['title', 'cli', 'description'],
+  orderFields: [
+    { 'createdAt': 'desc' },
+    { 'title': 'asc' },
+  ],
+  paginator: {
+    pageSize: 15,
+  },
+  queryPlaceholder: 'Search Kommandrs',
+  addNew: {
+    to: '/',
+    label: 'New Kommandr',
+  },
+  listName: 'kommandrs',
+});

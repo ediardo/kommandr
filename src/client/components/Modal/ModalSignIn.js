@@ -68,8 +68,6 @@ class ModalSignIn extends Component {
     });
   }
 
-
-
   toggle() {
     this.props.toggle();
   }
@@ -89,15 +87,16 @@ class ModalSignIn extends Component {
       <Modal isOpen={isOpen} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>Can I see some ID?</ModalHeader>
         <ModalBody>
-        <a href={apiUrl('/login/github')}>
-          <Button size="big" color="primary" >
-            <FontAwesome name="github" /> Log in with your GitHub account
-          </Button>
-        </a>
-
+          <div>
+            <a href={apiUrl('/login/github')}>
+              <Button size="big" color="primary" >
+                <FontAwesome name="github" /> Log in with your GitHub account
+              </Button>
+            </a>
+          </div>
         </ModalBody>
         <ModalFooter>
-          <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+          <Button outline color="secondary" onClick={this.toggle}>Cancel</Button>
         </ModalFooter>
       </Modal>
     )

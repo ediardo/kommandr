@@ -21,7 +21,9 @@ module.exports = {
         type: Sequelize.STRING
       },
       forkFrom: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: true,
+        defaultValue: null,
       },
       source: {
         type: Sequelize.STRING
@@ -60,7 +62,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         defaultValue: 0
       },
-      totalFavs: {
+      totalStars: {
         allowNull: false,
         type: Sequelize.INTEGER,
         defaultValue: 0

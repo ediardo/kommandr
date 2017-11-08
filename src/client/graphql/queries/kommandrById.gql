@@ -1,0 +1,24 @@
+#import "../fragments/kommandrInfo.gql"
+#import "../fragments/kommandrStats.gql"
+#import "../fragments/kommandrForks.gql"
+
+query KommandrById($id: String!) {
+  kommandr: kommandrById(id: $id) {
+    ...kommandrInfo
+    ...kommandrForks
+    ...kommandrStats
+    author {
+      id
+      username
+    }
+    allComments {
+      id
+    }
+    allForks {
+      id
+    }
+    allStars {
+      id
+    }
+  }
+}

@@ -17,6 +17,9 @@ module.exports = {
       totalKommandrs: {
         type: Sequelize.INTEGER
       },
+      matchPattern: {
+        type: Sequelize.STRING,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
