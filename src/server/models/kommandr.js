@@ -11,7 +11,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true,
     },
     totalViews: DataTypes.INTEGER,
-    totalFavs: DataTypes.INTEGER,
+    totalStars: DataTypes.INTEGER,
     totalComments: DataTypes.INTEGER,
     totalForks: DataTypes.INTEGER,
     createdAt: DataTypes.DATE,
@@ -21,7 +21,7 @@ module.exports = function(sequelize, DataTypes) {
   Kommandr.associate = models => {
     Kommandr.belongsTo(models.User, { foreignKey: 'userId' });
     Kommandr.hasMany(models.Comment, { foreignKey: 'kommandrId', onDelete: 'cascade' });
-    Kommandr.hasMany(models.Fav, { foreignKey: 'kommandrId', onDelete: 'cascade' });
+    Kommandr.hasMany(models.Star, { foreignKey: 'kommandrId', onDelete: 'cascade' });
     Kommandr.hasMany(models.Kommandr, { foreignKey: 'forkFrom', as: 'Forks', onDelete: 'set null' })
     Kommandr.belongsTo(models.Collection, { foreignKey: 'collectionId' });
   };
@@ -44,7 +44,8 @@ module.exports = function(sequelize, DataTypes) {
       });
     }
     if (options.isForked) {
-      Kommandr.increment('totalForks', { where: { id: id }, silent: true });
+      const { forkFrom } = kommandr;
+      sequelize.models.Kommandr.update({ totalForks: sequelize.literal('totalForks + 1')}, { where: { id: forkFrom }, silent: true });
     }
   });
   
@@ -66,7 +67,7 @@ module.exports = function(sequelize, DataTypes) {
       });
     }
     if (forkFrom) {
-      sequelize.models.Kommandr.increment({ totalForks: -1 }, { where: { id: forkFrom }, silent: true });
+      sequelize.models.Kommandr.update({ totalForks: sequelize.literal('totalForks - 1') }, { where: { id: forkFrom }, silent: true });
     }
     
   });

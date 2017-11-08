@@ -211,7 +211,7 @@ const userType = new GraphQLObjectType({
     allStars: {
       type: new GraphQLList(starType),
       resolve: user => {
-        return models.Fav.findAll({
+        return models.Star.findAll({
           include: [{
             model: models.User,
             where: { id: user.id },

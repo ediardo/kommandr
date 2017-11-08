@@ -95,7 +95,7 @@ const RootQueryType = new GraphQLObjectType({
       }
     },
     
-    allFavsByUser: {
+    allStarsByUser: {
       type: new GraphQLList(starType),
       args: {
         username: {
@@ -104,7 +104,7 @@ const RootQueryType = new GraphQLObjectType({
         }
       },
       resolve(root, { username }) {
-        return models.Fav.findAll({
+        return models.Star.findAll({
           attributes: [ 'id', 'userId', 'kommandrId', 'createdAt' ],
           include: [{
             model: models.User,
@@ -265,7 +265,7 @@ const RootQueryType = new GraphQLObjectType({
       type: new GraphQLList(starType),
       resolve(root, args, ctx) {
         if (!ctx.user) return null;
-        return models.Fav.findAll({
+        return models.Star.findAll({
           where: { userId: ctx.user.id }
         }).then(myFavorited => myFavorited);
       }

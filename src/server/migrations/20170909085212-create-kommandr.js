@@ -62,7 +62,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         defaultValue: 0
       },
-      totalFavs: {
+      totalStars: {
         allowNull: false,
         type: Sequelize.INTEGER,
         defaultValue: 0

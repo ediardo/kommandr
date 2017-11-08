@@ -1,19 +1,19 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
-  var Fav = sequelize.define('Fav', {
+  var Star = sequelize.define('Star', {
     userId: DataTypes.INTEGER,
     kommandrId: DataTypes.INTEGER,
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
   });
   
-  Fav.associate = models => {
-    Fav.belongsTo(models.User, { foreignKey: 'userId' });
-    Fav.belongsTo(models.Kommandr, { foreignKey: 'kommandrId' });
+  Star.associate = models => {
+    Star.belongsTo(models.User, { foreignKey: 'userId' });
+    Star.belongsTo(models.Kommandr, { foreignKey: 'kommandrId' });
   };
 
-  Fav.afterCreate((fav, options) => {
-    const { id, kommandrId, userId } = fav;
+  Star.afterCreate((star, options) => {
+    const { id, kommandrId, userId } = star;
     // Anon user is always 0, do not log activity
     if (userId !== 0) { 
       sequelize.models.Activity.create({
@@ -22,28 +22,28 @@ module.exports = function(sequelize, DataTypes) {
         targetType: 'fav',
       });
     }
-    sequelize.models.Kommandr.increment('totalFavs', { where: { id: kommandrId }, silent: true })
+    sequelize.models.Kommandr.increment('totalStars', { where: { id: kommandrId }, silent: true })
   });
 
-  Fav.beforeBulkDestroy(options => {
+  Star.beforeBulkDestroy(options => {
     options.individualHooks = true;
     return options;
   });
 
-  Fav.afterDestroy((fav, options) => {
-    const { id, kommandrId, userId } = fav;
+  Star.afterDestroy((star, options) => {
+    const { id, kommandrId, userId } = star;
     // Anon user is always 0, do not log activity
     if (userId !== 0) { 
       sequelize.models.Activity.destroy({
         where: {
           userId,
           targetId: id,
-          targetType: 'fav',
+          targetType: 'star',
         },      
       });
     }
-    sequelize.models.Kommandr.increment({ totalFavs: -1 }, { where: { id: kommandrId }, silent: true });
+    sequelize.models.Kommandr.increment({ totalStars: -1 }, { where: { id: kommandrId }, silent: true });
   });
 
-  return Fav;
+  return Star;
 };

@@ -41,7 +41,7 @@ const kommandrType = new GraphQLObjectType({
       description: 'Description of the kommandr',
     },
     forkFrom: {
-      type: GraphQLInt,
+      type: GraphQLString,
       description: 'Kommandr ID',
     },
     createdAt: {
@@ -63,7 +63,6 @@ const kommandrType = new GraphQLObjectType({
     totalStars: {
       type: GraphQLInt,
       description: 'Counter',
-      resolve: kommandr => kommandr.totalFavs,
     },
     totalComments: {
       type: GraphQLInt,
@@ -96,7 +95,7 @@ const kommandrType = new GraphQLObjectType({
     allStars: {
       type: new GraphQLList(starType),
       resolve: kommandr => {
-        return models.Fav.findAll({
+        return models.Star.findAll({
           include: [{
             model: models.Kommandr,
             where: { hashId: kommandr.id }

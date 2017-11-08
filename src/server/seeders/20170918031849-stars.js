@@ -2,7 +2,7 @@
 
 module.exports = {
   up: function (queryInterface, Sequelize) {
-    return queryInterface.bulkInsert('Favs', [
+    return queryInterface.bulkInsert('Stars', [
       {
         id: 1,
         userId: 1,
@@ -35,6 +35,6 @@ module.exports = {
   },
 
   down: function (queryInterface, Sequelize) {
-    queryInterface.dropTable('Favs');
+    queryInterface.dropTable('Stars');
   }
 };
