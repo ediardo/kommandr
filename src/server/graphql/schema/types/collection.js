@@ -23,6 +23,9 @@ const collectionType = new GraphQLObjectType({
     description: {
       type: GraphQLString,
     },
+    matchPattern: {
+      type: GraphQLString,
+    },
     totalKommandrs: {
       type: GraphQLInt,
       description: 'Total kommandrs in this collection',

@@ -6,8 +6,8 @@ import {
   GraphQLString,
 } from 'graphql';
 
-const favType = new GraphQLObjectType({
-  name: 'Fav',
+const starType = new GraphQLObjectType({
+  name: 'Star',
   fields: () => ({
     id: {
       type: new GraphQLNonNull(GraphQLID),
@@ -27,4 +27,4 @@ const favType = new GraphQLObjectType({
   })
 });
 
-export default favType;
+export default starType;

@@ -25,6 +25,10 @@ const activityType = new GraphQLObjectType({
       type: GraphQLString,
       description: 'Type of the resource'
     },
+    targetName: {
+      type: GraphQLString,
+      description: ''
+    },
     isPublic: {
       type: GraphQLInt,
     },

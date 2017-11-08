@@ -4,14 +4,13 @@ import {
   GraphQLBoolean,
   GraphQLString,
   GraphQLObjectType,
-  GraphQLNonNull,
   GraphQLList
 } from 'graphql';
 
 import models from '../../../models';
 import activityType from './activity';
 import commentType from './comment';
-import favType from './fav';
+import starType from './star';
 import kommandrType from './kommandr';
 import collectionType from './collection';
 
@@ -209,8 +208,8 @@ const userType = new GraphQLObjectType({
         });
       }
     },
-    allFavs: {
-      type: new GraphQLList(favType),
+    allStars: {
+      type: new GraphQLList(starType),
       resolve: user => {
         return models.Fav.findAll({
           include: [{

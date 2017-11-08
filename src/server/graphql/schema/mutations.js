@@ -109,7 +109,7 @@ const mutation = new GraphQLObjectType({
       }
     },
 
-    favKommandr: {
+    starKommandr: {
       type: kommandrType,
       args: {
         id: { type: new GraphQLNonNull(GraphQLString) },
@@ -136,7 +136,7 @@ const mutation = new GraphQLObjectType({
       }
     },
 
-    unfavKommandr: {
+    unstarKommandr: {
       type: kommandrType,
       args: {
         id: { type: new GraphQLNonNull(GraphQLString) },
@@ -252,12 +252,16 @@ const mutation = new GraphQLObjectType({
         description: {
           type: GraphQLString,
         },
+        matchPattern: {
+          type: GraphQLString,
+        },
       },
-      resolve(parent, { name, description }, ctx) {
+      resolve(parent, { name, description, matchPattern }, ctx) {
         if (!ctx.user) return null;
         return models.Collection.create({
           name,
           description,
+          matchPattern,
           userId: ctx.user.id,
         });
       }

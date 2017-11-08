@@ -10,7 +10,7 @@ import {
 import activityType from './types/activity';
 import collectionType from './types/collection';
 import commentType from './types/comment';
-import favType from './types/fav';
+import starType from './types/star';
 import kommandrType from './types/kommandr';
 import userType from './types/user';
 import models from '../../models';
@@ -96,7 +96,7 @@ const RootQueryType = new GraphQLObjectType({
     },
     
     allFavsByUser: {
-      type: new GraphQLList(favType),
+      type: new GraphQLList(starType),
       args: {
         username: {
           description: 'User name',
@@ -261,8 +261,8 @@ const RootQueryType = new GraphQLObjectType({
       }
     },
 
-    myFavs: {
-      type: new GraphQLList(favType),
+    myStars: {
+      type: new GraphQLList(starType),
       resolve(root, args, ctx) {
         if (!ctx.user) return null;
         return models.Fav.findAll({

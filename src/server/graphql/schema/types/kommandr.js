@@ -8,7 +8,7 @@ import {
 } from 'graphql';
 
 import models from '../../../models';
-import favType from './fav';
+import starType from './star';
 import userType from './user';
 import commentType from './comment';
 
@@ -60,9 +60,10 @@ const kommandrType = new GraphQLObjectType({
       type: GraphQLInt,
       description: 'Counter',
     },
-    totalFavs: {
+    totalStars: {
       type: GraphQLInt,
       description: 'Counter',
+      resolve: kommandr => kommandr.totalFavs,
     },
     totalComments: {
       type: GraphQLInt,
@@ -92,8 +93,8 @@ const kommandrType = new GraphQLObjectType({
         }],
       })
     },
-    allFavs: {
-      type: new GraphQLList(favType),
+    allStars: {
+      type: new GraphQLList(starType),
       resolve: kommandr => {
         return models.Fav.findAll({
           include: [{
