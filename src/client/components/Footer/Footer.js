@@ -1,11 +1,10 @@
 import React from 'react';
-
 import { Container } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
-const Footer = (props) => {
+const Footer = props => {
   return (
-    <footer className={`footer ${props.className}`}>
+    <footer className="footer">
       <Container fluid>
         kommandr.com © {new Date().getFullYear()} |{' '}
         <a href="https://github.com/kommandr/kommandr/issues/new" target="_blank">report bugs</a> |{' '}

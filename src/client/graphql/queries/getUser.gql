@@ -1,16 +1,16 @@
 #import "../fragments/collectionInfo.gql"
 #import "../fragments/commentInfo.gql"
-#import "../fragments/favInfo.gql"
+#import "../fragments/starInfo.gql"
 #import "../fragments/kommandrInfo.gql"
 #import "../fragments/kommandrStats.gql"
 #import "../fragments/userInfo.gql"
-#import "../fragments/userActivity.gql"
+#import "../fragments/activityInfo.gql"
 
 query getUser($username: String!) {
   user (username: $username) {
     ...userInfo
     allActivities {
-      ...userActivity
+      ...activityInfo
     }
     allKommandrs {
       ...kommandrInfo
@@ -19,8 +19,8 @@ query getUser($username: String!) {
     allComments {
       ...commentInfo
     }
-    allFavs {
-      ...favInfo
+    allStars {
+      ...starInfo
     }
     allCollections {
       ...collectionInfo

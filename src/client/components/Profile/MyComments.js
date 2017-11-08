@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 const MyFavs = props => {
   return (
-    <h1>MyActivities</h1>
+    <h2>Coming soon...</h2>
   )
 }
 

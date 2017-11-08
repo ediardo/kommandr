@@ -1,24 +1,27 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-
 import { compose, graphql } from 'react-apollo';
 import { Col, Media, Row } from 'reactstrap';
 import CodeMirror from 'react-codemirror';
 
-import Actions from './Kommandr/KommandrActions';
-//import Description from './CommandLineDescription';
-//import Loading from './Loading';
-import Stats from './Kommandr/KommandrStats';
-//import Title from './CommandLineTitle';
+import { Actions, ActionButton } from './Actions';
+
+import { Stats, StatFork, StatView, StatComment, StatStar } from './Stats/';
+import { ModalDeleteKommandr } from './Modal';
 
 import addKommandr from '../graphql/mutations/addKommandr.gql';
 import forkKommandr from '../graphql/mutations/forkKommandr.gql';
 import deleteKommandr from '../graphql/mutations/deleteKommandr.gql';
 import updateKommandr from '../graphql/mutations/updateKommandr.gql';
+import starKommandr from '../graphql/mutations/starKommandr.gql';
+import unstarKommandr from '../graphql/mutations/unstarKommandr.gql';
 import kommandrById from '../graphql/queries/kommandrById.gql';
 import allKommandrs from '../graphql/queries/allKommandrs.gql';
 import currentUser from '../graphql/queries/currentUser.gql';
+import searchKommandr from '../graphql/queries/searchKommandr.gql';
 
+import 'codemirror/addon/display/placeholder.js';
+import 'codemirror/addon/display/autorefresh.js';
 import 'codemirror/addon/mode/simple';
 import 'codemirror/mode/shell/shell';
 
@@ -30,12 +33,13 @@ const initialState = {
   description: '',
   editedDescription: false,
   editing: false,
+  isOpenModalDelete: false,
+  isOpenModalReport: false,
 };
 
 class CommandLine extends Component {
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = initialState;
     this.flagKommandr = this.flagKommandr.bind(this);
     this.forkKommandr = this.forkKommandr.bind(this);
@@ -44,6 +48,9 @@ class CommandLine extends Component {
     this.setTitle = this.setTitle.bind(this);
     this.setDescription = this.setDescription.bind(this);
     this.setCli = this.setCli.bind(this);
+    this.starKommandr = this.starKommandr.bind(this);
+    this.unstarKommandr = this.unstarKommandr.bind(this);
+    this.toggleModalDelete = this.toggleModalDelete.bind(this);
   }
 
   saveKommandr() {
@@ -55,20 +62,19 @@ class CommandLine extends Component {
         refetchQueries: [
           { query: allKommandrs }
         ]
-      }).then(({ data }) => {
-        const { hashId } = data.kommandr;
-        this.props.history.push(`/k/${hashId}`);      
+      }).then(({ data: { kommandr } }) => {
+        this.props.history.push(`/k/${kommandr.id}`);      
       }).catch(error => {
         console.log('there was an error ', error);
       });
     } else {
-      const { id } = this.props.data.kommandr;
+      const { id } = this.props.kommandr.kommandr;
       const { editedCli, editedTitle, editedDescription } = this.state;
       var updateFields = {};
       updateFields.id = id;
-      updateFields.title = (editedTitle) ? title : this.props.data.kommandr.title;
-      updateFields.cli = (editedCli) ? cli : this.props.data.kommandr.cli;
-      updateFields.description = (editedDescription) ? description : this.props.data.kommandr.description;
+      updateFields.title = (editedTitle) ? title : this.props.kommandr.kommandr.title;
+      updateFields.cli = (editedCli) ? cli : this.props.kommand.kommandr.cli;
+      updateFields.description = (editedDescription) ? description : this.props.kommandr.kommandr.description;
       this.props.updateKommandr({
         variables: updateFields,
         refetchQueries: [{
@@ -80,23 +86,25 @@ class CommandLine extends Component {
   }
 
   forkKommandr() {
-    const { id } = this.props.data.kommandr;
-    this.props.forkKommandr({
-      variables: { id },
-      refetchQueries: [
-        { query: currentUser },
-        { query: allKommandrs },
-      ]
-    }).then(({ data }) => {
-      const { hashId } = data.kommandr;
-      this.props.history.push(`/k/${hashId}`);      
-    }).catch(error => {
-      console.log('there was an error ', error);
-    });
+    if (this.props.mode === 'view' && this.props.data.currentUser) {
+      const { id } = this.props.kommandr.kommandr;
+      this.props.forkKommandr({
+        variables: { id },
+        refetchQueries: [
+          { query: currentUser },
+          { query: allKommandrs },
+          { query: searchKommandr },
+        ]
+      }).then(({ data: { kommandr } }) => {
+        this.props.history.push(`/k/${kommandr.id}`);      
+      }).catch(error => {
+        console.log('there was an error ', error);
+      });
+    }
   }
 
   deleteKommandr() {
-    const { id } = this.props.data.kommandr;
+    const { id } = this.props.kommandr.kommandr;
     this.props.deleteKommandr({
       variables: { id },
       refetchQueries: [
@@ -112,12 +120,19 @@ class CommandLine extends Component {
     })
   }
 
+  starKommandr() {
+    console.log('Star');
+  }
+
+  unstarKommandr() {
+
+  }
+
   flagKommandr() {
     console.log('flag');
   }
 
   setCli(cli) {
-    console.log('Cli: ', cli);
     this.setState({
       cli:  cli,
       editedCli: true,
@@ -126,7 +141,6 @@ class CommandLine extends Component {
   }
 
   setDescription(e) {
-    console.log('Description: ', e.target.value);
     this.setState({
       description: e.target.value,
       editedDescription: true,
@@ -135,23 +149,27 @@ class CommandLine extends Component {
   }
 
   setTitle(e) {
-    console.log('Title: ', e.target.value);
     this.setState({
       title: e.target.value,
       editedTitle: true,
       editing: true
     });
   }
+  
+  toggleModalDelete() {
+    this.setState({ isOpenModalDelete: !this.state.isOpenModalDelete });
+  }
 
   render() {
-    const { mode, data: { loading } }=  this.props;
-    if (loading) {
-      return <span>Loading...</span>;
-    }
-    const { data: { kommandr, currentUser } } = this.props;
+    const { mode, kommandr, data: { loading, currentUser } } =  this.props;
+    const { isOpenModalDelete } = this.state;
+    if (loading || (kommandr && kommandr.loading))  return <span>Loading...</span>;
+    var ownedByCurrentUser = false;
     if (mode === 'view') {
-      if (kommandr === null) return <span>Looks like this kommandr does not exists</span>;
-      var { id, title, cli, description, author } = kommandr;
+      console.log(kommandr);
+      if (kommandr.kommandr === null) return <span>Looks like this kommandr does not exists</span>;
+      var { id, title, cli, description, author, totalStars, totalComments, totalForks, totalViews } = kommandr.kommandr;
+      ownedByCurrentUser = currentUser && author.id === currentUser.id;
     } else if (mode === 'create') {
       var { title, cli, description } = this.state, id = this.props.location.key;
       author = currentUser;
@@ -160,21 +178,50 @@ class CommandLine extends Component {
       var isAnonymous = true;
     }
 
+    const codemirrorOpts = {
+      lineNumbers: false,
+      mode: "shell",
+      autoRefresh: true,
+      lineWrapping: true,
+      height: 'auto',
+      viewportMargin: Infinity,
+      placeholder: 'Type a command here...',
+      autofocus: true,
+    };
+ 
     return (
       <span key={id}>
-        <div className="kommandr-title">
+        <div className="kommandr-title mb-2">
           <input className="editable-input" type="text" defaultValue={title} onChange={this.setTitle} placeholder="Name this kommandr" />
         </div>
-        <Row className="mb-2">
-          <Col xs="12" sm="8">
-            <Stats mode={mode} kommandrId={id} data={{}} />
-          </Col>
-          <Col xs="12" sm="4">
-            <Actions mode={mode} author={author} onSave={this.saveKommandr} onDelete={this.deleteKommandr} onFlag={this.flagKommandr} onFork={this.forkKommandr} />
-          </Col>
-        </Row>
+        <div className="mb-3 d-flex justify-content-end">
+          <Stats>
+            <StatView value={totalViews} />
+            <StatComment value={totalComments} />
+            <StatFork value={totalForks} onClick={this.forkKommandr} disabled={(mode === 'create' || ownedByCurrentUser)} />
+            <StatStar value={totalStars} onClick={this.starKommandr} />
+          </Stats>
+          <Actions className="ml-auto">
+            {mode === 'create' 
+              ? <ActionButton text="create" name="add" onClick={this.saveKommandr} disabled={cli.length === 0 || title.length === 0} />
+              : null
+            }
+            {mode === 'view' && ownedByCurrentUser
+              ? <ActionButton text="update" name="update" onClick={this.saveKommandr} />
+              : null
+            }
+            {mode === 'view' && !ownedByCurrentUser 
+              ? <ActionButton text="report" name="report" onClick={() => console.log('click')} />
+              : null
+            }
+            {mode === 'view' && ownedByCurrentUser
+              ? <ActionButton text="delete" name="delete" onClick={this.toggleModalDelete} />
+              : null
+            }
+          </Actions>
+        </div>
         <div className="kommandr mb-2">
-          <CodeMirror value={cli} onChange={this.setCli} options={{lineNumbers: true, mode: "shell"}} />
+          <CodeMirror value={cli} onChange={this.setCli} options={codemirrorOpts} />
         </div>
         <Row className="kommandr-info">
           <Col xs="12" className="kommandr-description">  
@@ -201,6 +248,7 @@ class CommandLine extends Component {
             </Media>
           </Col>
         </Row>
+        <ModalDeleteKommandr isOpen={isOpenModalDelete} onClickConfirm={this.deleteKommandr} onClickCancel={this.toggleModalDelete} />
       </span>
     );
   }
@@ -214,6 +262,7 @@ export default compose(
     })   
   }),
   graphql(kommandrById, {
+    name: 'kommandr',
     options: (props) => ({ variables: { id: props.match.params.id } }),
     skip: (ownProps) => !ownProps.match.params.hasOwnProperty('id')    
   }),

@@ -1,0 +1,7 @@
+#import "../fragments/collectionInfo.gql"
+
+mutation addCollection($name: String!, $matchPattern: String!, $description: String) {
+  collection: addCollection(name: $name, matchPattern: $matchPattern, description: $description) {
+    ...collectionInfo
+  }
+}

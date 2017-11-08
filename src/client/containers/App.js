@@ -1,30 +1,25 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { graphql, compose } from 'react-apollo';
 import PropTypes from 'prop-types';
 
 import Main from './Main';
-import Contact from '../components/Contact';
+import Contact from '../components/Pages/Contact';
 import EditProfile from './EditProfile';
-import Footer from '../components/Footer';
+import Footer from '../components/Footer/Footer';
 import Header from '../components/Header/Header';
-import Loading from '../components/Loading';
-import Privacy from '../components/Privacy';
+import Privacy from '../components/Pages/Privacy';
 import Profile from './Profile';
-import Terms from '../components/Terms';
+import Terms from '../components/Pages/Terms';
 import ModalWelcome from '../components/Modal/ModalWelcome';
-
-import currentUser from '../graphql/queries/currentUser.gql';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import '../style/main.scss';
 
-const App = ({ data: { loading, currentUser } }) => {
+const App = props => {
   return (
     <div className="app">
-      { loading && <Loading />}
-      { !loading && currentUser && <ModalWelcome data={{ currentUser }} /> }
-      <Header data={{ currentUser }} />
+      <ModalWelcome />
+      <Header />
         <Switch>
           <Route path="/" exact component={Main} />
           <Route path="/privacy" component={Privacy} />
@@ -43,6 +38,4 @@ App.propTypes = {
   data: PropTypes.object,
 };
 
-export default compose(
-  graphql(currentUser),
-)(App);
+export default App;

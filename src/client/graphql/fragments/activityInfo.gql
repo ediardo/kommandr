@@ -1,4 +1,4 @@
-fragment userActivity on Activity {
+fragment activityInfo on Activity {
   id
   userId
   targetType

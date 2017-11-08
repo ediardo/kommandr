@@ -2,4 +2,9 @@ fragment collectionInfo on Collection {
   id
   userId
   name
+  description
+  matchPattern
+  totalKommandrs
+  updatedAt
+  createdAt
 }

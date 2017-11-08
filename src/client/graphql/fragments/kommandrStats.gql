@@ -1,6 +1,6 @@
 fragment kommandrStats on Kommandr {
   totalForks
   totalViews
-  totalFavs
+  totalStars
   totalComments
 }

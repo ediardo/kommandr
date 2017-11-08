@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Container } from 'reactstrap';
-import Content from '../containers/Content';
+import Content from '../../containers/Content';
 
 const Contact = () => {
   return (

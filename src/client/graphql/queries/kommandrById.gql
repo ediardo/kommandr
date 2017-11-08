@@ -17,7 +17,7 @@ query KommandrById($id: String!) {
     allForks {
       id
     }
-    allFavs {
+    allStars {
       id
     }
   }

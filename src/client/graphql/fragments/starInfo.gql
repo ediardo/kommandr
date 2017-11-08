@@ -1,4 +1,4 @@
-fragment favInfo on Fav {
+fragment starInfo on Star {
   id
   userId
   kommandrId

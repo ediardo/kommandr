@@ -1,15 +1,12 @@
 @import 'variables';
 html {
-  //box-sizing: content-box;
-}
-html, body, #root, .app {
-  height: 100%;
-  width: 100%;
+  min-height: 100%;
+  position: relative;
 }
 
 body {
   background-color: #FDFDFD;
-  overflow: hidden;
+  margin-bottom: 75px;
 }
 
 h1, h2, h3, h4 {
@@ -48,41 +45,57 @@ header {
   }
 }
 
-.ReactCodeMirror {
-  width: 100%;
-  .CodeMirror {
-    height: 100px;
+.inline-stats, .inline-actions {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  li {
+    display: inline-block;
+    margin-right: 0.8rem;
+    text-align: center;
+    &:last-child {
+      margin: 0;
+    }
   }
 }
 
-.kommandr-item, .kommandr-container {
-  .kommandr-stats {
-    box-sizing: content-box;
-    color: #999;
-    font-size: 1rem;
-    list-style-type: none;
-    margin: 0;
-    padding: 0; 
-    
-    li {
-      display: inline-block;
-      text-align: center;
-      margin-right: 1rem;
-    }
-    
-    button {
-      color: inherit;
-      font-size: inherit;
-      padding: 0;
-      &:hover {
-        text-decoration: none;
+.inline-stats {
+  color: #999;
+  font-size: 0.9rem; 
+  li {
+    .full {
+      button {
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        color: black;
+        cursor: pointer;
+        text-decoration: none!important;
+        &:hover {
+          color: black;
+        }
       }
     }
+    .compact {
+      font-size: 0.8rem;
+    }
+  }
+  
+  .input-group-addon {
+    background-color: white;
   }
 }
+
+.CodeMirror {
+  font-family: 'Ubuntu Mono', monospace!important;
+}
+
 .kommandr-container {
+  .CodeMirror {
+    font-size: 1.9rem;
+    height: initial;
+  }
   .kommandr-title {
     color: $kommandr-title-font-color;
+    
     h2 {
       display: inline-block;
       font-size: $kommandr-title-font-size;
@@ -91,24 +104,12 @@ header {
     .editable-input {
       border: 0px;
       font-size: $kommandr-title-font-size;
-      font-family: 'Bitter', serif;
+      font-family: $kommandr-title-font-family;
+      
       padding: 0;
     }
   }
-  .kommandr-stats {
-    li {
-      &.forks:hover {
-        .fa {
-          color: #000000;
-        }
-      }
-      &.favs:hover {
-        .fa {
-          color: #FF0000;
-        }
-      }
-    }
-  }
+
   .kommandr {
     background-color: $kommandr-background;
     border: 1px solid #E1E4E5;
@@ -119,42 +120,45 @@ header {
   }
 }
 
-.kommandr-item {
-  padding: 0.5rem 1rem;
-  width: 100%;
-  &:hover {
-    background-color: $ultra-light-gray;
-  }
-  h6 { 
-    font-size: 0.9rem;
-    margin-bottom: 0.15rem;
-  }
-  code {
-    font-size: 0.8rem;
-  }
-  &.compact {
-    .kommandr-stats {
-      font-size: 0.8rem;
-    }
-  }
 
-  .kommandr-author {
-    border-top: 1px solid #EEEEEE;
-    margin-top: 1rem;
-    padding-top: 1rem;
-  }
-
-  .kommandr-description {
-    textarea, p {
-      width: 100%;
-      white-space: pre;
-    }
-  }
-}
 .list-kommandrs { 
   list-style-type: none;
   padding: 0;
+
+  .kommandr-item {
+    padding: 0.5rem 1rem;
+    width: 100%;
+  
+    h6 { 
+      font-size: 0.9rem;
+      margin-bottom: 0.15rem;
+    }
+    
+    .CodeMirror {
+      font-size: 1.4rem;
+      height: initial;
+    }
+    &.compact {
+      .kommandr-stats {
+        font-size: 0.8rem;
+      }
+    }
+  
+    .kommandr-author {
+      border-top: 1px solid #EEEEEE;
+      margin-top: 1rem;
+      padding-top: 1rem;
+    }
+  
+    .kommandr-description {
+      textarea, p {
+        width: 100%;
+        white-space: pre;
+      }
+    }
+  }
 }
+
 .sidebar {
   background-color: $sidebar-bg;
   border-left: 1px solid $sidebar-border-color;
@@ -230,12 +234,24 @@ header {
 
 }
 
+.container-list-actions {
+  display: table;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  width: 100%;
+  position: relative;
+  .list-action-create {
+    margin-left: 15px;
+  }
+}
 .container-search-input {
   background-color: $search-input-bg;
   border: 1px solid $search-input-border-color;
+  display: table-cell;
   line-height: $search-input-line-height;
   font-size: $search-input-font-size;
   padding: 0.5rem 0.75rem;
+  width: 100%;
   label {
     color: $search-input-icon-color;
     position: absolute;
@@ -301,4 +317,9 @@ header {
   position: absolute;
   top: 0; 
   padding: 0.15rem 0.5rem 0.25rem 0.5rem;
+}
+
+.match-pattern {
+  font-family: Courier;
+  margin-left: 15px;
 }

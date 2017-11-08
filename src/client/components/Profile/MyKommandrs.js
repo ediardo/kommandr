@@ -1,36 +1,37 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import _  from 'lodash';
 
-import InputSearch from '../Form/InputSearch';
 import KommandrList from '../Kommandr/KommandrList';
+import ListWithFilters from '../List/ListWithFilters';
 
-class MyKommandrs extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      query: ''
-    }
-    this.onChangeSearch = this.onChangeSearch.bind(this);
-  }
-  onChangeSearch(query) {
-    this.setState({ query });
-  }
+const MyKommandrs = ({ filteredItems, query, filters, sort }) => {
+  return (
+    <KommandrList data={filteredItems} /> 
+  )
+};
 
-  render() {
-    const { data: kommandrs } = this.props;
-    console.log(kommandrs);
-    return (
-      <div>
-        <div className="m-3">
-          <InputSearch value={this.state.query} onChange={this.onChangeSearch} />
-        </div>
-        <KommandrList data={kommandrs} />        
-      </div>
-    )
-  }
-}
 MyKommandrs.propTypes = {
   data: PropTypes.array,
-}
+  query: PropTypes.string,
+  filters: PropTypes.object,
+  sort: PropTypes.object,
+  isCurrentUser: PropTypes.bool,
+};
 
-export default MyKommandrs;
+export default ListWithFilters(MyKommandrs, {
+  filterFields: ['title', 'cli', 'description'],
+  orderFields: [
+    { 'createdAt': 'desc' },
+    { 'title': 'asc' },
+  ],
+  paginator: {
+    pageSize: 15,
+  },
+  queryPlaceholder: 'Search Kommandrs',
+  addNew: {
+    to: '/',
+    label: 'New Kommandr',
+  },
+  listName: 'kommandrs',
+});
