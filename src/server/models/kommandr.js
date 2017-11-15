@@ -23,7 +23,7 @@ module.exports = function(sequelize, DataTypes) {
     Kommandr.hasMany(models.Comment, { foreignKey: 'kommandrId', onDelete: 'cascade' });
     Kommandr.hasMany(models.Star, { foreignKey: 'kommandrId', onDelete: 'cascade' });
     Kommandr.hasMany(models.Kommandr, { foreignKey: 'forkFrom', as: 'Forks', onDelete: 'set null' })
-    Kommandr.belongsTo(models.Collection, { foreignKey: 'collectionId' });
+    Kommandr.belongsToMany(models.Collection, { foreignKey: 'kommandrId', through: 'KommandrCollection' });
   };
 
   Kommandr.beforeCreate((kommandr, options) => {
