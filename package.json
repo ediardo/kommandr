@@ -2,6 +2,7 @@
   "name": "kommandr",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:5001/",
   "dependencies": {
     "apollo-client": "^1.9.3",
     "axios": "^0.16.2",
@@ -36,8 +37,10 @@
     "react": "^16.0.0",
     "react-ace": "^5.2.1",
     "react-addons-css-transition-group": "^15.6.0",
+    "react-addons-shallow-compare": "^15.6.2",
     "react-addons-transition-group": "^15.6.0",
     "react-apollo": "^1.4.16",
+    "react-avatar": "^2.4.0",
     "react-bootstrap": "^0.31.0",
     "react-codemirror": "^1.0.0",
     "react-copy-to-clipboard": "^5.0.0",
