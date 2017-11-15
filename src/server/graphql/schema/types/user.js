@@ -7,7 +7,7 @@ import {
   GraphQLList
 } from 'graphql';
 
-import models from '../../../models';
+import db from '../../../models';
 import activityType from './activity';
 import commentType from './comment';
 import starType from './star';
@@ -123,7 +123,7 @@ const userType = new GraphQLObjectType({
       }
     },
     lastSignedIn: {
-      type: GraphQLInt,
+      type: GraphQLString,
       resolve: (user, args, ctx) => {
         if (ctx.user && ctx.user.id === user.id) {
           return user.lastSignedIn;
@@ -169,9 +169,9 @@ const userType = new GraphQLObjectType({
     },
     allActivities: {
       type: new GraphQLList(activityType),
-      resolve: user => models.Activity.findAll({
+      resolve: user => db.Activity.findAll({
         include: [{
-          model: models.User,
+          model: db.User,
           where: { id: user.id },
         }],
         order: [
@@ -182,10 +182,9 @@ const userType = new GraphQLObjectType({
     allComments: {
       type: new GraphQLList(commentType),
       resolve: user => {
-        console.log('here');
-        return models.Comment.findAll({
+        return db.Comment.findAll({
           include: [{
-            model: models.User,
+            model: db.User,
             where: { id: user.id },
           }],
           order: [
@@ -197,9 +196,9 @@ const userType = new GraphQLObjectType({
     allKommandrs: {
       type: new GraphQLList(kommandrType),
       resolve: user => {
-        return models.Kommandr.findAll({
+        return db.Kommandr.findAll({
           include: [{
-            model: models.User,
+            model: db.User,
             where: { id: user.id },
           }],
           order: [
@@ -211,9 +210,9 @@ const userType = new GraphQLObjectType({
     allStars: {
       type: new GraphQLList(starType),
       resolve: user => {
-        return models.Star.findAll({
+        return db.Star.findAll({
           include: [{
-            model: models.User,
+            model: db.User,
             where: { id: user.id },
           }],
           order: [
@@ -225,9 +224,9 @@ const userType = new GraphQLObjectType({
     allCollections: {
       type: new GraphQLList(collectionType),
       resolve: user => {
-        return models.Collection.findAll({
+        return db.Collection.findAll({
           include: [{
-            model: models.User,
+            model: db.User,
             where: { id: user.id },
           }],
           order: [

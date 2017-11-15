@@ -2,6 +2,7 @@ import {
   GraphQLSchema,
   GraphQLObjectType,
   GraphQLInt,
+  GraphQLID,
   GraphQLNonNull,
   GraphQLList,
   GraphQLString
@@ -13,7 +14,7 @@ import commentType from './types/comment';
 import starType from './types/star';
 import kommandrType from './types/kommandr';
 import userType from './types/user';
-import models from '../../models';
+import db from '../../models';
 import mutations from './mutations';
 
 const RootQueryType = new GraphQLObjectType({
@@ -27,13 +28,8 @@ const RootQueryType = new GraphQLObjectType({
           type: GraphQLString,
         },
       },
-      resolve(root, { name, username }, ctx) {
-        return models.Collection.findAll({
-          attributes: [ 'userId', 'name', 'description', 'totalKommandrs', 'createdAt', 'updatedAt' ],
-          include: [{
-            model: models.User,
-            where: { username },
-          }],
+      resolve: (root, { name = '' }, ctx) => {
+        return db.Collection.findAll({
           where: { name: { $like: `${name}%` }  },
           order: [
             [ 'createdAt', 'DESC' ]
@@ -50,21 +46,23 @@ const RootQueryType = new GraphQLObjectType({
           type: new GraphQLNonNull(GraphQLString)
         }
       },
-      resolve(root, { username }) {
-        return models.Collection.findAll({
+      resolve: (root, { username }) => {
+        return db.Collection.findAll({
           include: [{
-            model: models.User,
+            model: db.User,
             where: { username }
-          }]
-        })
+          }],
+          order: [
+            [ 'createdAt', 'DESC' ]
+          ],
+        });
       }
     },
 
     allComments: {
       type: new GraphQLList(commentType),
-      resolve (root, args) {
-        return models.Comment.findAll({
-          attributes: [ 'id', 'userId', 'kommandrId', 'comment', 'createdAt', 'updatedAt' ],
+      resolve: (root, args) => {
+        return db.Comment.findAll({
           order: [
             [ 'createdAt', 'DESC' ]
           ]
@@ -80,12 +78,11 @@ const RootQueryType = new GraphQLObjectType({
           type: new GraphQLNonNull(GraphQLString)
         }
       },
-      resolve(root, { username }, ctx) {
+      resolve: (root, { username }, ctx) => {
         if (!ctx.user || ctx.user.username !== username) return null;
-        return models.Comment.findAll({
-          attributes: [ 'id', 'userId', 'kommandrId', 'comment', 'createdAt', 'updatedAt' ],
+        return db.Comment.findAll({
           include: [{
-            model: models.User,
+            model: db.User,
             where: { username }
           }],
           order: [
@@ -103,11 +100,10 @@ const RootQueryType = new GraphQLObjectType({
           type: new GraphQLNonNull(GraphQLString)
         }
       },
-      resolve(root, { username }) {
-        return models.Star.findAll({
-          attributes: [ 'id', 'userId', 'kommandrId', 'createdAt' ],
+      resolve: (root, { username }) => {
+        return db.Star.findAll({
           include: [{
-            model: models.User,
+            model: db.User,
             where: { username },
           }],
           order: [
@@ -130,7 +126,7 @@ const RootQueryType = new GraphQLObjectType({
           type: GraphQLString,
         }
       },
-      resolve: (root, { title, cli, description }, ctx) => {
+      resolve: (root, { title = '', cli = '', description = '' }, ctx) => {
         let where = {};
         if (title || cli || description) {
           where = { $or: [] };
@@ -138,11 +134,11 @@ const RootQueryType = new GraphQLObjectType({
           if (cli) where.$or.push({ cli: { $like: `${cli}%` } });
           if (description) where.$or.push({ description: { $like: `${description}%` } });  
         }
-        return models.Kommandr.findAll({ 
-          where,
+        return db.Kommandr.findAll({ 
           include: [{
-            model: models.User
+            model: db.User
           }],
+          where,
           order: [
             [ 'createdAt', 'DESC' ]
           ],
@@ -157,16 +153,16 @@ const RootQueryType = new GraphQLObjectType({
           type: new GraphQLNonNull(GraphQLString),
         },
       },
-      resolve(root, { username }, ctx) {
-        return models.Kommandr.findAll({
+      resolve: (root, { username }, ctx) => {
+        return db.Kommandr.findAll({
           include: [{
-            model: models.User,
+            model: db.User,
             where: { username },
           }],
           order: [
             [ 'createdAt', 'DESC' ]
           ],
-        }).then(kommandrs => kommandrs);
+        });
       }
     },
 
@@ -178,13 +174,12 @@ const RootQueryType = new GraphQLObjectType({
           type: GraphQLString,
         }
       },
-      resolve(root, { username }, ctx) {
-        if (!username) username = '';
-        return models.User.findAll({
+      resolve: (root, { username = '' }, ctx) => {
+        return db.User.findAll({
           where: {
             status: 1,
             id: { ne: 0 },
-            name: { $like: `${username}%` }
+            username: { $like: `${username}%` }
           }
         })
       }
@@ -192,10 +187,23 @@ const RootQueryType = new GraphQLObjectType({
 
     currentUser: {
       type: userType,
-      resolve(root, args, ctx) {
+      resolve: (root, args, ctx) => {
         if (!ctx.user)  return null;
-        const { id } = ctx.user;
-        return models.User.findById(id);
+        return db.User.findById(ctx.user.id);
+      }
+    },
+
+    userById: {
+      type: userType,
+      args: {
+        id: {
+          type: new GraphQLNonNull(GraphQLID)
+        }
+      },
+      resolve: (root, { id }) => {
+        return db.User.findOne({
+          where: { id }
+        });
       }
     },
 
@@ -203,27 +211,35 @@ const RootQueryType = new GraphQLObjectType({
       type: userType,
       args: {
         username: {
-          description: 'User name',
-          type: new GraphQLNonNull(GraphQLString)
-        }
+          type: new GraphQLNonNull(GraphQLString),
+        },
       },
-      resolve(root, { username }) {
-        return models.User.findOne({
+      resolve: (root, { username } ) => {
+        return db.User.findOne({
           where: { username }
         });
       }
     },
-
-    comment: {
+    commentById: {
       type: commentType,
       args: {
         id: {
           description: 'ID of the comment',
-          type: new GraphQLNonNull(GraphQLInt)
+          type: new GraphQLNonNull(GraphQLID)
         }
       },
-      resolve(root, args) {
-        return models.Comment.findById(args.id);
+      resolve: (root, { id }) => {
+        return db.Comment.findById(
+          id,
+          {
+            include: [{
+              model: db.User,
+            }],
+            order: [
+              [ 'createdAt', 'DESC' ]
+            ],
+          }
+        );
       }
     },
     
@@ -232,13 +248,13 @@ const RootQueryType = new GraphQLObjectType({
       args: {
         id: {
           description: 'ID of the kommandr',
-          type: new GraphQLNonNull(GraphQLString)
+          type: new GraphQLNonNull(GraphQLID)
         }
       },
-      resolve(root, { id }, ctx) {
-        return models.Kommandr.findOne({
+      resolve: (root, { id }, ctx) => {
+        return db.Kommandr.findOne({
           include: [{
-            model: models.User,
+            model: db.User,
           }],
           where: { hashId: id },
         }).then(kommandr => {
@@ -248,39 +264,50 @@ const RootQueryType = new GraphQLObjectType({
       }
     },
 
-    collection: {
+    collectionById: {
       type: collectionType,
       args: {
         id: {
           description: 'ID of the collection',
-          type: new GraphQLNonNull(GraphQLInt)
+          type: new GraphQLNonNull(GraphQLID)
         }
       },
-      resolve(root, args) {
-        return models.Collection.findById(args.id);
+      resolve(root, { id }) {
+        return db.Collection.findById(
+          id,
+          {
+            include: [{
+              model: db.User,
+            }],
+            order: [
+              [ 'createdAt', 'DESC' ]
+            ],
+          }
+        );
       }
     },
 
-    myStars: {
-      type: new GraphQLList(starType),
-      resolve(root, args, ctx) {
+    collectionByName: {
+      type: collectionType,
+      args: {
+        name: {
+          type: new GraphQLNonNull(GraphQLString)
+        }
+      },
+      resolve(root, { name }, ctx) {
         if (!ctx.user) return null;
-        return models.Star.findAll({
-          where: { userId: ctx.user.id }
-        }).then(myFavorited => myFavorited);
+        return db.Collection.findOne({
+          include: [{
+            model: db.User,
+            where: { id: ctx.user.id },
+          }],
+          where: {
+            name,
+          },
+        });
       }
     },
 
-    myKommandrs: {
-      type: new GraphQLList(kommandrType),
-      resolve(root, args, ctx) {
-        if (!ctx.user) return null;
-        return models.Kommandr.findAll({
-          where: { userId: ctx.user.id },
-          attributes: [['hashId', 'id']]
-        })
-      }
-    },
     getActivity: {
       type: new GraphQLList(activityType),
       args: {
@@ -290,30 +317,11 @@ const RootQueryType = new GraphQLObjectType({
         }
       },
       resolve(root, { username }, ctx) {
-        return models.Activity.findAll({
+        return db.Activity.findAll({
           include: [{
-            model: models.User,
+            model: db.User,
             where: { username }
-          }]
-        }).then(activities => activities);
-      }
-    },
-
-    searchCollections: {
-      type: new GraphQLList(collectionType),
-      args: {
-        name: {
-          type: GraphQLString,
-        }
-      },
-      resolve: (root, { name }, ctx) => {
-        let where = { };
-        if (name) {
-          where = { $or: [{ name: { $like: `${name}%` } }] };
-        }
-        
-        return models.Collection.findAll({ 
-          where,
+          }],
           order: [
             [ 'createdAt', 'DESC' ]
           ],
