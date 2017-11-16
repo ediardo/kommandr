@@ -1,4 +1,4 @@
-mutation starKommandr($kommandrId: String!) {
+mutation starKommandr($kommandrId: ID!) {
   kommandr: starKommandr(kommandrId: $kommandrId) {
     id
     totalStars

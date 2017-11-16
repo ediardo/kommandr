@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { graphql } from 'react-apollo';
 import { Button } from 'reactstrap';
 
+import ProfileAvatar from './ProfileAvatar';
 import currentUser from '../../graphql/queries/currentUser.gql';
 
 const ProfileSidebar = ({ user, data: { loading, currentUser } }) => {
@@ -12,7 +13,7 @@ const ProfileSidebar = ({ user, data: { loading, currentUser } }) => {
   return (
     <div className="user-card">
       <div className="user-avatar lg-avatar">
-        <img src={`${externalAvatarUrl}`} alt="profile" />
+        <ProfileAvatar size="xl" url={externalAvatarUrl} name={name} />
       </div>
       <div className="user-info mt-2">
           <h4 className="user-display-name">{name}</h4>

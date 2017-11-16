@@ -74,27 +74,26 @@ function ListWithFilters(WrappedList, injectedProps) {
     }
 
     render() {
-      const { filters, items, query, sort, modalIsOpen, currentPage } = this.state;
-      const { queryPlaceholder, paginator: { pageSize }, addNew, listName } = injectedProps;
-      const { isCurrentUser } = this.props;
+      const { filters, items, query, sort, currentPage } = this.state;
+      const { queryPlaceholder, paginator: { pageSize }, listName, listActions = [] } = injectedProps;
+      const { isCurrentUser, location } = this.props;
       const paginatedItems = _.slice(items, currentPage*pageSize - pageSize, currentPage*pageSize - 1);
-      if (addNew) {
-        var addNewBtn = null;
-        if (addNew.to) {
-          addNewBtn = <Button tag={Link} to={addNew.to} color="success" className="list-action-create">{addNew.label}</Button>;
-        } else if (addNew.modal) {
-          addNewBtn = <Button onClick={this.toggleModal} color="success" className="list-action-create">{addNew.label}</Button>;
+      const listActionsBtns = listActions.map((action, idx) => {
+        if (!action.onlyCurrentUser) {
+          return <Button key={idx} tag={Link} to={this.props.location.pathname + action.url} color={action.color} className="list-action-create">{action.name}</Button>;
+        } else if (isCurrentUser) {
+          return <Button key={idx} tag={Link} to={this.props.location.pathname + action.url} color={action.color} className="list-action-create">{action.name}</Button>;
         }
-      }
+      });
       return (
         <div className="container-list">
           <div className="container-list-actions border-bottom-1">
             <InputSearch value={query} onChange={this.onChangeSearch} placeholder={queryPlaceholder} />
-            {isCurrentUser && addNewBtn}
+            {listActionsBtns}
           </div>
           {query.length > 0 && items.length === 0
             ? <ListAlert color="danger" heading={`Oops! No ${listName} matched your query`} text="Try using a different query" />
-            : <WrappedList filteredItems={paginatedItems} filters={filters} sort={sort} query={query} modalIsOpen={modalIsOpen} toggleModalHandler={this.toggleModal}  />
+            : <WrappedList filteredItems={paginatedItems} filters={filters} sort={sort} query={query} {...this.props} />
           }
           <Paginator total={items.length} pageSize={pageSize} onPageChange={this.onPageChange} currentPage={currentPage} />
         </div>

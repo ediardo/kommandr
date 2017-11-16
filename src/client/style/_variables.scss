@@ -3,8 +3,10 @@ $body-bg:  #F4F4F4;
 // colors
 $dark: #151519;
 $light-dark: #454747;
+$ultra-light-dark: #757777;
 $light-gray: #EAEAEA;
 $ultra-light-gray: #F4F4F4;
+$green-ultra-dark: #28a745;
 $green: #5cb85c;
 $green-dark: #449d44;
 $layout-border-color: #D5D5D5;
@@ -12,21 +14,21 @@ $layout-border-color: #D5D5D5;
 $footer-bg: white;
 $footer-border-color: $layout-border-color;
 $footer-font-color: #0A0A0A;
-$footer-height: 3rem;
+$footer-height: 47px;
 $footer-line-height: $footer-height;
 $footer-link-color: #EEEEEE;
 
-$header-bg: white;
+$header-bg: #383A3A;
 $header-border-color: $layout-border-color;
-$header-font-color: #0A0A0A;
-$header-link-color: #444444;
-$header-link-color-hover: #000000;
+$header-font-color: white;
+$header-link-color: white;
+$header-link-color-hover: #28a746;
 $header-height: 54px;
 
 $kommandr-title-bg: $light-gray;
 $kommandr-title-font-color: $dark;
 $kommandr-title-font-family: 'Fira Sans', sans-serif;
-$kommandr-title-font-size: 1.7rem;
+$kommandr-title-font-size: 2rem;
 $kommandr-title-height: 3rem;
 $kommandr-title-info-font-color: $dark;
 
@@ -35,7 +37,7 @@ $kommandr-font-color: #000;
 
 $sidebar-bg: white;
 $sidebar-border-color: $layout-border-color;
-$sidebar-width: 20rem;
+$sidebar-width: 23rem;
 
 $search-input-border-color: $light-gray;
 $search-input-bg: white;
@@ -45,3 +47,5 @@ $search-input-color: black;
 $search-input-icon-position: $search-input-font-size * 1.5;
 $search-input-icon-color: $light-dark;
 $search-input-placeholder-color: $light-dark;
+
+$link-color: $green-ultra-dark;

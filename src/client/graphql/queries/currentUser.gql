@@ -10,6 +10,7 @@ query currentUser {
     ...userInfo
     isPasswordSet
     hasSeenWelcome
+    lastSignedIn
     allActivities {
       ...activityInfo
     }

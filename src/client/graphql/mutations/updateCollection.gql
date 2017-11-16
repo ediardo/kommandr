@@ -1,0 +1,7 @@
+#import "../fragments/collectionInfo.gql"
+
+mutation updateCollection($id: ID!, $name: String!, $matchRegex: String!, $description: String, $isEnabled: Boolean, $matchAllTime: Boolean) {
+  collection: updateCollection(id: $id, name: $name, matchRegex: $matchRegex, description: $description, isEnabled: $isEnabled, matchAllTime: $matchAllTime) {
+    ...collectionInfo
+  }
+}

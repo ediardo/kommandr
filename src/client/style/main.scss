@@ -5,13 +5,11 @@ html {
 }
 
 body {
-  background-color: #FDFDFD;
+  background-color: #F9FCFC;
   margin-bottom: 75px;
 }
 
-h1, h2, h3, h4 {
-      font-family: 'Bitter', serif;
-}
+
 /*
  HEADER
 */
@@ -27,14 +25,32 @@ header {
       text-decoration: none;
     }
   }
-
+  a {
+    color: $header-link-color!important;
+  }
   .header-links {
     .fa {
       font-size: 1.3rem;
     }
   }
-}
 
+}
+.modal-login {
+  ul.oauth-providers {
+    list-style-type: none;
+    text-align: center;
+    li {
+      margin-bottom: 15px;
+
+      &:last-child {
+        margin-bottom: 0px;
+      }
+    }
+  }
+}
+a {
+  color: $link-color;
+}
 .content {
   height: calc(100% - #{$footer-height} - #{$header-height});
   overflow-y: auto;
@@ -86,13 +102,41 @@ header {
 
 .CodeMirror {
   font-family: 'Ubuntu Mono', monospace!important;
+  font-weight: bold;
+  span.cm-builtin {
+    color: black;
+    font-weight: bolder;
+  }
+  span.cm-attribute {
+    color: #007bff;
+  }
+  span.cm-string {
+    color: #d30289;
+  }
+
+  span.cm-number { 
+    color: #28a746;
+  }
+  pre.CodeMirror-placeholder {
+    color: $ultra-light-dark;
+  }
 }
 
 .kommandr-container {
+  
+  h1, h2, h3, h4 {
+    font-family: 'Bitter', serif;
+  }
+
   .CodeMirror {
     font-size: 1.9rem;
     height: initial;
+    padding: 8px;
+    .CodeMirror-lines { 
+      padding: 0px;
+    }
   }
+
   .kommandr-title {
     color: $kommandr-title-font-color;
     
@@ -102,11 +146,12 @@ header {
       margin: 0;
     }
     .editable-input {
+      background-color: transparent;
       border: 0px;
       font-size: $kommandr-title-font-size;
       font-family: $kommandr-title-font-family;
-      
       padding: 0;
+      width: 100%;
     }
   }
 
@@ -117,6 +162,12 @@ header {
     color: $kommandr-font-color;
     font-size: 1.5em;
     width: 100%;
+  }
+
+  .kommandr-timestamps {
+    color: $dark;
+    font-style: italic;
+    font-size: 0.9rem;
   }
 }
 
@@ -130,12 +181,12 @@ header {
     width: 100%;
   
     h6 { 
-      font-size: 0.9rem;
+      font-size: 1rem;
       margin-bottom: 0.15rem;
     }
     
     .CodeMirror {
-      font-size: 1.4rem;
+      font-size: 1.1rem;
       height: initial;
     }
     &.compact {
@@ -163,9 +214,9 @@ header {
   background-color: $sidebar-bg;
   border-left: 1px solid $sidebar-border-color;
   bottom: 0;
-  height: calc(100% - #{$footer-height} - #{$header-height});
-  position: relative;
-  top: 0;
+  position: absolute;
+  right: 0;
+  top: 53px;
   width: $sidebar-width;
 
   .sidebar-search {
@@ -190,6 +241,7 @@ header {
 }
 
 .sidebar-search-results {
+  width: 100%;
   ul {
     list-style-type: none;
     margin: 0;
@@ -200,11 +252,9 @@ header {
 .footer {
   background-color: $footer-bg;
   border-top: 1px solid $footer-border-color;
-  bottom: 0;
   color: $footer-font-color;
   height: $footer-height;
   line-height: $footer-line-height;
-  position: absolute;
   width: 100%;
 }
 
@@ -218,6 +268,7 @@ header {
   .editable-input {
     display: none;
     border: 1px solid transparent;
+    width: 100%;
   }
   &.editing {
     .editable {
@@ -322,4 +373,9 @@ header {
 .match-pattern {
   font-family: Courier;
   margin-left: 15px;
+}
+
+.custom-alert {
+  top: 35px;
+  position: fixed;
 }

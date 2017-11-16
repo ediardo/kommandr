@@ -16,6 +16,7 @@ import {
   ModalFooter
 } from 'reactstrap';
 import FontAwesome from 'react-fontawesome';
+import isEmail from 'validator/lib/isEmail';
 
 import CheckUsername from '../Form/CheckUsername';
 import CustomTooltip from '../CustomTooltip';
@@ -48,14 +49,17 @@ class ModalWelcome extends Component {
     super(props);
     this.state = {
       username: '',
-      usernameValid: false,
+      usernameIsValid: false,
+      email: '',
+      emailValid: false,
       password: '',
-      passwordValid: false,
+      passwordIsValid: false,
       revealPassword: false,
       isOpen: false,
       showMessage: false,
     };
     this.onChangeUsername = this.onChangeUsername.bind(this);
+    this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
     this.submit = this.submit.bind(this);
     this.toggle = this.toggle.bind(this);
@@ -67,15 +71,22 @@ class ModalWelcome extends Component {
     const username = e.target.value.trim();
     this.setState({
       username,
-      usernameValid: username.match(usernameRegex)
+      usernameIsValid: username.match(usernameRegex)
     });    
   }
 
+  onChangeEmail(e) {
+    const email = e.target.value.trim();
+    this.setState({
+      email,
+      emailIsValid: isEmail(email),
+    });
+  }
   onChangePassword(e) {
     const password = e.target.value;
     this.setState({
       password,
-      passwordValid: password.trim().length > 5
+      passwordIsValid: password.trim().length > 5
     });
   }
 
@@ -111,10 +122,13 @@ class ModalWelcome extends Component {
   componentWillReceiveProps(nextProps) {
     const { loading, currentUser } = nextProps.data;
     if (!loading && currentUser && !currentUser.hasSeenWelcome) {
+      console.log(currentUser);
       this.setState({
         isOpen: true,
         username: currentUser.username,
-        usernameValid: currentUser.username.match(usernameRegex),
+        usernameIsValid: currentUser.username.match(usernameRegex) !== null,
+        email: currentUser.email,
+        emailIsValid: isEmail(currentUser.email),
       });
     }
   }
@@ -123,9 +137,11 @@ class ModalWelcome extends Component {
     const { 
       isOpen,
       username,
-      usernameValid,
+      usernameIsValid,
+      email,
+      emailIsValid,
       password,
-      passwordValid,
+      passwordIsValid,
       showMessage,
       revealPassword,
     } = this.state;
@@ -137,38 +153,48 @@ class ModalWelcome extends Component {
       <Modal isOpen={isOpen} toggle={this.toggle} backdrop="static">
         <ModalHeader toggle={this.toggle}>Nice to meet you, { name }</ModalHeader>
         <ModalBody>
-          <p>We've fetched and stored basic public information from your GitHub account into our database,
+          <p>We've fetched and stored basic public information from your external account into our database,
           but there's one last step to complete: a strong password.</p>
           <FormGroup>
             <Label for="username">Username</Label>
             <InputGroup>
-              <Input value={username} type="text" name="username" id="username" placeholder="Username" onChange={this.onChangeUsername} />
+              <Input value={username} type="text" name="username" id="username" placeholder="Username" onChange={this.onChangeUsername} valid={usernameIsValid} />
               <InputGroupAddon>
-                { usernameValid
+                { usernameIsValid
                   ? <CheckUsername currentUsername={currentUser.username} newUsername={username} />
                   : <span className="text-danger">invalid</span>}
               </InputGroupAddon>
             </InputGroup>
-            
+
+            <Label for="emailInput">Email</Label>
+            <Input value={email} type="text" name="email" id="emailInput" placeholder="Email" onChange={this.onChangeEmail} valid={emailIsValid} />
+            { !emailIsValid &&
+              <FormFeedback>
+                Email address is invalid
+              </FormFeedback>
+            }
+
+
             <Label for="password">Password</Label>              
             <InputGroup>
-              <Input type={(revealPassword) ? 'text' : 'password'} name="password" id="password" placeholder="Type a password" value={password} onChange={this.onChangePassword} minLength="3"/>
-              <InputGroupAddon>
-                <FontAwesome name={(passwordValid) ? 'check' : 'times'} id="passwordValid" />
-              </InputGroupAddon>
-  
+              <Input type={(revealPassword) ? 'text' : 'password'} name="password" id="password" placeholder="Type a password" value={password} onChange={this.onChangePassword} minLength="3" valid={passwordIsValid} />
               <InputGroupButton>
-                <Button color="secondary" onClick={this.revealPassword} id="revealPassword" >
+                <Button color="secondary" onClick={this.revealPassword} id="revealPassword" outline >
                   <FontAwesome name={(revealPassword) ? 'eye-slash' : 'eye'}/>
                 </Button>
                 <CustomTooltip content={(revealPassword) ? 'Hide password' : 'Reveal password' } placement="top" target="revealPassword" />                  
               </InputGroupButton>
             </InputGroup>
+            { !passwordIsValid && 
+              <FormFeedback>
+                Password is not valid
+              </FormFeedback>
+            }
           </FormGroup>
         </ModalBody>
         <ModalFooter>
           <Button outline color="secondary" onClick={this.toggle}>I'll do this later</Button>
-          <Button color="primary" onClick={this.submit} disabled={!(usernameValid && passwordValid)} >Save changes</Button>
+          <Button color="primary" onClick={this.submit} disabled={!(usernameIsValid && passwordIsValid)} >Save changes</Button>
           <ModalMessage isOpen={showMessage} toggle={this.toggle} />
           
         </ModalFooter>

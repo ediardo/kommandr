@@ -2,7 +2,7 @@
 #import "../fragments/kommandrStats.gql"
 #import "../fragments/kommandrForks.gql"
 
-query KommandrById($id: String!) {
+query KommandrById($id: ID!) {
   kommandr: kommandrById(id: $id) {
     ...kommandrInfo
     ...kommandrForks

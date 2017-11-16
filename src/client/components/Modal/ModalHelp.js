@@ -1,31 +1,32 @@
-import React, { Component } from 'react';
-
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Button, Modal, ModalBody, ModalHeader, ModalFooter } from 'reactstrap';
 
-class ModalHelp extends Component {
-  constructor(props) {
-    super(props);
-    this.toggle = this.toggle.bind(this);
-  }
+const ModalHelp = ({ location, history }) => {
 
-  toggle() {
-    this.props.toggle();
-  }
+  const toggle = () => {
+    var from = '/';
+    if (location.state) 
+      from = location.state.from;
+    history.push(from);
+  };
 
-  render() {
-    const { isOpen } = this.props;
-    return (
-      <Modal isOpen={isOpen} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>Help</ModalHeader>
-        <ModalBody>
-          Trying to get some help?
-        </ModalBody>
-        <ModalFooter>
-          <Button outline color="secondary" onClick={this.toggle}>Exit</Button>
-        </ModalFooter>
-      </Modal>
-    )
-  }
-}
+  return (
+    <Modal isOpen={true} toggle={toggle}>
+      <ModalHeader toggle={toggle}>Help</ModalHeader>
+      <ModalBody>
+        Trying to get some help?
+      </ModalBody>
+      <ModalFooter>
+        <Button outline color="secondary" onClick={toggle}>Exit</Button>
+      </ModalFooter>
+    </Modal>
+  )
+};
+
+ModalHelp.propTypes = {
+  location: PropTypes.object,
+  history: PropTypes.object,
+};
 
 export default ModalHelp;

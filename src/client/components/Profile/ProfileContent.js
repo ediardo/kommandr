@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
-import { Link } from 'react-router-dom';
+import { Link, Switch, Route } from 'react-router-dom';
 import {
   Badge,
   Nav,
@@ -23,6 +23,7 @@ import currentUser from '../../graphql/queries/currentUser.gql';
 class ProfileContent extends Component {
   constructor(props) {
     super(props);
+    console.log(props);
     this.state = {
       activeTab: 'profile'
     };
@@ -75,21 +76,12 @@ class ProfileContent extends Component {
           }
         </Nav>
         <TabContent activeTab={activeTab} className="mt-3">
-          <TabPane tabId="profile" className="my-activities">
-            <MyActivities items={userActivities} isCurrentUser={isCurrentUser} />
-          </TabPane>
-          <TabPane tabId="kommandrs" className="my-kommandrs">
-            <MyKommandrs items={userKommandrs} isCurrentUser={isCurrentUser} />
-          </TabPane>
-          <TabPane tabId="collections" className="my-collections">
-            <MyCollections items={userCollections} isCurrentUser={isCurrentUser} />
-          </TabPane>
-          <TabPane tabId="stars" className="my-stars">
-            <MyStars items={userStars} isCurrentUser={isCurrentUser} />
-          </TabPane>
-          <TabPane tabId="comments" className="my-comments">
-            <MyComments items={userComments} isCurrentUser={isCurrentUser} />
-          </TabPane>
+          <Switch>
+            <Route path="/u/:username" exact render={(props) => <MyActivities items={userActivities} currentUser={currentUser} isCurrentUser={isCurrentUser} />} />
+            <Route path="/u/:username/kommandrs" render={(props) => <MyKommandrs items={userKommandrs}  currentUser={currentUser} isCurrentUser={isCurrentUser} />} />
+            <Route path="/u/:username/collections" render={(props) => <MyCollections items={userCollections} currentUser={currentUser} isCurrentUser={isCurrentUser} {...props} />} />
+            <Route path="/u/:username/stars" render={(props) => <MyStars items={userStars} currentUser={currentUser} isCurrentUser={isCurrentUser} />} />
+          </Switch>
         </TabContent>
       </div>
     )

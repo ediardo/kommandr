@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import gql from 'graphql-tag';
-import { graphql } from 'react-apollo';
-
+import { Link } from 'react-router-dom';
 import {
   Button,
   Modal,
@@ -13,10 +11,11 @@ import FontAwesome from 'react-fontawesome';
 
 import { apiUrl } from '../../utils/';
 
-class ModalSignIn extends Component {
+class ModalLogin extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isOpen: true,
       activeTab: '1',
       loginCredentials: {
         email: '',
@@ -32,7 +31,6 @@ class ModalSignIn extends Component {
     this.onChangeSignUpPassword = this.onChangeSignUpPassword.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.toggle = this.toggle.bind(this);
-    this.toggleTab = this.toggleTab.bind(this);
   }
 
   onSubmit(e) {
@@ -69,31 +67,30 @@ class ModalSignIn extends Component {
   }
 
   toggle() {
-    this.props.toggle();
+    const { from } = this.props.location.state;
+    this.props.history.push(from);
   }
 
-  toggleTab(tab) {
-    this.setState({
-      activeTab: tab,
-      submitAction: (tab === '1') ? 'Log in' : 'Register new account'
-    });
-
-  }
 
   render() {
-    const { isOpen } = this.props;
-
+    const { isOpen } = this.state;
     return (
-      <Modal isOpen={isOpen} toggle={this.toggle}>
+      <Modal isOpen={isOpen} toggle={this.toggle} className="modal-login">
         <ModalHeader toggle={this.toggle}>Can I see some ID?</ModalHeader>
         <ModalBody>
-          <div>
-            <a href={apiUrl('/login/github')}>
-              <Button size="big" color="primary" >
+          <p>Use any of your accounts below to continue</p>
+          <ul className="oauth-providers">
+            <li>
+              <Button size="lg" href={apiUrl('/login/github')} color="link">
                 <FontAwesome name="github" /> Log in with your GitHub account
               </Button>
-            </a>
-          </div>
+            </li>
+            <li>
+              <Button size="lg" color="link" href={apiUrl('/login/facebook')}>
+                <FontAwesome name="facebook" /> Log in with your Facebook account
+              </Button>
+            </li>
+          </ul>
         </ModalBody>
         <ModalFooter>
           <Button outline color="secondary" onClick={this.toggle}>Cancel</Button>
@@ -103,13 +100,5 @@ class ModalSignIn extends Component {
   }
 }
 
-const mutation = gql`
-  mutation AddUser($email: String!, $password: String!) {
-    addUser(email: $email, password: $password) {
-      id
-      email
-    }
-  }
-`;
 
-export default graphql(mutation)(ModalSignIn);
+export default ModalLogin;

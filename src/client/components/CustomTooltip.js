@@ -17,7 +17,7 @@ CustomTooltip.propTypes = {
 };
 
 CustomTooltip.defaultProps = {
-  target: 'top',
+  placement: 'top',
 };
 
 export default CustomTooltip;
