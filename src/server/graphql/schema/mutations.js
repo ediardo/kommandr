@@ -92,7 +92,7 @@ const mutation = new GraphQLObjectType({
       type: kommandrType,
       args: {
         id: {
-          type: GraphQLString
+          type: new GraphQLNonNull(GraphQLID),
         },
       },
       resolve: (root, { id }, ctx) => {
@@ -133,18 +133,25 @@ const mutation = new GraphQLObjectType({
       type: reportType,
       args: {
         id: {
-          type: GraphQLString
+          type: new GraphQLNonNull(GraphQLID),
         },
         reason: {
-          type: GraphQLString
+          type: new GraphQLNonNull(GraphQLString),
         },
       },
       resolve: (root, { id, reason }, ctx) => {
         if (!ctx.user) return null;
-        if (reason !== 'spam' || reason !== 'fake') reason = 'spam';
-        return db.Report.create({
-          userId: ctx.user.id,
-          reason
+        if (reason !== 'spam' || reason !== 'fake' || reason !== 'dangerous') reason = 'spam';
+        return db.Kommandr.findOne({
+          where: { 
+            hashId: id
+          }
+        }).then(kommandr => {
+          return db.Report.create({
+            userId: ctx.user.id,
+            kommandrId: kommandr.id,
+            reason,
+          });
         });
       }
     },
@@ -268,15 +275,22 @@ const mutation = new GraphQLObjectType({
         website: {
           type: GraphQLString,
         },
+        enableLogin: {
+          type: GraphQLBoolean,
+        },
       },
       resolve: (root, { email, username, password, name, website }, ctx) => {
-        if (!ctx.user || ctx.user.id !== id) return null;
+        if (!ctx.user) return null;
         let userFields = {};
         if (username) {
           userFields = { ...userFields, username };
         }
         if (password) {
-          userFields = { ...userFields, password };
+          userFields = { 
+            ...userFields, 
+            password,
+            isPasswordSet: true,
+          };
         }
         if (name) {
           userFields = { ...userFields, name };
@@ -289,19 +303,18 @@ const mutation = new GraphQLObjectType({
         userFields = { 
           ...userFields,
           hasSeenWelcome: 1,
-          isPasswordSet: 1
         };
+
         db.User.findOne({
-          where: { id },
+          where: { id: ctx.user.id },
         }).then(user => {
           return db.User.update(
             userFields, 
             {
               where: { id: ctx.user.id } 
             }
-          ).then(affectedRows => (affectedRows === 1) ? db.User.findById(ctx.user.id) : user);
+          ).then(affectedRows => (affectedRows === 1) ? db.User.findById(ctx.user.id) : userno );
         });
-       
       }
     },
 
@@ -322,7 +335,7 @@ const mutation = new GraphQLObjectType({
         });
       }
     },
-   
+    
     addCollection: {
       type: collectionType,
       args: {

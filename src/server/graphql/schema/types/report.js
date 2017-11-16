@@ -2,7 +2,6 @@ import {
   GraphQLObjectType,
   GraphQLNonNull,
   GraphQLID,
-  GraphQLInt,
   GraphQLString,
 } from 'graphql';
 
@@ -14,11 +13,11 @@ const reportType = new GraphQLObjectType({
       description: 'ID of the fav'
     },
     userId: {
-      type: GraphQLInt,
+      type: new GraphQLNonNull(GraphQLID),
       description: 'ID of the User',
     },
     kommandrId: {
-      type: GraphQLInt,
+      type: new GraphQLNonNull(GraphQLID),
       description: 'ID of the Kommandr',
     },
     reason: {

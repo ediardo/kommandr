@@ -220,6 +220,7 @@ const RootQueryType = new GraphQLObjectType({
         });
       }
     },
+    
     commentById: {
       type: commentType,
       args: {
@@ -258,7 +259,9 @@ const RootQueryType = new GraphQLObjectType({
           }],
           where: { hashId: id },
         }).then(kommandr => {
-          kommandr.increment('totalViews');
+          kommandr.increment('totalViews', {
+            silent: true,
+          });
           return kommandr;
         });
       }

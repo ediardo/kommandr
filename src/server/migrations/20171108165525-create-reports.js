@@ -25,7 +25,7 @@ module.exports = {
         }
       },
       reason: {
-        type: Sequelize.TEXT
+        type: Sequelize.STRING
       },
       status: {
         type: Sequelize.INTEGER,
