@@ -77,8 +77,11 @@ const kommandrType = new GraphQLObjectType({
       resolve: kommandr => models.Comment.findAll({
         include: [{
           model: models.Kommandr,
-          where: { hashId: kommandr.id }
+          where: { id: kommandr.id }
         }],
+        order: [
+          [ 'createdAt', 'DESC' ]
+        ],
       })
     },
     allForks: {

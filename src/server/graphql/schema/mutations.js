@@ -210,15 +210,23 @@ const mutation = new GraphQLObjectType({
         kommandrId: {
           type: new GraphQLNonNull(GraphQLID)
         },
-        userId: {
-          type: new GraphQLNonNull(GraphQLID)
-        },
         comment: {
-          type: GraphQLString
+          type: new GraphQLNonNull(GraphQLString)
         },
       },
-      resolve: (root, { kommandrId, userId, comment }) => {
-        return db.Comment.create({ kommandrId, userId, comment });
+      resolve: (root, { kommandrId, comment }, ctx) => {
+        if (!ctx.user) return null;
+        return db.Kommandr.findOne({
+          where: { hashId: kommandrId }
+        }).then(kommandr => {
+          return db.Comment.create({ 
+            kommandrId: kommandr.id, 
+            userId: ctx.user.id,
+            comment 
+          }).then(comment => {
+            console.log(comment);
+          });
+        });
       }
     },
 
@@ -283,7 +291,11 @@ const mutation = new GraphQLObjectType({
         if (!ctx.user) return null;
         let userFields = {};
         if (username) {
-          userFields = { ...userFields, username };
+          userFields = {
+            ...userFields,
+            username,
+            isUsernameSet: true,
+          };
         }
         if (password) {
           userFields = { 
@@ -313,7 +325,7 @@ const mutation = new GraphQLObjectType({
             {
               where: { id: ctx.user.id } 
             }
-          ).then(affectedRows => (affectedRows === 1) ? db.User.findById(ctx.user.id) : userno );
+          ).then(affectedRows => (affectedRows === 1) ? db.User.findById(ctx.user.id) : user );
         });
       }
     },

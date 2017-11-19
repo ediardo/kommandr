@@ -47,6 +47,15 @@ const userType = new GraphQLObjectType({
         return null;
       }
     },
+    isUsernameSet: {
+      type: GraphQLBoolean,
+      resolve: (user, args, ctx) => {
+        if (ctx.user && ctx.user.id === user.id) {
+          return user.isUsernameSet
+        }
+        return null;
+      }
+    },
     website: {
       type: GraphQLString,
       resolve: user => user.website

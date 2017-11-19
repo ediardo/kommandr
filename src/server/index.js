@@ -43,13 +43,16 @@ passport.use(
     callbackURL:  oauthConfig['github'].callbackURL,
   }, (accessToken, refreshToken, profile, done) => {
     const { id, login, name, email, avatar_url } = profile._json;
-    console.log(profile);
     db.User.findOne({
       where: {
-        $or: [ { githubId: id }, { email: 'djedir@gmail.com' }]
+        $or: [ { githubId: id }, { email: email }]
       }
     }).then(user => {
       if (user) {
+        if (!user.githubId) {
+          user.githubId = id;
+          user.save();
+        }
         return done(null, user.id);
       } else {
         db.User.create({
@@ -59,6 +62,7 @@ passport.use(
           email,
           externalAvatarUrl: avatar_url,
           isPasswordSet: 0,
+          isUsernameSet: true,
           status: 1
         }).then(newUser => done(null, newUser.id));
       }
@@ -72,9 +76,33 @@ passport.use(
     clientID: oauthConfig['facebook'].clientId,
     clientSecret:  oauthConfig['facebook'].secret,
     callbackURL:  oauthConfig['facebook'].callbackURL,
-    profileFields: ['emai000ls']
+    profileFields: ['emails', 'id', 'displayName', 'name', 'picture']
   }, (accessToken, refreshToken, profile, done) => {
-    
+    const { id, email, name } = profile._json;
+    db.User.findOne({
+      where: {
+        $or: [ { facebookId: id }, { email } ]
+      }
+    }).then(user => {
+      if (user) {
+        if (!user.facebookId ) {
+          user.facebookId = id;
+          user.save();
+        }
+        return done(null, user.id);
+      } else {
+        var externalAvatarUrl = `https://graph.facebook.com/${id}/picture?width=250`;
+        db.User.create({
+          facebookId: id,
+          name,
+          email,
+          externalAvatarUrl,
+          isPasswordSet: 0,
+          isUsernameSet: 0,
+          status: 1
+        }).then(newUser => done(null, newUser.id));
+      }
+    });
   })
 );
 
@@ -118,7 +146,7 @@ app.get(
 app.get(
   '/login/facebook/return',
   passport.authenticate('facebook', { failureRedirect: '/login' }), (req, res) => {
-    res.redirect('http://localhost:5000')
+    res.redirect('http://localhost:5000/#')
   }
 );
 

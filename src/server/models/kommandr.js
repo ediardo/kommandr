@@ -10,6 +10,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: true,
     },
+    source: DataTypes.STRING,
     totalViews: DataTypes.INTEGER,
     totalStars: DataTypes.INTEGER,
     totalComments: DataTypes.INTEGER,

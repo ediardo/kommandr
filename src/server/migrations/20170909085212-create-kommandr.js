@@ -20,6 +20,9 @@ module.exports = {
       description: {
         type: Sequelize.STRING
       },
+      source: {
+        type: Sequelize.STRING,
+      },
       forkFrom: {
         type: Sequelize.STRING,
         allowNull: true,
