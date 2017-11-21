@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 const Footer = props => {
   return (
-    <footer className="footer">
+    <footer className="footer fixed-bottom">
       <Container fluid>
         kommandr.com © {new Date().getFullYear()} |{' '}
         <a href="https://github.com/kommandr/kommandr/issues/new" target="_blank">report bugs</a> |{' '}

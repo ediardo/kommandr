@@ -1,20 +1,42 @@
 @import 'variables';
-html {
-  min-height: 100%;
-  position: relative;
+.no-scroll {
+  height: 100%;
+  overflow: hidden;
+  width: 100%;
+  main { 
+    border: 0;
+    background: initial;
+    padding: 0;
+    
+  }
 }
 
 body {
-  background-color: #FDFDFD;
+  height: inherit;
+  width: inherit;
+  overflow: inherit;
+  background-color: #F9FCFC;
   margin-bottom: 75px;
 }
 
-h1, h2, h3, h4 {
-      font-family: 'Bitter', serif;
+#root, .app, main {
+  height: inherit;
+}
+.app{
+  display: flex;
+  flex-direction: column;
 }
 /*
  HEADER
 */
+
+main {
+  background-color: white;
+  border-left: 1px solid $layout-border-color;
+  border-right: 1px solid $layout-border-color;
+  border-bottom: 1px solid $layout-border-color;
+  padding: 15px 0;
+}
 header {
   background-color: $header-bg;
   border-bottom: 1px solid $header-border-color;
@@ -27,14 +49,35 @@ header {
       text-decoration: none;
     }
   }
-
+  a {
+    color: $header-link-color;
+    &:hover {
+      color: $header-link-color;
+    }
+  }
   .header-links {
     .fa {
       font-size: 1.3rem;
     }
   }
-}
 
+}
+.modal-login {
+  ul.oauth-providers {
+    list-style-type: none;
+    text-align: center;
+    li {
+      margin-bottom: 15px;
+
+      &:last-child {
+        margin-bottom: 0px;
+      }
+    }
+  }
+}
+a {
+  color: $link-color;
+}
 .content {
   height: calc(100% - #{$footer-height} - #{$header-height});
   overflow-y: auto;
@@ -86,37 +129,108 @@ header {
 
 .CodeMirror {
   font-family: 'Ubuntu Mono', monospace!important;
+  font-weight: bold;
+  span.cm-builtin {
+    color: black;
+    font-weight: bolder;
+  }
+  span.cm-attribute {
+    color: #007bff;
+  }
+  span.cm-string {
+    color: #d30289;
+  }
+
+  span.cm-number { 
+    color: #28a746;
+  }
+  pre.CodeMirror-placeholder {
+    color: $ultra-light-dark;
+  }
 }
 
-.kommandr-container {
+.command-line-container, .kommandr-container {
+  flex-direction: column;
+  width: 70%;
+  h1, h2, h3, h4 {
+    font-family: 'Bitter', serif;
+  }
+
   .CodeMirror {
     font-size: 1.9rem;
     height: initial;
+    padding: 8px;
+    .CodeMirror-lines { 
+      padding: 0px;
+    }
   }
+
   .kommandr-title {
     color: $kommandr-title-font-color;
-    
+    flex: none;
+
     h2 {
       display: inline-block;
       font-size: $kommandr-title-font-size;
       margin: 0;
     }
     .editable-input {
+      background-color: transparent;
       border: 0px;
       font-size: $kommandr-title-font-size;
       font-family: $kommandr-title-font-family;
-      
       padding: 0;
+      width: 100%;
     }
   }
 
+  .kommandr-actions {
+    flex: none;
+  }
   .kommandr {
     background-color: $kommandr-background;
     border: 1px solid #E1E4E5;
     border-radius: 4px;
     color: $kommandr-font-color;
+    flex: none;
     font-size: 1.5em;
     width: 100%;
+  }
+
+  .kommandr-author {
+    border-bottom: 1px solid $light-gray;
+    flex: none;
+  }
+  .kommandr-description {
+    textarea {
+      min-width: 100%;
+    }
+    .static-description {
+      white-space: pre-line;
+    }
+  }
+  .kommandr-timestamps {
+    color: $dark;
+    font-style: italic;
+    font-size: 0.9rem;
+    text-align: right;
+  }
+
+  .kommandr-comments {
+    flex: 1;
+    margin: 0 -15px;
+    padding: 0 5px 0 15px;
+    overflow: scroll;
+    &::-webkit-scrollbar {
+      background-color: transparent;
+      border: none;
+      width: $scrollbar-width;
+    }
+    &::-webkit-scrollbar-thumb
+    {
+      background-color: $scrollbar-color;
+      border: none;
+    }
   }
 }
 
@@ -124,18 +238,19 @@ header {
 .list-kommandrs { 
   list-style-type: none;
   padding: 0;
+  width: 100%;
 
   .kommandr-item {
     padding: 0.5rem 1rem;
     width: 100%;
   
     h6 { 
-      font-size: 0.9rem;
+      font-size: 1rem;
       margin-bottom: 0.15rem;
     }
     
     .CodeMirror {
-      font-size: 1.4rem;
+      font-size: 1.1rem;
       height: initial;
     }
     &.compact {
@@ -159,18 +274,23 @@ header {
   }
 }
 
-.sidebar {
+
+.command-line-sidebar, .sidebar {
   background-color: $sidebar-bg;
   border-left: 1px solid $sidebar-border-color;
-  bottom: 0;
-  height: calc(100% - #{$footer-height} - #{$header-height});
-  position: relative;
-  top: 0;
-  width: $sidebar-width;
+  flex-direction: column;
+  min-width: 250px;
+  width: 30%;
 
   .sidebar-search {
     border-bottom: 1px solid $sidebar-border-color;
+    padding: 15px;
+
+    input {
+      width: calc(100% - 20px);
+    }
   }
+
   .sidebar-menu {
 
     li {
@@ -190,6 +310,19 @@ header {
 }
 
 .sidebar-search-results {
+  height: 100%;
+  overflow: auto;
+  
+  &::-webkit-scrollbar {
+    background-color: transparent;
+    border: none;
+    width: 10px;
+  }
+  &::-webkit-scrollbar-thumb
+  {
+    background-color: $scrollbar-color;
+    border: none;
+  }
   ul {
     list-style-type: none;
     margin: 0;
@@ -200,11 +333,9 @@ header {
 .footer {
   background-color: $footer-bg;
   border-top: 1px solid $footer-border-color;
-  bottom: 0;
   color: $footer-font-color;
   height: $footer-height;
   line-height: $footer-line-height;
-  position: absolute;
   width: 100%;
 }
 
@@ -218,6 +349,7 @@ header {
   .editable-input {
     display: none;
     border: 1px solid transparent;
+    width: 100%;
   }
   &.editing {
     .editable {
@@ -247,7 +379,6 @@ header {
 .container-search-input {
   background-color: $search-input-bg;
   border: 1px solid $search-input-border-color;
-  display: table-cell;
   line-height: $search-input-line-height;
   font-size: $search-input-font-size;
   padding: 0.5rem 0.75rem;
@@ -322,4 +453,55 @@ header {
 .match-pattern {
   font-family: Courier;
   margin-left: 15px;
+}
+
+.custom-alert {
+  top: 35px;
+  position: fixed;
+}
+
+.link-username {
+  font-weight: bold;
+}
+
+.profile-avatar {
+  img {
+    border-radius: 5px!important;
+  }
+}
+
+.comment-add-container {
+  .comment-input-container {
+    min-width: 400px;
+  }
+  .comment-input {
+    background-color: white;
+    border: 1px solid $layout-border-color;
+  }
+}
+
+.list-comments {
+  list-style-type: none;
+  padding: 0;
+
+  .comment-body {
+    width: 100%;
+  }
+}
+
+.profile-settings-container {
+  .title {
+    border-bottom: 1px solid $layout-border-color;
+  }
+
+  .profile-settings-form {
+    width: 100%;
+  }
+  .profile-avatar-sidebar {
+    width: 255px;
+  }
+}
+
+label {
+  font-weight: bold;
 }

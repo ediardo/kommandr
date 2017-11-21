@@ -22,7 +22,7 @@ module.exports = function(sequelize, DataTypes) {
         targetType: 'fav',
       });
     }
-    sequelize.models.Kommandr.increment('totalStars', { where: { id: kommandrId }, silent: true })
+    sequelize.models.Kommandr.update({ totalStars: sequelize.literal('totalStars + 1')}, { where: { id: kommandrId }, silent: true });    
   });
 
   Star.beforeBulkDestroy(options => {
@@ -42,7 +42,7 @@ module.exports = function(sequelize, DataTypes) {
         },      
       });
     }
-    sequelize.models.Kommandr.increment({ totalStars: -1 }, { where: { id: kommandrId }, silent: true });
+    sequelize.models.Kommandr.update({ totalStars: sequelize.literal('totalStars - 1')}, { where: { id: kommandrId }, silent: true });    
   });
 
   return Star;

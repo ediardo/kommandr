@@ -1,31 +1,36 @@
-import React, { Component } from 'react';
-
+import React from 'react';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import { Button, Modal, ModalBody, ModalHeader, ModalFooter } from 'reactstrap';
 
-class ModalHelp extends Component {
-  constructor(props) {
-    super(props);
-    this.toggle = this.toggle.bind(this);
-  }
+const ModalHelp = ({ handleToggle, isOpen, match, history }) => {
+  const toggle = () => {
+    if (match.path === '/help') {
+      history.push('/');
+    } else {
+      handleToggle();
+    }
+  };
 
-  toggle() {
-    this.props.toggle();
-  }
+  return (
+    <Modal isOpen={isOpen} toggle={toggle}>
+      <ModalHeader toggle={toggle}>Help</ModalHeader>
+      <ModalBody>
+        Trying to get some help?
+      </ModalBody>
+      <ModalFooter>
+        <Button outline color="secondary" onClick={toggle}>Exit</Button>
+      </ModalFooter>
+    </Modal>
+  )
+};
 
-  render() {
-    const { isOpen } = this.props;
-    return (
-      <Modal isOpen={isOpen} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>Help</ModalHeader>
-        <ModalBody>
-          Trying to get some help?
-        </ModalBody>
-        <ModalFooter>
-          <Button outline color="secondary" onClick={this.toggle}>Exit</Button>
-        </ModalFooter>
-      </Modal>
-    )
-  }
-}
+ModalHelp.propTypes = {
+  isOpen: PropTypes.bool,
+};
 
-export default ModalHelp;
+ModalHelp.defaultProps = {
+  isOpen: true,
+};
+
+export default withRouter(ModalHelp);

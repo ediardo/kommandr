@@ -18,8 +18,12 @@ module.exports = {
         type: Sequelize.STRING
       },
       isPasswordSet: {
-        type: Sequelize.INTEGER,
-        defaultValue: 0,
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
+      isUsernameSet: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
       },
       email: {
         type: Sequelize.STRING
@@ -27,8 +31,14 @@ module.exports = {
       website: {
         type: Sequelize.STRING
       },
+      bio: {
+        type: Sequelize.STRING
+      },
+      location: {
+        type: Sequelize.STRING,
+      },
       isLoginEnabled: {
-        type: Sequelize.INTEGER
+        type: Sequelize.BOOLEAN
       },
       lastSignedIn: {
         type: Sequelize.DATE

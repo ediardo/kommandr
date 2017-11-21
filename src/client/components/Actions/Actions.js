@@ -1,7 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const Actions = (props) => {
-  const actions = props.children.map((stat, idx) => {
+const Actions = ({ children, className }) => {
+  const actions = children.filter((stat, idx) => {
     if (stat) {
       return (
         <li className="action" key={idx}>
@@ -9,13 +10,23 @@ const Actions = (props) => {
         </li>
       )
     }
+    return null;
   });
 
   return (
-    <ul className={`inline-actions ${props.className}`}>
+    <ul className={`inline-actions ${className}`}>
       {actions}
     </ul>
   )
+};
+
+Actions.propTypes = {
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string,
+}
+
+Actions.defaultProps = {
+  className: '',
 };
 
 export default Actions;

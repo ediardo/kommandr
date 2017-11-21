@@ -3,13 +3,14 @@
 #import "../fragments/kommandrInfo.gql"
 #import "../fragments/commentInfo.gql"
 #import "../fragments/collectionInfo.gql"
-#import "../fragments/starInfo.gql"
 
 query currentUser {
   currentUser {
     ...userInfo
     isPasswordSet
+    isUsernameSet
     hasSeenWelcome
+    lastSignedIn
     allActivities {
       ...activityInfo
     }
@@ -20,7 +21,7 @@ query currentUser {
       ...commentInfo
     }
     allStars {
-      ...starInfo
+      ...kommandrInfo
     }
     allCollections {
       ...collectionInfo

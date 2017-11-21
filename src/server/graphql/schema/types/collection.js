@@ -3,8 +3,14 @@ import {
   GraphQLID,
   GraphQLInt,
   GraphQLString,
-  GraphQLNonNull
+  GraphQLNonNull,
+  GraphQLBoolean,
+  GraphQLList,
 } from 'graphql';
+
+import db from '../../../models';
+import kommandrType from './kommandr';
+import userType from './user';
 
 const collectionType = new GraphQLObjectType({
   name: 'Collection',
@@ -23,8 +29,24 @@ const collectionType = new GraphQLObjectType({
     description: {
       type: GraphQLString,
     },
-    matchPattern: {
+    matchRegex: {
       type: GraphQLString,
+    },
+    isEnabled: {
+      type: GraphQLBoolean,
+    },
+    matchAllTime: {
+      type: GraphQLBoolean,
+    },
+    author: {
+      type: userType,
+      resolve: collection => collection.User,
+    },
+    allKommandrs: {
+      type: new GraphQLList(kommandrType),
+      resolve: (collection, args, ctx) => {
+        return db.Collection.getKommandrs();
+      }
     },
     totalKommandrs: {
       type: GraphQLInt,

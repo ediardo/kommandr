@@ -4,15 +4,17 @@ import { Link } from 'react-router-dom';
 import { graphql } from 'react-apollo';
 import { Button } from 'reactstrap';
 
+import ProfileAvatar from './ProfileAvatar';
 import currentUser from '../../graphql/queries/currentUser.gql';
 
 const ProfileSidebar = ({ user, data: { loading, currentUser } }) => {
-  const { name, username, email, externalAvatarUrl } = user;
+  const { name, username, email} = user;
+  if (loading) return <span>Loading..</span>;
   const sameUser = currentUser && user.id === currentUser.id;
   return (
-    <div className="user-card">
+    <div>
       <div className="user-avatar lg-avatar">
-        <img src={`${externalAvatarUrl}`} alt="profile" />
+        <ProfileAvatar size="xl" user={user} />
       </div>
       <div className="user-info mt-2">
           <h4 className="user-display-name">{name}</h4>
@@ -21,9 +23,8 @@ const ProfileSidebar = ({ user, data: { loading, currentUser } }) => {
       </div>
       <hr />
       <div className="user-details">
-        {sameUser && <Button tag={Link} to={`/u/${currentUser}/edit`} color="primary">Edit my info</Button>}
+        {sameUser && <Button tag={Link} to={`/settings`} color="primary" outline>Edit my profile</Button>}
       </div>
-
     </div>
   )
 }

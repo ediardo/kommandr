@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { graphql } from 'react-apollo';
-
+import { Fade } from 'reactstrap';
 import KommandrList from '../Kommandr/KommandrList';
 
 import searchKommandr from '../../graphql/queries/searchKommandr.gql';
@@ -11,11 +11,9 @@ class SidebarSearchResults extends Component {
     const { loading, allKommandrs } = this.props.data;
     if (loading) return <span>Loading...</span>;
     return (
-      <div className="sidebar-search-results">
-        <ul className="results-group">
-          <KommandrList data={allKommandrs} compact={true} />
-        </ul>
-      </div>
+      <Fade in={true}>
+        <KommandrList data={allKommandrs} compact={true} />
+      </Fade>
     )
   }
 }

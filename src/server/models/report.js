@@ -3,6 +3,7 @@ module.exports = (sequelize, DataTypes) => {
   var Report = sequelize.define('Report', {
     userId: DataTypes.INTEGER,
     kommandrId: DataTypes.INTEGER,
+    reason: DataTypes.STRING,
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
   });

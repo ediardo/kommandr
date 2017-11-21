@@ -5,13 +5,15 @@ module.exports = function(sequelize, DataTypes) {
     description: DataTypes.STRING,
     userId: DataTypes.INTEGER,
     totalKommandrs: DataTypes.INTEGER,
-    matchPattern: DataTypes.STRING,
+    matchRegex: DataTypes.STRING,
+    isEnabled: DataTypes.BOOLEAN,
+    matchAllTime: DataTypes.BOOLEAN,
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
   });
 
   Collection.associate = models => {
-    Collection.hasMany(models.Kommandr, { foreignKey: 'collectionId' });
+    Collection.belongsToMany(models.Kommandr, { foreignKey: 'collectionId', through: 'KommandrCollection' });
     Collection.belongsTo(models.User, { foreignKey: 'userId' });
   };
 

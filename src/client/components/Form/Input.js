@@ -1,38 +1,48 @@
 import React, { Component } from 'react';
-import { Input } from 'reactstrap';
+import { FormGroup, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
 
-class CustomInput extends Component {
-  constructor(props) {
-    super(props);
-    this.state ={
-      value: this.props.value,
-    };
-    this.onChange = this.onChange.bind(this);
-  }
-
-  onChange(e) {
-    const { value } = e.target;
-    this.setState({ value });
-    this.props.onChange(value);
-  }
-  
-  render() {
-    const { value } = this.state;
-    const { type, name, id, placeholder } = this.props;
-    return (
-      <Input {...this.props}  />      
-    )
-  }
-}
-
-CustomInput.propTypes = {
-  value: PropTypes.string,
-  type: PropTypes.string,
-  name: PropTypes.string,
-  id: PropTypes.string,
-  placeholder: PropTypes.string,
-  onChange: PropTypes.func,
+export const InputUsername = ({ value, placeholder, onChange }) => {
+  return (
+    <FormGroup>
+      <Label for="inputUsername">Username</Label>
+      <Input type="text" value={value} onChange={(e) => onChange(e)} placeholder={placeholder} id="inputUsername" />
+    </FormGroup>
+  )
 };
 
-export default CustomInput;
+export const InputName = ({ value, placeholder, onChange }) => {
+  return (
+    <FormGroup>
+      <Label for="inputName">Name</Label>
+      <Input type="text" value={value} onChange={(e) => onChange(e)} placeholder={placeholder} id="inputName" />
+    </FormGroup>
+  )
+};
+
+export const InputWebsite = ({ value, placeholder, onChange }) => {
+  return (
+    <FormGroup>
+      <Label for="inputWebsite">Website</Label>
+      <Input type="text" value={value} onChange={(e) => onChange(e)} placeholder={placeholder} id="inputWebsite"/>
+    </FormGroup>
+  )
+};
+
+export const InputPassword = ({ value, placeholder, onChange }) => {
+  return (
+    <FormGroup>
+      <Label for="inputPassword">Username</Label>
+      <Input type="password" value={value} onChange={(e) => onChange(e)} placeholder={placeholder} id="inputPassword"/>
+    </FormGroup>
+  )
+};
+
+export const InputEmail = ({ value, placeholder, onChange }) => {
+  return (
+    <FormGroup>
+      <Label for="inputEmail">Email</Label>
+      <Input type="password" value={value} onChange={(e) => onChange(e)} placeholder={placeholder} id="inputEmail"/>
+    </FormGroup>
+  )
+}

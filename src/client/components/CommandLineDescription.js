@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Media } from 'reactstrap';
 
-
+import ProfileAvatar from './ProfileAvatar';
 import ContentEditable from './ContentEditable';
 
 class CommandLineDescription extends Component {
@@ -40,10 +40,8 @@ class CommandLineDescription extends Component {
         <Media>
           <Media left href="#">
             <div className="user-avatar sm-avatar placeholder">
-              { isAnonymous
-                ? ''
-                : <img src={author.externalAvatarUrl} />
-              }
+            <ProfileAvatar size="s" url={author.externalAvatarUrl} name={author.name} />
+            
             </div>
           </Media>
           <Media body className="ml-2">

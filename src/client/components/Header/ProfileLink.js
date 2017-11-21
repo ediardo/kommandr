@@ -2,7 +2,7 @@ import React from 'react';
 import { graphql } from 'react-apollo'
 import PropTypes from 'prop-types';
 import FontAwesome from 'react-fontawesome';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import {
   Button,
   UncontrolledDropdown,
@@ -11,40 +11,41 @@ import {
   DropdownItem
 } from 'reactstrap';
 
+import { ProfileAvatar } from '../Profile';
 import { apiUrl } from '../../utils/';
 import currentUser from '../../graphql/queries/currentUser.gql';
 
-const ProfileLink = ({ data: { currentUser, loading }, onClickLoginHandler }) => {
+const ProfileLink = ({ data: { currentUser, loading }, handleOnClickLogin }) => {
   if (loading) return null;
   if (!currentUser) {
     return (
-      <Button  color="link" onClick={() => onClickLoginHandler()} className="mr-2">
+      <Button  color="link" onClick={() => handleOnClickLogin()} className="mr-2">
         <FontAwesome name="user" />
       </Button>
     )
   } else {
-    const { externalAvatarUrl, username } = currentUser;
+    const { username } = currentUser;
     return (
       <UncontrolledDropdown>
         <DropdownToggle caret color="link" size="sm">
-        <img src={`${externalAvatarUrl}&s=30`} alt="avatar" />
+        <ProfileAvatar user={currentUser} size="xs" nolink/>
         </DropdownToggle>
         <DropdownMenu right>
           <DropdownItem header>
             You're <span className="font-weight-bold">{username}</span>
           </DropdownItem>
           <DropdownItem divider />
-          <DropdownItem tag={Link} to={`/u/${username}/k`}>
+          <DropdownItem tag={Link} to={`/u/${username}/kommandrs`}>
             My Kommandrs
           </DropdownItem>
-          <DropdownItem tag={Link} to={`/u/${username}/c`}>
+          <DropdownItem tag={Link} to={`/u/${username}/collections`}>
             My Collections
           </DropdownItem>  
-          <DropdownItem tag={Link} to={`/u/${username}/f`}>
-            My Favs
+          <DropdownItem tag={Link} to={`/u/${username}/stars`}>
+            My Stars
           </DropdownItem>  
           <DropdownItem divider />          
-          <DropdownItem tag={Link} to={`/u/${username}/edit`}>
+          <DropdownItem tag={Link} to={`/settings`}>
             Edit my profile
           </DropdownItem>  
           <DropdownItem divider />  
@@ -59,7 +60,7 @@ const ProfileLink = ({ data: { currentUser, loading }, onClickLoginHandler }) =>
 
 ProfileLink.propTypes = {
   data: PropTypes.object,
-  onClickLoginHandler: PropTypes.func,
+  handleOnClickLogin: PropTypes.func,
 };
 
-export default graphql(currentUser)(ProfileLink);
+export default graphql(currentUser)(withRouter(ProfileLink));

@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { graphql } from 'react-apollo';
 
 import userExists from '../../graphql/queries/userExists.gql';

@@ -17,12 +17,10 @@ module.exports = function(sequelize, DataTypes) {
           min: 3,
           isLowercase: true,
           notIn: [reservedUsernames],
-          
         }
       },
       email: {
         type: DataTypes.STRING,
-        allowNull: false,
         validate: {
           isEmail: true,
         }
@@ -33,9 +31,10 @@ module.exports = function(sequelize, DataTypes) {
           min: 6
         }
       },
-      isPasswordSet: DataTypes.INTEGER,
+      isPasswordSet: DataTypes.BOOLEAN,
+      isUsernameSet: DataTypes.BOOLEAN,
       website: DataTypes.STRING,
-      isLoginEnabled: DataTypes.INTEGER,
+      isLoginEnabled: DataTypes.BOOLEAN,
       githubId: DataTypes.STRING,
       googleId: DataTypes.STRING,
       facebookId: DataTypes.STRING,
@@ -58,9 +57,7 @@ module.exports = function(sequelize, DataTypes) {
 
   
   User.hook('beforeBulkUpdate', (user) => {
-    console.log(user.attributes);
     const { username, password } = user.attributes;
-    console.log(username, password);
     if (username) {
       user.attributes.username = username.trim().toLowerCase()
     }

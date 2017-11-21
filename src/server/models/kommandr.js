@@ -10,6 +10,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: true,
     },
+    source: DataTypes.STRING,
     totalViews: DataTypes.INTEGER,
     totalStars: DataTypes.INTEGER,
     totalComments: DataTypes.INTEGER,
@@ -20,10 +21,10 @@ module.exports = function(sequelize, DataTypes) {
 
   Kommandr.associate = models => {
     Kommandr.belongsTo(models.User, { foreignKey: 'userId' });
-    Kommandr.hasMany(models.Comment, { foreignKey: 'kommandrId', onDelete: 'cascade' });
-    Kommandr.hasMany(models.Star, { foreignKey: 'kommandrId', onDelete: 'cascade' });
-    Kommandr.hasMany(models.Kommandr, { foreignKey: 'forkFrom', as: 'Forks', onDelete: 'set null' })
-    Kommandr.belongsTo(models.Collection, { foreignKey: 'collectionId' });
+    Kommandr.hasMany(models.Comment, { foreignKey: 'kommandrId', onDelete: 'CASCADE' });
+    Kommandr.hasMany(models.Star, { foreignKey: 'kommandrId' });
+    Kommandr.hasMany(models.Kommandr, { foreignKey: 'forkFrom', as: 'Forks', onDelete: 'SET NULL' })
+    Kommandr.belongsToMany(models.Collection, { foreignKey: 'kommandrId', through: 'KommandrCollection' });
   };
 
   Kommandr.beforeCreate((kommandr, options) => {

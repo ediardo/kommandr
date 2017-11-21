@@ -20,7 +20,7 @@ const Activity = data => {
       info = hdate.relativeTime(data.data.createdAt);
       break;
     case 'comment':
-      icon = <FontAwesome name="comment" />
+      icon = <FontAwesome name="comment-o" />
       title = 'Posted a comment';
       info = hdate.relativeTime(data.data.createdAt);
       break;
@@ -44,8 +44,7 @@ const Activity = data => {
   }
   return (
     <span>
-      {icon}{' '}{title}
-      {info}
+      {icon}{' '}{title}{' '}{info}
     </span>
   )
 };

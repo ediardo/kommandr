@@ -1,0 +1,7 @@
+#import "../fragments/collectionInfo.gql"
+
+query collectionByName($name: String!) {
+  collection: collectionByName(name: $name) {
+    ...collectionInfo
+  }
+}

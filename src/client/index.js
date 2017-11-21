@@ -28,7 +28,7 @@ const store = createStore(reducer, applyMiddleware(...middleware));
 */
 
 const networkInterface = createNetworkInterface({
-  uri: 'http://kommandr.com:5001/graphql',
+  uri: '/graphql',
   opts: {
     credentials: 'include'
   },

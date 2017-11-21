@@ -3,8 +3,13 @@ fragment collectionInfo on Collection {
   userId
   name
   description
-  matchPattern
+  matchRegex
+  isEnabled
+  matchAllTime
   totalKommandrs
+  author {
+    username
+  }
   updatedAt
   createdAt
 }

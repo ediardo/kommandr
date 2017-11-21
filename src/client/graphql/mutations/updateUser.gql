@@ -1,5 +1,7 @@
-mutation updateUser($username: String, $password: String) {
-  user: updateUser(username: $username, password: $password) {
-    username
+#import "../fragments/userInfo.gql"
+
+mutation updateUser($username: String, $password: String, $email: String, $name: String, $website: String, $enableLogin: Boolean) {
+  user: updateUser(username: $username, password: $password, email: $email, name: $name, website: $website, enableLogin: $enableLogin) {
+    ...userInfo
   }
 }
