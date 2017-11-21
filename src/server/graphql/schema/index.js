@@ -130,8 +130,8 @@ const RootQueryType = new GraphQLObjectType({
         let where = {};
         if (title || cli || description) {
           where = { $or: [] };
-          if (title) where.$or.push({ title: { $like: `${title}%` } });
-          if (cli) where.$or.push({ cli: { $like: `${cli}%` } });
+          if (title) where.$or.push({ title: { $like: `%${title}%` } });
+          if (cli) where.$or.push({ cli: { $like: `%${cli}%` } });
           if (description) where.$or.push({ description: { $like: `${description}%` } });  
         }
         return db.Kommandr.findAll({ 

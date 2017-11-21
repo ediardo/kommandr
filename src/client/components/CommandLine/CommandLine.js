@@ -1,28 +1,30 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { compose, graphql } from 'react-apollo';
-import { Alert, Col, Media, Row } from 'reactstrap';
+import { Input, Fade } from 'reactstrap';
 import CodeMirror from 'react-codemirror';
 import classNames from 'classnames';
-import hdate from 'human-date';
 import ReactAlert from 'react-s-alert';
 
+import AuthenticatedOnly from '../AuthenticatedOnly';
 import { Actions, ActionButton } from './../Actions';
-
+import CommandLineAuthor from './CommandLineAuthor';
+import CommandLineComments from './CommandLineComments';
 import { Stats, StatFork, StatView, StatComment, StatStar } from '../Stats/';
 import { ModalDeleteKommandr, ModalShareKommandr, ModalReportKommandr, ModalForkKommandr } from '../Modal';
-import CustomTooltip from '../CustomTooltip';
+import { AddComment, CommentList } from '../Comment/';
 import addKommandr from '../../graphql/mutations/addKommandr.gql';
 import forkKommandr from '../../graphql/mutations/forkKommandr.gql';
 import deleteKommandr from '../../graphql/mutations/deleteKommandr.gql';
 import updateKommandr from '../../graphql/mutations/updateKommandr.gql';
 import reportKommandr from '../../graphql/mutations/reportKommandr.gql';
 import starKommandr from '../../graphql/mutations/starKommandr.gql';
-import unstarKommandr from '../../graphql/mutations/unstarKommandr.gql';
+import addComment from '../../graphql/mutations/addComment.gql';
 import allKommandrs from '../../graphql/queries/allKommandrs.gql';
 import currentUser from '../../graphql/queries/currentUser.gql';
 import searchKommandr from '../../graphql/queries/searchKommandr.gql';
+import kommandrById from '../../graphql/queries/kommandrById.gql';
 
 import 'codemirror/addon/display/placeholder.js';
 import 'codemirror/addon/display/autorefresh.js';
@@ -37,6 +39,7 @@ const initialState = {
   description: '',
   editedDescription: false,
   editing: false,
+  comment: '',
   isOpenModalDelete: false,
   isOpenModalReport: false,
   isOpenModalShare: false,
@@ -52,19 +55,7 @@ const codemirrorOpts = {
   viewportMargin: Infinity,
   placeholder: 'Type a command here...',
   autofocus: true,
-};
-
-const CommandLineTimestamps = ({ date }) => {
-  return (
-    <div className="kommandr-timestamps">
-      Last updated <span id="lastUpdated">{hdate.relativeTime(date)}</span>
-      <CustomTooltip content={hdate.prettyPrint(date, { showTime: true })} target="lastUpdated" placement="bottom" />
-    </div>
-  )
-};
-
-CommandLineTimestamps.propTypes = {
-  date: PropTypes.string,
+  readOnly: false,
 };
 
 class CommandLine extends Component {
@@ -85,7 +76,8 @@ class CommandLine extends Component {
     this.setDescription = this.setDescription.bind(this);
     this.setCli = this.setCli.bind(this);
     this.starKommandr = this.starKommandr.bind(this);
-    this.unstarKommandr = this.unstarKommandr.bind(this);
+    this.setComment =  this.setComment.bind(this);
+    this.saveComment = this.saveComment.bind(this);
     this.toggleModalDelete = this.toggleModalDelete.bind(this);
     this.toggleModalShare = this.toggleModalShare.bind(this);
     this.toggleModalReport = this.toggleModalReport.bind(this);
@@ -95,7 +87,7 @@ class CommandLine extends Component {
   saveKommandr() {
     const { title, cli, description } = this.state;
     const { mode } = this.props;
-    if (mode === 'create') {
+    if (mode === 'add') {
       this.props.addKommandr({
         variables: { title, cli, description },
         refetchQueries: [
@@ -107,15 +99,27 @@ class CommandLine extends Component {
         console.log('there was an error ', error);
       });
     } else {
-      const { id } = this.props.kommandr.kommandr;
-      const { editedCli, editedTitle, editedDescription } = this.state;
+      const { id } = this.props.kommandr;
+      /*
       var updateFields = {};
       updateFields.id = id;
       updateFields.title = (editedTitle) ? title : this.props.kommandr.kommandr.title;
       updateFields.cli = (editedCli) ? cli : this.props.kommand.kommandr.cli;
       updateFields.description = (editedDescription) ? description : this.props.kommandr.kommandr.description;
+      */
       this.props.updateKommandr({
-        variables: updateFields,
+        variables: { id, title, cli, description },
+        refetchQueries: [
+          { query: currentUser },
+          { 
+            query: kommandrById,
+            variables: {
+              id
+            }
+          }
+        ]
+      }).then(({ data: { kommandr } }) => {
+        ReactAlert.success('You have updated your Kommandr');  
       });
     }
   }
@@ -134,13 +138,12 @@ class CommandLine extends Component {
       ReactAlert.success('You have forked a new Kommandr');
       this.props.history.push(`/k/${id}`);      
     }).catch(error => {
-      console.log(error);
       ReactAlert.error('There was an error while we try to Fork this Kommandr');
     });
   }
 
   deleteKommandr() {
-    const { id } = this.props.kommandr.kommandr;
+    const { id } = this.props.kommandr;
     this.props.deleteKommandr({
       variables: { id },
       refetchQueries: [
@@ -156,12 +159,26 @@ class CommandLine extends Component {
   }
 
   starKommandr() {
-    console.log('Star');
+    const { id } = this.props.kommandr;
+    this.props.starKommandr({
+      variables: { id },
+      refetchQueries: [
+        { query: currentUser },
+        { 
+          query: kommandrById,
+          variables: {
+            id
+          }
+        }
+      ]
+    }).then(({ data }) => {
+      const { id } = data.kommandr;
+      if (id) {
+        ReactAlert.success('You have successfully starred a Kommandr');
+      }      
+    });
   }
 
-  unstarKommandr() {
-
-  }
 
   reportKommandr(reason) {
     const { id } = this.props.kommandr;
@@ -172,6 +189,32 @@ class CommandLine extends Component {
         this.toggleModalReport();
         ReactAlert.success('Thank you, we will review your report');
       }
+    });
+  }
+
+  saveComment() {
+    const kommandrId = this.props.kommandr.id;
+    const { comment } = this.state;
+    this.props.addComment({
+      variables: {
+        kommandrId,
+        comment
+      },
+      refetchQueries: [
+        { 
+          query: kommandrById,
+          variables: {
+            id: kommandrId,
+          }
+        }
+      ]
+    }).then(({ data }) => {
+      if (data) {
+        ReactAlert.success('Your comment has been posted');        
+      }
+      this.setState({
+        comment: '',
+      });
     });
   }
 
@@ -199,6 +242,13 @@ class CommandLine extends Component {
     });
   }
   
+  setComment(e) {
+    const comment = e.target.value;
+    this.setState({
+      comment
+    });
+  }
+
   toggleModalDelete() {
     this.setState({
       isOpenModalDelete: !this.state.isOpenModalDelete,
@@ -225,22 +275,39 @@ class CommandLine extends Component {
 
   render() {
     const { mode, kommandr, data: { loading, currentUser } } =  this.props;
-    const { isOpenModalDelete, title, cli, description, isOpenModalShare, isOpenModalReport, isOpenModalFork } = this.state;
-    if (loading) return <p>Loading...</p>;
-    var isOwnedByCurrentUser = false, isAnonymous = (currentUser) ? false : true;;
-    isOwnedByCurrentUser = mode === 'view' && currentUser && kommandr.author.id === currentUser.id;
+    const {
+      isOpenModalDelete,
+      title,
+      cli,
+      description,
+      isOpenModalShare,
+      isOpenModalReport,
+      isOpenModalFork,
+      comment
+    } = this.state;
 
+    if (loading) return <p>Loading...</p>;
+    var author, isOwnedByCurrentUser = false, isAnonymous = currentUser === null;
+    
+    if (mode === 'view') {
+      isOwnedByCurrentUser = currentUser && kommandr.author.id === currentUser.id;
+      if (!isOwnedByCurrentUser) {
+      }
+      author = kommandr.author;
+    } else if (!isAnonymous) {
+      author = currentUser;
+    }
     return (
-      <div className={classNames({ 'view-mode': (mode === 'view') })}>
+      <Fade className={classNames({ 'container-fluid d-flex flex-column': true} , {'view-mode': (mode === 'view') })}>
         <div className="kommandr-title mb-2">
           <input className="editable-input" type="text" value={title} onChange={this.setTitle} placeholder="Name this kommandr" />
         </div>
-        <div className="mb-3 d-flex justify-content-end">
+        <div className="kommandr-actions mb-3 d-flex justify-content-end">
           <Stats>
             <StatView value={(mode === 'view') ? kommandr.totalViews : 0} />
             <StatComment value={(mode === 'view') ? kommandr.totalComments : 0} disabled={isAnonymous} />
             <StatFork value={(mode === 'view') ? kommandr.totalForks : 0} onClick={this.toggleModalFork} disabled={(isAnonymous || mode === 'add' || isOwnedByCurrentUser)} />
-            <StatStar value={(mode === 'view') ? kommandr.totalStars : 0} onClick={this.starKommandr} disabled={(mode === 'add' || isOwnedByCurrentUser)} />
+            <StatStar value={(mode === 'view') ? kommandr.totalStars : 0} disabled={(mode === 'add' || isAnonymous)} onClick={this.starKommandr} />
           </Stats>
           <Actions className="ml-auto" >
             {mode === 'add' && <ActionButton text="create" name="add" onClick={this.saveKommandr} disabled={cli.length === 0 || title.length === 0} tooltip={true} />}
@@ -252,19 +319,35 @@ class CommandLine extends Component {
         </div>
         <div className="kommandr mb-2">
           <CodeMirror value={cli} onChange={this.setCli} options={codemirrorOpts} />
-          
         </div>
-        {mode === 'view' && <CommandLineTimestamps date={kommandr.updatedAt} />}
-        <Row className="kommandr-info">
-          
-        <textarea className="editable-input" defaultValue={description} onChange={this.setDescription} placeholder="Enter a description..." />                
-         
-        </Row>
+
+        <CommandLineAuthor author={author} kommandr={kommandr} >
+          <div className="kommandr-description">
+            {mode === 'add' || isOwnedByCurrentUser
+              ? <Input type="textarea" value={description} onChange={this.setDescription} maxLength="1000"/>
+              : <div className="static-description">{description}</div>
+            }
+          </div>
+        </CommandLineAuthor>
+        {mode === 'view' &&
+          <CommandLineComments total={kommandr.allComments.length}>
+            <AuthenticatedOnly currentUser={currentUser} alertMessage="Login to post a comment">
+              <AddComment 
+                hideAnonymous 
+                author={currentUser} 
+                value={comment} 
+                handleOnChange={this.setComment} 
+                handleOnSubmit={this.saveComment} />
+            </AuthenticatedOnly>
+            <CommentList data={kommandr.allComments} />
+          </CommandLineComments>
+        }
+    
         <ModalForkKommandr isOpen={isOpenModalFork} onClickConfirm={this.forkKommandr} toggle={this.toggleModalFork} />
         <ModalShareKommandr isOpen={isOpenModalShare} toggle={this.toggleModalShare} kommandr={kommandr} />
         <ModalReportKommandr isOpen={isOpenModalReport} onClickConfirm={this.reportKommandr} toggle={this.toggleModalReport} />
         <ModalDeleteKommandr isOpen={isOpenModalDelete} onClickConfirm={this.deleteKommandr} toggle={this.toggleModalDelete} />
-      </div>
+      </Fade>
     );
   }
 }
@@ -285,4 +368,6 @@ export default compose(
   graphql(reportKommandr, { name: 'reportKommandr' }),
   graphql(deleteKommandr, { name: 'deleteKommandr' }),  
   graphql(forkKommandr, { name: 'forkKommandr' }),
+  graphql(starKommandr, { name: 'starKommandr' }),
+  graphql(addComment, { name: 'addComment' }),
 )(withRouter(CommandLine));

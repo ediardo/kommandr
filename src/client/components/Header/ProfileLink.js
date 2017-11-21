@@ -11,23 +11,24 @@ import {
   DropdownItem
 } from 'reactstrap';
 
+import { ProfileAvatar } from '../Profile';
 import { apiUrl } from '../../utils/';
 import currentUser from '../../graphql/queries/currentUser.gql';
 
-const ProfileLink = ({ location, data: { currentUser, loading }, onClickLoginHandler }) => {
+const ProfileLink = ({ data: { currentUser, loading }, handleOnClickLogin }) => {
   if (loading) return null;
   if (!currentUser) {
     return (
-      <Button  color="link" tag={Link} to={{ pathname: "/login", state: { from: location.pathname } }} className="mr-2">
+      <Button  color="link" onClick={() => handleOnClickLogin()} className="mr-2">
         <FontAwesome name="user" />
       </Button>
     )
   } else {
-    const { externalAvatarUrl, username } = currentUser;
+    const { username } = currentUser;
     return (
       <UncontrolledDropdown>
         <DropdownToggle caret color="link" size="sm">
-        <img src={`${externalAvatarUrl}&s=30`} alt="avatar" />
+        <ProfileAvatar user={currentUser} size="xs" nolink/>
         </DropdownToggle>
         <DropdownMenu right>
           <DropdownItem header>
@@ -44,7 +45,7 @@ const ProfileLink = ({ location, data: { currentUser, loading }, onClickLoginHan
             My Stars
           </DropdownItem>  
           <DropdownItem divider />          
-          <DropdownItem tag={Link} to={`/u/${username}/edit`}>
+          <DropdownItem tag={Link} to={`/settings`}>
             Edit my profile
           </DropdownItem>  
           <DropdownItem divider />  
@@ -58,9 +59,8 @@ const ProfileLink = ({ location, data: { currentUser, loading }, onClickLoginHan
 };
 
 ProfileLink.propTypes = {
-  location: PropTypes.object,
   data: PropTypes.object,
-  onClickLoginHandler: PropTypes.func,
+  handleOnClickLogin: PropTypes.func,
 };
 
 export default graphql(currentUser)(withRouter(ProfileLink));

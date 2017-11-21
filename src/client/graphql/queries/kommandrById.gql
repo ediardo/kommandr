@@ -1,7 +1,7 @@
 #import "../fragments/kommandrInfo.gql"
 #import "../fragments/kommandrStats.gql"
 #import "../fragments/kommandrForks.gql"
-
+#import "../fragments/commentInfo.gql"
 query KommandrById($id: ID!) {
   kommandr: kommandrById(id: $id) {
     ...kommandrInfo
@@ -10,9 +10,11 @@ query KommandrById($id: ID!) {
     author {
       id
       username
+      name
+      externalAvatarUrl
     }
     allComments {
-      id
+      ...commentInfo
     }
     allForks {
       id

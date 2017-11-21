@@ -217,16 +217,22 @@ const userType = new GraphQLObjectType({
       }
     },
     allStars: {
-      type: new GraphQLList(starType),
+      type: new GraphQLList(kommandrType),
       resolve: user => {
-        return db.Star.findAll({
-          include: [{
-            model: db.User,
-            where: { id: user.id },
-          }],
+        return db.Kommandr.findAll({
+          include: [
+            {
+              model: db.Star,
+              where: { 
+                userId: user.id
+              },
+            },
+          ],
           order: [
             [ 'createdAt', 'DESC' ]
           ],
+        }).then(star => {
+          return star;
         });
       }
     },

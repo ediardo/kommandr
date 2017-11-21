@@ -5,4 +5,10 @@ fragment commentInfo on Comment {
   comment
   createdAt
   updatedAt
+  author {
+    id
+    name
+    username
+    externalAvatarUrl
+  }
 }

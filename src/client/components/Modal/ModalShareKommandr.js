@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import FontAwesome from 'react-fontawesome';
-import { Button, Form, FormGroup, Label, Input, FormText, Modal, ModalBody, ModalHeader, ModalFooter } from 'reactstrap';
+import { Button, FormGroup, Label, Input, Modal, ModalBody, ModalHeader, ModalFooter } from 'reactstrap';
 
 import { siteUrl } from '../../utils';
 
 const ModalShareKommandr = ({ isOpen, toggle, kommandr }) => {
+  if (!kommandr) return null;
   return (
     <Modal isOpen={isOpen} toggle={() => toggle()}>
       <ModalHeader toggle={() => toggle() }>
@@ -36,6 +37,6 @@ ModalShareKommandr.propTypes = {
   isOpen: PropTypes.bool,
   toggle: PropTypes.func,
   kommandr: PropTypes.object
-}
+};
 
 export default ModalShareKommandr;

@@ -78,16 +78,17 @@ function ListWithFilters(WrappedList, injectedProps) {
       const { queryPlaceholder, paginator: { pageSize }, listName, listActions = [] } = injectedProps;
       const { isCurrentUser, location } = this.props;
       const paginatedItems = _.slice(items, currentPage*pageSize - pageSize, currentPage*pageSize - 1);
-      const listActionsBtns = listActions.map((action, idx) => {
+      const listActionsBtns = listActions.filter((action, idx) => {
         if (!action.onlyCurrentUser) {
-          return <Button key={idx} tag={Link} to={this.props.location.pathname + action.url} color={action.color} className="list-action-create">{action.name}</Button>;
+          return <Button key={idx} tag={Link} to={location.pathname + action.url} color={action.color} className="list-action-create">{action.name}</Button>;
         } else if (isCurrentUser) {
-          return <Button key={idx} tag={Link} to={this.props.location.pathname + action.url} color={action.color} className="list-action-create">{action.name}</Button>;
+          return <Button key={idx} tag={Link} to={location.pathname + action.url} color={action.color} className="list-action-create">{action.name}</Button>;
         }
+        return null
       });
       return (
         <div className="container-list">
-          <div className="container-list-actions border-bottom-1">
+          <div className="container-list-actions border-bottom-1 d-flex flex-row">
             <InputSearch value={query} onChange={this.onChangeSearch} placeholder={queryPlaceholder} />
             {listActionsBtns}
           </div>

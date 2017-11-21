@@ -8,13 +8,12 @@ import ProfileAvatar from './ProfileAvatar';
 import currentUser from '../../graphql/queries/currentUser.gql';
 
 const ProfileSidebar = ({ user, data: { loading, currentUser } }) => {
-  const { name, username, email} = user;
-  if (loading) return <span>Loading..</span>;
+  const { name, username, email, externalAvatarUrl } = user;
   const sameUser = currentUser && user.id === currentUser.id;
   return (
-    <div>
+    <div className="user-card">
       <div className="user-avatar lg-avatar">
-        <ProfileAvatar size="xl" user={user} />
+        <ProfileAvatar size="xl" url={externalAvatarUrl} name={name} />
       </div>
       <div className="user-info mt-2">
           <h4 className="user-display-name">{name}</h4>
@@ -23,8 +22,9 @@ const ProfileSidebar = ({ user, data: { loading, currentUser } }) => {
       </div>
       <hr />
       <div className="user-details">
-        {sameUser && <Button tag={Link} to={`/settings`} color="primary" outline>Edit my profile</Button>}
+        {sameUser && <Button tag={Link} to={`/u/${currentUser}/edit`} color="primary">Edit my info</Button>}
       </div>
+
     </div>
   )
 }

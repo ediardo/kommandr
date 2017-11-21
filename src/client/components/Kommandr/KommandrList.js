@@ -29,14 +29,14 @@ const KommandrList = ({ data, compact }) => {
       'kommandr-item': true,
       'compact': compact === true,
     });
-    const cli = (compact) ? Humanize.truncate(kommandr.cli, 20) : kommandr.cli;
+    const cli = (compact) ? Humanize.truncate(kommandr.cli, 35) : kommandr.cli;
     return (
-      <ListGroupItem key={idx} className={itemClassnames}>
+      <ListGroupItem key={kommandr.id} className={itemClassnames}>
       {!compact
-        ? <h4><Link to={`/k/${kommandr.id}`}>{kommandr.title}</Link></h4>
+        ? <h5><Link to={`/k/${kommandr.id}`}>{kommandr.title}</Link></h5>
         : <h6><Link to={`/k/${kommandr.id}`}>{kommandr.title}</Link></h6>
       }
-        <CodeMirror defaultValue={cli} options={codemirrorOpts} id={idx}/>
+        <CodeMirror defaultValue={cli} options={codemirrorOpts}/>
         <Stats>
           <StatView value={kommandr.totalViews} compact />
           <StatComment value={kommandr.totalComments} compact />

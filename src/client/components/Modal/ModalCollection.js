@@ -21,7 +21,6 @@ import addCollection from '../../graphql/mutations/addCollection.gql';
 import updateCollection from '../../graphql/mutations/updateCollection.gql';
 import currentUser from '../../graphql/queries/currentUser.gql';
 
-
 const nameIsValid = name => {
   return name.trim().length > 0;
 }
@@ -146,7 +145,6 @@ class ModalCollection extends Component {
     const { mode, isOpen, data: { loading } } = this.props;
     if (loading) return <p>Loading...</p>;
     const { nameIsValid, nameIsUnique, name, description, matchRegex, matchesFound, isEnabled, matchAllTime } = this.state;
-    console.log(this.state);
     const modalTitle = (mode === 'view') ? 'Edit Collection' : 'Add Collection';
     return (
       <Modal isOpen={isOpen} toggle={this.toggle}>

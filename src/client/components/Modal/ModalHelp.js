@@ -1,18 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import { Button, Modal, ModalBody, ModalHeader, ModalFooter } from 'reactstrap';
 
-const ModalHelp = ({ location, history }) => {
-
+const ModalHelp = ({ handleToggle, isOpen, match, history }) => {
   const toggle = () => {
-    var from = '/';
-    if (location.state) 
-      from = location.state.from;
-    history.push(from);
+    if (match.path === '/help') {
+      history.push('/');
+    } else {
+      handleToggle();
+    }
   };
 
   return (
-    <Modal isOpen={true} toggle={toggle}>
+    <Modal isOpen={isOpen} toggle={toggle}>
       <ModalHeader toggle={toggle}>Help</ModalHeader>
       <ModalBody>
         Trying to get some help?
@@ -25,8 +26,11 @@ const ModalHelp = ({ location, history }) => {
 };
 
 ModalHelp.propTypes = {
-  location: PropTypes.object,
-  history: PropTypes.object,
+  isOpen: PropTypes.bool,
 };
 
-export default ModalHelp;
+ModalHelp.defaultProps = {
+  isOpen: true,
+};
+
+export default withRouter(ModalHelp);

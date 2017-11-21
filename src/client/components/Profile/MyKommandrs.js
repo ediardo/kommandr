@@ -29,9 +29,5 @@ export default ListWithFilters(MyKommandrs, {
     pageSize: 15,
   },
   queryPlaceholder: 'Search Kommandrs',
-  addNew: {
-    to: '/',
-    label: 'New Kommandr',
-  },
   listName: 'kommandrs',
 });

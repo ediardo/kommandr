@@ -56,22 +56,18 @@ module.exports = {
         }
       },
       totalViews: {
-        allowNull: false,
         type: Sequelize.INTEGER,
         defaultValue: 0
       },
       totalForks: {
-        allowNull: false,
         type: Sequelize.INTEGER,
         defaultValue: 0
       },
       totalStars: {
-        allowNull: false,
         type: Sequelize.INTEGER,
         defaultValue: 0
       },
       totalComments: {
-        allowNull: false,
         type: Sequelize.INTEGER,
         defaultValue: 0
       }

@@ -1,0 +1,15 @@
+mutation addComment($kommandrId: ID!, $comment: String!) {
+  comment: addComment(kommandrId: $kommandrId, comment: $comment) {
+    id
+    author {
+      username
+      name
+      externalAvatarUrl
+    }
+    comment
+    kommandrId
+    userId
+    createdAt
+    updatedAt
+  }
+}

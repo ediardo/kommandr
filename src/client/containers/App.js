@@ -1,16 +1,15 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Alert from 'react-s-alert';
 
 import Main from './Main';
 import Contact from '../components/Pages/Contact';
-import Login from '../components/Modal/ModalLogin';
-import Help from '../components/Modal/ModalHelp';
 import Footer from '../components/Footer/Footer';
 import Header from '../components/Header/Header';
 import Privacy from '../components/Pages/Privacy';
 import Profile from './Profile';
+import ProfileSettings from './ProfileSettings';
 import Terms from '../components/Pages/Terms';
 
 import 'bootstrap/dist/css/bootstrap.css';
@@ -21,13 +20,14 @@ const App = props => {
   return (
     <div className="app">
       <Header />
-        <Route path="/"  component={Main} />
-        <Route path="/login" exact component={Login} />
-        <Route path="/help" exact component={Help} />
-        <Route path="/privacy" component={Privacy} />
-        <Route path="/terms" component={Terms} />
-        <Route path="/contact" component={Contact} />
+      <Switch>
         <Route path="/u/:username" component={Profile} />
+        <Route path="/privacy" exact component={Privacy} />
+        <Route path="/terms" exact component={Terms} />
+        <Route path="/contact" exact component={Contact} />
+        <Route path="/settings" component={ProfileSettings} />
+        <Route path="/" component={Main} />
+      </Switch>
       <Footer />
       <Alert stack={{limit: 3}} />      
     </div>

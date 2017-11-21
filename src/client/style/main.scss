@@ -1,18 +1,42 @@
 @import 'variables';
-html {
-  min-height: 100%;
-  position: relative;
+.no-scroll {
+  height: 100%;
+  overflow: hidden;
+  width: 100%;
+  main { 
+    border: 0;
+    background: initial;
+    padding: 0;
+    
+  }
 }
 
 body {
+  height: inherit;
+  width: inherit;
+  overflow: inherit;
   background-color: #F9FCFC;
   margin-bottom: 75px;
 }
 
-
+#root, .app, main {
+  height: inherit;
+}
+.app{
+  display: flex;
+  flex-direction: column;
+}
 /*
  HEADER
 */
+
+main {
+  background-color: white;
+  border-left: 1px solid $layout-border-color;
+  border-right: 1px solid $layout-border-color;
+  border-bottom: 1px solid $layout-border-color;
+  padding: 15px 0;
+}
 header {
   background-color: $header-bg;
   border-bottom: 1px solid $header-border-color;
@@ -26,7 +50,10 @@ header {
     }
   }
   a {
-    color: $header-link-color!important;
+    color: $header-link-color;
+    &:hover {
+      color: $header-link-color;
+    }
   }
   .header-links {
     .fa {
@@ -122,8 +149,9 @@ a {
   }
 }
 
-.kommandr-container {
-  
+.command-line-container, .kommandr-container {
+  flex-direction: column;
+  width: 70%;
   h1, h2, h3, h4 {
     font-family: 'Bitter', serif;
   }
@@ -139,7 +167,8 @@ a {
 
   .kommandr-title {
     color: $kommandr-title-font-color;
-    
+    flex: none;
+
     h2 {
       display: inline-block;
       font-size: $kommandr-title-font-size;
@@ -155,19 +184,53 @@ a {
     }
   }
 
+  .kommandr-actions {
+    flex: none;
+  }
   .kommandr {
     background-color: $kommandr-background;
     border: 1px solid #E1E4E5;
     border-radius: 4px;
     color: $kommandr-font-color;
+    flex: none;
     font-size: 1.5em;
     width: 100%;
   }
 
+  .kommandr-author {
+    border-bottom: 1px solid $light-gray;
+    flex: none;
+  }
+  .kommandr-description {
+    textarea {
+      min-width: 100%;
+    }
+    .static-description {
+      white-space: pre-line;
+    }
+  }
   .kommandr-timestamps {
     color: $dark;
     font-style: italic;
     font-size: 0.9rem;
+    text-align: right;
+  }
+
+  .kommandr-comments {
+    flex: 1;
+    margin: 0 -15px;
+    padding: 0 5px 0 15px;
+    overflow: scroll;
+    &::-webkit-scrollbar {
+      background-color: transparent;
+      border: none;
+      width: $scrollbar-width;
+    }
+    &::-webkit-scrollbar-thumb
+    {
+      background-color: $scrollbar-color;
+      border: none;
+    }
   }
 }
 
@@ -175,6 +238,7 @@ a {
 .list-kommandrs { 
   list-style-type: none;
   padding: 0;
+  width: 100%;
 
   .kommandr-item {
     padding: 0.5rem 1rem;
@@ -210,18 +274,23 @@ a {
   }
 }
 
-.sidebar {
+
+.command-line-sidebar, .sidebar {
   background-color: $sidebar-bg;
   border-left: 1px solid $sidebar-border-color;
-  bottom: 0;
-  position: absolute;
-  right: 0;
-  top: 53px;
-  width: $sidebar-width;
+  flex-direction: column;
+  min-width: 250px;
+  width: 30%;
 
   .sidebar-search {
     border-bottom: 1px solid $sidebar-border-color;
+    padding: 15px;
+
+    input {
+      width: calc(100% - 20px);
+    }
   }
+
   .sidebar-menu {
 
     li {
@@ -241,7 +310,19 @@ a {
 }
 
 .sidebar-search-results {
-  width: 100%;
+  height: 100%;
+  overflow: auto;
+  
+  &::-webkit-scrollbar {
+    background-color: transparent;
+    border: none;
+    width: 10px;
+  }
+  &::-webkit-scrollbar-thumb
+  {
+    background-color: $scrollbar-color;
+    border: none;
+  }
   ul {
     list-style-type: none;
     margin: 0;
@@ -298,7 +379,6 @@ a {
 .container-search-input {
   background-color: $search-input-bg;
   border: 1px solid $search-input-border-color;
-  display: table-cell;
   line-height: $search-input-line-height;
   font-size: $search-input-font-size;
   padding: 0.5rem 0.75rem;
@@ -378,4 +458,50 @@ a {
 .custom-alert {
   top: 35px;
   position: fixed;
+}
+
+.link-username {
+  font-weight: bold;
+}
+
+.profile-avatar {
+  img {
+    border-radius: 5px!important;
+  }
+}
+
+.comment-add-container {
+  .comment-input-container {
+    min-width: 400px;
+  }
+  .comment-input {
+    background-color: white;
+    border: 1px solid $layout-border-color;
+  }
+}
+
+.list-comments {
+  list-style-type: none;
+  padding: 0;
+
+  .comment-body {
+    width: 100%;
+  }
+}
+
+.profile-settings-container {
+  .title {
+    border-bottom: 1px solid $layout-border-color;
+  }
+
+  .profile-settings-form {
+    width: 100%;
+  }
+  .profile-avatar-sidebar {
+    width: 255px;
+  }
+}
+
+label {
+  font-weight: bold;
 }

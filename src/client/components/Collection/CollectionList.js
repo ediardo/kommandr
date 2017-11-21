@@ -10,7 +10,6 @@ import CustomTooltip from '../CustomTooltip';
 
 const CollectionList = ({ data, compact, isCurrentUser }) => {
   const collectionList = data.map((collection, idx) => {
-    console.log(collection);
     return (
       <ListGroupItem key={idx} className="collection-item">
         <ListGroupItemHeading>

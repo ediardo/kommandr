@@ -93,7 +93,10 @@ class ModalWelcome extends Component {
   submit() {
     const { username, password } = this.state;
     this.props.updateUser({
-      variables: { username, password }
+      variables: { username, password },
+      refetchQueries: [
+        { query: currentUser },
+      ],
     }).then(({data}) =>{
       this.showMessage();
     }).catch(error => {
@@ -122,11 +125,10 @@ class ModalWelcome extends Component {
   componentWillReceiveProps(nextProps) {
     const { loading, currentUser } = nextProps.data;
     if (!loading && currentUser && !currentUser.hasSeenWelcome) {
-      console.log(currentUser);
       this.setState({
         isOpen: true,
-        username: currentUser.username,
-        usernameIsValid: currentUser.username.match(usernameRegex) !== null,
+        username: (currentUser.isUsernameSet) ? currentUser.username : '',
+        usernameIsValid: (currentUser.isUsernameSet) ? currentUser.username.match(usernameRegex) !== null : false,
         email: currentUser.email,
         emailIsValid: isEmail(currentUser.email),
       });
@@ -150,8 +152,8 @@ class ModalWelcome extends Component {
     if (!currentUser) return null;
     const {  name } = currentUser;
     return (
-      <Modal isOpen={isOpen} toggle={this.toggle} backdrop="static">
-        <ModalHeader toggle={this.toggle}>Nice to meet you, { name }</ModalHeader>
+      <Modal isOpen={isOpen} backdrop="static">
+        <ModalHeader >Nice to meet you, { name }</ModalHeader>
         <ModalBody>
           <p>We've fetched and stored basic public information from your external account into our database,
           but there's one last step to complete: a strong password.</p>
@@ -173,8 +175,6 @@ class ModalWelcome extends Component {
                 Email address is invalid
               </FormFeedback>
             }
-
-
             <Label for="password">Password</Label>              
             <InputGroup>
               <Input type={(revealPassword) ? 'text' : 'password'} name="password" id="password" placeholder="Type a password" value={password} onChange={this.onChangePassword} minLength="3" valid={passwordIsValid} />
@@ -193,7 +193,6 @@ class ModalWelcome extends Component {
           </FormGroup>
         </ModalBody>
         <ModalFooter>
-          <Button outline color="secondary" onClick={this.toggle}>I'll do this later</Button>
           <Button color="primary" onClick={this.submit} disabled={!(usernameIsValid && passwordIsValid)} >Save changes</Button>
           <ModalMessage isOpen={showMessage} toggle={this.toggle} />
           

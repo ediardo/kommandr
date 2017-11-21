@@ -2,9 +2,10 @@ $body-bg:  #F4F4F4;
 
 // colors
 $dark: #151519;
+$dark-1: #373739;
 $light-dark: #454747;
 $ultra-light-dark: #757777;
-$light-gray: #EAEAEA;
+$light-gray: #e3e3e3;
 $ultra-light-gray: #F4F4F4;
 $green-ultra-dark: #28a745;
 $green: #5cb85c;
@@ -34,6 +35,9 @@ $kommandr-title-info-font-color: $dark;
 
 $kommandr-background: #E3E3E3;
 $kommandr-font-color: #000;
+
+$scrollbar-color: $dark-1;
+$scrollbar-width: 8px;
 
 $sidebar-bg: white;
 $sidebar-border-color: $layout-border-color;

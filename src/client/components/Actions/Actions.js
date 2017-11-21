@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const Actions = ({ children, className }) => {
-  const actions = children.map((stat, idx) => {
+  const actions = children.filter((stat, idx) => {
     if (stat) {
       return (
         <li className="action" key={idx}>
@@ -10,6 +10,7 @@ const Actions = ({ children, className }) => {
         </li>
       )
     }
+    return null;
   });
 
   return (

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import FontAwesome from 'react-fontawesome';
 import { Button, InputGroup, InputGroupAddon, InputGroupButton } from 'reactstrap';
 
-const Star = ({ value, className, onClick, compact }) => {
+const Star = ({ value, className, onClick, compact, disabled }) => {
   if (compact) {
     return (
       <span className="stat-star compact">
@@ -15,7 +15,7 @@ const Star = ({ value, className, onClick, compact }) => {
     return (
       <InputGroup size="sm" className="stat-star full" >
         <InputGroupButton>
-          <Button color="link" onClick={() => onClick()}>
+          <Button color="link" onClick={() => onClick()} disabled={disabled}>
             <FontAwesome name="star" />{' '}star
           </Button>
         </InputGroupButton>
@@ -30,6 +30,7 @@ Star.propTypes = {
   className: PropTypes.string,
   onClick: PropTypes.func,
   compact: PropTypes.bool,
+  disabled: PropTypes.bool,
 };
 
 Star.defaultProps = {

@@ -28,7 +28,7 @@ const store = createStore(reducer, applyMiddleware(...middleware));
 */
 
 const networkInterface = createNetworkInterface({
-  uri: 'http://localhost:5000/graphql',
+  uri: '/graphql',
   opts: {
     credentials: 'include'
   },

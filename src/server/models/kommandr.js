@@ -21,9 +21,9 @@ module.exports = function(sequelize, DataTypes) {
 
   Kommandr.associate = models => {
     Kommandr.belongsTo(models.User, { foreignKey: 'userId' });
-    Kommandr.hasMany(models.Comment, { foreignKey: 'kommandrId', onDelete: 'cascade' });
-    Kommandr.hasMany(models.Star, { foreignKey: 'kommandrId', onDelete: 'cascade' });
-    Kommandr.hasMany(models.Kommandr, { foreignKey: 'forkFrom', as: 'Forks', onDelete: 'set null' })
+    Kommandr.hasMany(models.Comment, { foreignKey: 'kommandrId', onDelete: 'CASCADE' });
+    Kommandr.hasMany(models.Star, { foreignKey: 'kommandrId' });
+    Kommandr.hasMany(models.Kommandr, { foreignKey: 'forkFrom', as: 'Forks', onDelete: 'SET NULL' })
     Kommandr.belongsToMany(models.Collection, { foreignKey: 'kommandrId', through: 'KommandrCollection' });
   };
 

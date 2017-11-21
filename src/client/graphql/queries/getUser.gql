@@ -1,6 +1,5 @@
 #import "../fragments/collectionInfo.gql"
 #import "../fragments/commentInfo.gql"
-#import "../fragments/starInfo.gql"
 #import "../fragments/kommandrInfo.gql"
 #import "../fragments/kommandrStats.gql"
 #import "../fragments/userInfo.gql"
@@ -20,7 +19,7 @@ query getUser($username: String!) {
       ...commentInfo
     }
     allStars {
-      ...starInfo
+      ...kommandrInfo
     }
     allCollections {
       ...collectionInfo

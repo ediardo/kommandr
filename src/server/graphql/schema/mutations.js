@@ -122,9 +122,18 @@ const mutation = new GraphQLObjectType({
       resolve: (root, { id }, ctx) => {
         if (!ctx.user) return null;
         return db.Kommandr.findOne({
-          where: { hashId: id }
+          where: {
+            hashId: id,
+            userId: ctx.user.id
+          }
         }).then(kommandr => {
-          return kommandr.destroy.then(affectedRows => (affectedRows === 1) ? ({ id }) : null);          
+          return db.Kommandr.destroy({
+            where: {
+              id: kommandr.id,
+            }
+          }).then(affectedRows => {
+            if (affectedRows > 0) return kommandr
+          });
         });
       }
     },
@@ -160,7 +169,7 @@ const mutation = new GraphQLObjectType({
       type: kommandrType,
       args: {
         id: {
-          type: new GraphQLNonNull(GraphQLString)
+          type: new GraphQLNonNull(GraphQLID)
         },
       },
       resolve: (root, { id }, ctx) => {
@@ -169,20 +178,21 @@ const mutation = new GraphQLObjectType({
           where: { hashId: id },
         }).then(kommandr => {
           return db.Star.findOrCreate({ 
-            include: [{
-              model: db.Kommandr,
-              where: { id: kommandr.id },
-            }],
-            where: { userId: ctx.user.id },
+            where: {
+              kommandrId: kommandr.id,
+              userId: ctx.user.id
+            },
             defaults: {
               userId: ctx.user.id,
               kommandrId: kommandr.id,
             }
-          }).spread((fav, created) => ({ id }));  
+          }).spread((star, created) => {
+            return kommandr;    
+          });  
         });
       }
     },
-
+/*
     unstarKommandr: {
       type: kommandrType,
       args: {
@@ -193,16 +203,27 @@ const mutation = new GraphQLObjectType({
       resolve: (root, { id }, ctx) => {
         if (!ctx.user) return null;
         return db.Star.findOne({
-          include: [{
-            model: db.Kommandr,
-            where: { hashId: id },
-          }],
-          where: { userId: ctx.user.id },
+          include: [
+            {
+              model: db.Kommandr,
+              where: { hashId: id },
+            },
+            {
+              mode: db.User, 
+              where: { id: ctx.user.id },
+            }
+          ],
         }).then(star => {
-          return star.destroy().then(affectedRows => (affectedRows === 1) ? ({ id }) : null);
+          return db
+          return db.Star.destroy({
+            where: { id: star.id }
+          }).then(affectedRows => {
+            if (affectedRows > 0) return star;
+          });
         });
       }
     },
+    */
 
     addComment: {
       type: commentType,
