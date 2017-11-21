@@ -1,82 +1,74 @@
-import React from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import FontAwesome from 'react-fontawesome';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import {
   Button,
   Collapse,
   Nav,
   Navbar,
+  NavItem,
   NavbarBrand
 } from 'reactstrap';
 
+import { ModalLogin, ModalHelp } from '../Modal';
 import ProfileLink from './ProfileLink';
-import CustomTooltip from '../CustomTooltip';
-import ModalHelp from '../Modal/ModalHelp';
-import ModalSignIn from '../Modal/ModalSignIn';
 
-class Header extends React.Component {
-
+class Header extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      settingsMenuIsOpen: false,
+      isOpenModalLogin: false,
       isOpenModalHelp: false,
-      isOpenModalSignIn: false
     };
-    this.toggleSettingsMenu = this.toggleSettingsMenu.bind(this);
-    this.toggleModalHelp = this.toggleModalHelp.bind(this);
-    this.toggleModalSignIn = this.toggleModalSignIn.bind(this);
+    this.handleToggleModalLogin = this.handleToggleModalLogin.bind(this);
+    this.handleToggleModalHelp = this.handleToggleModalHelp.bind(this);
   }
 
-  toggleSettingsMenu() {
+  handleToggleModalHelp() {
     this.setState({
-      settingsMenuIsOpen: !this.state.settingsMenuIsOpen
+      isOpenModalHelp: !this.state.isOpenModalHelp,
     });
   }
 
-  toggleModalHelp() {
+  handleToggleModalLogin() {
     this.setState({
-      isOpenModalHelp: !this.state.isOpenModalHelp
-    });
-  }
-
-  toggleModalSignIn() {
-    this.setState({
-      isOpenModalSignIn: !this.state.isOpenModalSignIn
-    });
+      isOpenModalLogin: !this.state.isOpenModalLogin
+    })
   }
 
   render() {
-    const { isOpenModalHelp, isOpenModalSignIn } = this.state;
-    const { currentUser } = this.props.data;
-
+    const { isOpenModalHelp, isOpenModalLogin } = this.state;
     return (
       <header>
-        <Navbar  toggleable>
-          <NavbarBrand tag='span'>
-            <Link to={{ pathname: '/', state: 'createNew' }}>kommandr</Link>
+        <Navbar  color="faded" light expand="md">
+          <NavbarBrand tag="span">
+            <Link to={{ pathname: '/', state: 'createNew' }}>kommandr.com</Link>
           </NavbarBrand>
-          <Collapse isOpen={true} navbar>
-            <Nav navbar className="mr-auto">
-
-            </Nav>
-            { currentUser 
-              ? <ProfileLink data={currentUser} />
-              : <Button  color="link" onClick={this.toggleModalSignIn} className="mr-2">
-                  <FontAwesome name="user" />
+          <Button color="success" size="sm"><FontAwesome name="terminal" />{' '}Create new</Button>
+          <Collapse navbar>
+            <Nav navbar className="ml-auto">
+              <NavItem>
+                <ProfileLink handleOnClickLogin={this.handleToggleModalLogin} />
+              </NavItem>
+              <NavItem>
+                <Button color="link" onClick={this.handleToggleModalHelp}>
+                  <FontAwesome name="question-circle" />
                 </Button>
-            }
-
-            <Button color="link" onClick={this.toggleModalHelp}>
-                <FontAwesome name="question-circle" />
-            </Button>
-            <ModalSignIn toggle={this.toggleModalSignIn} isOpen={isOpenModalSignIn} />
-            <ModalHelp toggle={this.toggleModalHelp} isOpen={isOpenModalHelp} />
+              </NavItem>
+            </Nav>
           </Collapse>
         </Navbar>
+        <ModalLogin isOpen={isOpenModalLogin} handleToggle={this.handleToggleModalLogin} />
+        <ModalHelp isOpen={isOpenModalHelp} handleToggle={this.handleToggleModalHelp} />
       </header>
-    );
+    )
   }
+ 
 }
 
-export default Header;
+Header.propTypes = {
+  location: PropTypes.object,
+};
+
+export default withRouter(Header);

@@ -1,0 +1,9 @@
+#import "../fragments/kommandrInfo.gql"
+#import "../fragments/kommandrStats.gql"
+
+query searchKommandr($query: String) {
+  allKommandrs (title: $query, cli: $query, description: $query) {
+    ...kommandrInfo
+    ...kommandrStats
+  }
+}

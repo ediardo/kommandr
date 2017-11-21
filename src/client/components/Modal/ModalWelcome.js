@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { compose, graphql } from 'react-apollo';
-
 import {
   FormGroup,
   Label,
   Input,
   InputGroupAddon,
   InputGroup,
+  FormFeedback,
   InputGroupButton,
   Button,
   Modal,
@@ -14,17 +15,17 @@ import {
   ModalHeader,
   ModalFooter
 } from 'reactstrap';
-
 import FontAwesome from 'react-fontawesome';
+import isEmail from 'validator/lib/isEmail';
 
 import CheckUsername from '../Form/CheckUsername';
 import CustomTooltip from '../CustomTooltip';
-import updateUser from '../../queries/updateUser';
+import updateUser from '../../graphql/mutations/updateUser.gql';
+import currentUser from '../../graphql/queries/currentUser.gql';
 
 const usernameRegex = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){3,38}$/i;
 
-const ModalMessage = (props) => { 
-  const { isOpen, toggle } = props;
+const ModalMessage = ({ isOpen, toggle }) => { 
   return (
     <Modal isOpen={isOpen} toggle={toggle}>
       <ModalHeader>You are all set!</ModalHeader>
@@ -38,20 +39,27 @@ const ModalMessage = (props) => {
   )
 };
 
+ModalMessage.propTypes = {
+  isOpen: PropTypes.bool,
+  toggle: PropTypes.func,
+};
+
 class ModalWelcome extends Component {
   constructor(props) {
     super(props);
-    const { currentUser } = this.props.data;
     this.state = {
-      username: currentUser.username,
-      usernameValid: currentUser.username.match(usernameRegex),
+      username: '',
+      usernameIsValid: false,
+      email: '',
+      emailValid: false,
       password: '',
-      passwordValid: currentUser.username > 5,
+      passwordIsValid: false,
       revealPassword: false,
-      isOpen: (currentUser) ? !currentUser.hasSeenWelcome : false,
+      isOpen: false,
       showMessage: false,
     };
     this.onChangeUsername = this.onChangeUsername.bind(this);
+    this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
     this.submit = this.submit.bind(this);
     this.toggle = this.toggle.bind(this);
@@ -60,25 +68,35 @@ class ModalWelcome extends Component {
   }
 
   onChangeUsername(e) {
-    const { value } = e.target;
+    const username = e.target.value.trim();
     this.setState({
-      username: value,
-      usernameValid: value.match(usernameRegex)
+      username,
+      usernameIsValid: username.match(usernameRegex)
     });    
   }
 
-  onChangePassword(e) {
-    const { value } = e.target;
+  onChangeEmail(e) {
+    const email = e.target.value.trim();
     this.setState({
-      password: value.trim(),
-      passwordValid: value.trim().length > 5
+      email,
+      emailIsValid: isEmail(email),
+    });
+  }
+  onChangePassword(e) {
+    const password = e.target.value;
+    this.setState({
+      password,
+      passwordIsValid: password.trim().length > 5
     });
   }
 
   submit() {
     const { username, password } = this.state;
     this.props.updateUser({
-      variables: { username, password }
+      variables: { username, password },
+      refetchQueries: [
+        { query: currentUser },
+      ],
     }).then(({data}) =>{
       this.showMessage();
     }).catch(error => {
@@ -104,65 +122,91 @@ class ModalWelcome extends Component {
     });
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { loading, currentUser } = nextProps.data;
+    if (!loading && currentUser && !currentUser.hasSeenWelcome) {
+      this.setState({
+        isOpen: true,
+        username: (currentUser.isUsernameSet) ? currentUser.username : '',
+        usernameIsValid: (currentUser.isUsernameSet) ? currentUser.username.match(usernameRegex) !== null : false,
+        email: currentUser.email,
+        emailIsValid: isEmail(currentUser.email),
+      });
+    }
+  }
+
   render() {
     const { 
       isOpen,
       username,
-      usernameValid,
+      usernameIsValid,
+      email,
+      emailIsValid,
       password,
-      passwordValid,
+      passwordIsValid,
       showMessage,
       revealPassword,
     } = this.state;
-    const { currentUser } = this.props.data;
-    console.log(currentUser);
-    if (currentUser === undefined || currentUser === null) return null;
-    const { name } = currentUser;
+    const { loading, currentUser } = this.props.data;
+    if (loading) return null;
+    if (!currentUser) return null;
+    const {  name } = currentUser;
     return (
-      <Modal isOpen={isOpen} toggle={this.toggle} backdrop="static">
-        <ModalHeader toggle={this.toggle}>Nice to meet you, { name }</ModalHeader>
+      <Modal isOpen={isOpen} backdrop="static">
+        <ModalHeader >Nice to meet you, { name }</ModalHeader>
         <ModalBody>
-          <p>We've fetched and stored basic public information from your GitHub account into our database,
-          but there's one last step to complete: a strong password.
-          </p>
+          <p>We've fetched and stored basic public information from your external account into our database,
+          but there's one last step to complete: a strong password.</p>
           <FormGroup>
             <Label for="username">Username</Label>
             <InputGroup>
-              <Input type="text" name="username" id="username" placeholder="Your username" value={username} onChange={this.onChangeUsername} />
+              <Input value={username} type="text" name="username" id="username" placeholder="Username" onChange={this.onChangeUsername} valid={usernameIsValid} />
               <InputGroupAddon>
-                { usernameValid
+                { usernameIsValid
                   ? <CheckUsername currentUsername={currentUser.username} newUsername={username} />
                   : <span className="text-danger">invalid</span>}
               </InputGroupAddon>
             </InputGroup>
-            
+
+            <Label for="emailInput">Email</Label>
+            <Input value={email} type="text" name="email" id="emailInput" placeholder="Email" onChange={this.onChangeEmail} valid={emailIsValid} />
+            { !emailIsValid &&
+              <FormFeedback>
+                Email address is invalid
+              </FormFeedback>
+            }
             <Label for="password">Password</Label>              
             <InputGroup>
-              <Input type={(revealPassword) ? 'text' : 'password'} name="password" id="password" placeholder="Type a password" value={password} onChange={this.onChangePassword} minLength="3"/>
-              <InputGroupAddon>
-                <FontAwesome name={(passwordValid) ? 'check' : 'times'} id="passwordValid" />
-              </InputGroupAddon>
-              <CustomTooltip content={(passwordValid) ? 'Your password is valid' : 'Reveal password' } placement="top center" target="passwordValid" />                  
+              <Input type={(revealPassword) ? 'text' : 'password'} name="password" id="password" placeholder="Type a password" value={password} onChange={this.onChangePassword} minLength="3" valid={passwordIsValid} />
               <InputGroupButton>
-                <Button color="secondary" onClick={this.revealPassword} id="revealPassword" >
+                <Button color="secondary" onClick={this.revealPassword} id="revealPassword" outline >
                   <FontAwesome name={(revealPassword) ? 'eye-slash' : 'eye'}/>
                 </Button>
-                <CustomTooltip content={(revealPassword) ? 'Hide password' : 'Reveal password' } placement="top center" target="revealPassword" />                  
+                <CustomTooltip content={(revealPassword) ? 'Hide password' : 'Reveal password' } placement="top" target="revealPassword" />                  
               </InputGroupButton>
             </InputGroup>
+            { !passwordIsValid && 
+              <FormFeedback>
+                Password is not valid
+              </FormFeedback>
+            }
           </FormGroup>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={this.submit} disabled={!(usernameValid && passwordValid)} >Save changes</Button>
+          <Button color="primary" onClick={this.submit} disabled={!(usernameIsValid && passwordIsValid)} >Save changes</Button>
           <ModalMessage isOpen={showMessage} toggle={this.toggle} />
-          <Button color="secondary" onClick={this.toggle}>I'll do this later</Button>
+          
         </ModalFooter>
       </Modal>
     )
   }
-}
+};
 
+ModalWelcome.propTypes = {
+  data: PropTypes.object,
+};
 
 export default compose(
   graphql(updateUser, { name: 'updateUser' }),
+  graphql(currentUser),
 )(ModalWelcome);

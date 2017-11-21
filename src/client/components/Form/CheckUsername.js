@@ -1,8 +1,7 @@
 import React from 'react';
-
 import { graphql } from 'react-apollo';
 
-import userExists from '../../queries/userExists';
+import userExists from '../../graphql/queries/userExists.gql';
 
 const CheckUsername = ({ currentUsername, newUsername, data: { loading, userExists } }) => {
   if (loading) return <span className="text-secondary">verifying</span>

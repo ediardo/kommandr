@@ -20,8 +20,13 @@ module.exports = {
       description: {
         type: Sequelize.STRING
       },
+      source: {
+        type: Sequelize.STRING,
+      },
       forkFrom: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: true,
+        defaultValue: null,
       },
       source: {
         type: Sequelize.STRING
@@ -51,22 +56,18 @@ module.exports = {
         }
       },
       totalViews: {
-        allowNull: false,
         type: Sequelize.INTEGER,
         defaultValue: 0
       },
       totalForks: {
-        allowNull: false,
         type: Sequelize.INTEGER,
         defaultValue: 0
       },
-      totalFavs: {
-        allowNull: false,
+      totalStars: {
         type: Sequelize.INTEGER,
         defaultValue: 0
       },
       totalComments: {
-        allowNull: false,
         type: Sequelize.INTEGER,
         defaultValue: 0
       }

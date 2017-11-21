@@ -1,15 +1,22 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { graphql } from 'react-apollo';
+import { NavLink, Switch, Route } from 'react-router-dom';
 import {
+  Badge,
   Nav,
   NavItem,
   TabContent,
-  TabPane
 } from 'reactstrap';
-import classNames from 'classnames';
 
-import MyActivity from './MyActivity';
+import FontAwesome from 'react-fontawesome';
+
+import MyActivities from './MyActivities';
 import MyKommandrs from './MyKommandrs';
+import MyCollections from './MyCollections';
+import MyStars from './MyStars';
+
+import currentUser from '../../graphql/queries/currentUser.gql';
 
 class ProfileContent extends Component {
   constructor(props) {
@@ -20,54 +27,66 @@ class ProfileContent extends Component {
     this.toggleTab = this.toggleTab.bind(this);
   }
 
-  toggleTab(tab) {
-    this.setState({
-      activeTab: tab
-    });
+  toggleTab(activeTab) {
+    this.setState({ activeTab });
   }
 
   render() {
     const { activeTab } = this.state;
-    const user = this.props.data;
+    const { user, data: { currentUser, loading } } = this.props;
+    if (loading) return null;
+    let isCurrentUser = currentUser && currentUser.id === user.id;
+    let userActivities = (isCurrentUser) ? currentUser.allActivities : user.allActivities;
+    let userKommandrs = (isCurrentUser) ? currentUser.allKommandrs : user.allKommandrs;
+    let userCollections = (isCurrentUser) ? currentUser.allCollections : user.allCollections;
+    let userStars = (isCurrentUser) ? currentUser.allStars : user.allStars;
     return (
       <div>
         <Nav tabs>
           <NavItem>
-            <Link to={`/u/${user.username}`} className={'nav-link ' + classNames({ active: activeTab === 'profile' })} onClick={() => this.toggleTab('profile') }>
-              Profile
-            </Link>
+            <NavLink to={`/u/${user.username}`} className={'nav-link '} exact activeClassName="active" onClick={() => this.toggleTab('profile') }>
+              Activity
+            </NavLink>
           </NavItem>
           <NavItem>
-            <Link to={`/u/${user.username}/k`} className={'nav-link ' + classNames({ active: activeTab === 'kommandrs' })} onClick={() => this.toggleTab('kommandrs') }>
-              Kommandrs
-            </Link>
+            <NavLink to={`/u/${user.username}/kommandrs`} className={'nav-link '} activeClassName="active" onClick={() => this.toggleTab('kommandrs') }>
+              Kommandrs{' '}<Badge color="light">{userKommandrs.length || 0}</Badge>
+            </NavLink>
           </NavItem>
           <NavItem>
-            <Link to={`/u/${user.username}/c`} className={'nav-link ' + classNames({ active: activeTab === 'collections' })} onClick={() => this.toggleTab('collections') }>
-              Collections
-            </Link>
+            <NavLink to={`/u/${user.username}/collections`} className={'nav-link '} activeClassName="active" onClick={() => this.toggleTab('collections') }>
+              Collections{' '}<Badge color="light">{userCollections.length || 0}</Badge>
+            </NavLink>
           </NavItem>
           <NavItem>
-            <Link to={`/u/${user.username}/f`} className={'nav-link ' + classNames({ active: activeTab === 'favs' })}onClick={() => this.toggleTab('favs') }>
-              Favs
-            </Link>
+            <NavLink to={`/u/${user.username}/stars`} className={'nav-link '}  activeClassName="active" onClick={() => this.toggleTab('stars') }>
+              Stars{' '}<Badge color="light">{userStars.length || 0}</Badge>
+            </NavLink>
           </NavItem>
+          {isCurrentUser && 
+          <NavItem>
+            <NavLink to={`/u/${user.username}/comments`} className={'nav-link '} activeClassName="active" onClick={() => this.toggleTab('comments') }>
+              <FontAwesome name="lock" />{' '}Comments{' '}<Badge color="light">{userStars.length || 0}</Badge>
+            </NavLink>
+          </NavItem>
+          }
         </Nav>
-        <TabContent activeTab={activeTab}>
-          <TabPane tabId="profile" className="profile-overview">
-            <MyActivity user={user} />
-          </TabPane>
-          <TabPane tabId="kommandrs" className="my-kommandrs">
-            <MyKommandrs user={user}/>
-          </TabPane>
-          <TabPane tabId="collections" className="my-collections">
-          </TabPane>
-          <TabPane tabId="favs" className="my-favs">
-          </TabPane>
+        <TabContent activeTab={activeTab} className="mt-3">
+          <Switch>
+            <Route path="/u/:username" exact render={(props) => <MyActivities items={userActivities} currentUser={currentUser} isCurrentUser={isCurrentUser} />} />
+            <Route path="/u/:username/kommandrs" render={(props) => <MyKommandrs items={userKommandrs}  currentUser={currentUser} isCurrentUser={isCurrentUser} />} />
+            <Route path="/u/:username/collections" render={(props) => <MyCollections items={userCollections} currentUser={currentUser} isCurrentUser={isCurrentUser} {...props} />} />
+            <Route path="/u/:username/stars" render={(props) => <MyStars items={userStars} currentUser={currentUser} isCurrentUser={isCurrentUser} />} />
+          </Switch>
         </TabContent>
       </div>
     )
   }
 }
 
-export default ProfileContent;
+ProfileContent.propTypes = {
+  data: PropTypes.object,
+  user: PropTypes.object,
+};
+
+export default graphql(currentUser)(ProfileContent);

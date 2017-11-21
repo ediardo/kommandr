@@ -8,6 +8,14 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      userId: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+          model: 'Users',
+          key: 'id'
+        }
+      },
       name: {
         type: Sequelize.STRING
       },
@@ -17,6 +25,15 @@ module.exports = {
       totalKommandrs: {
         type: Sequelize.INTEGER
       },
+      matchRegex: {
+        type: Sequelize.STRING,
+      },
+      isEnabled: {
+        type: Sequelize.BOOLEAN,
+      },
+      matchAllTime: {
+        type: Sequelize.BOOLEAN,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
@@ -24,14 +41,6 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
-      },
-      userId: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-        references: {
-          model: 'Users',
-          key: 'id'
-        }
       }
     });
   },

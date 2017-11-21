@@ -22,7 +22,7 @@ module.exports = function(sequelize, DataTypes) {
         targetType: 'comment',
       });
     }
-    sequelize.models.Kommandr.increment('totalComments', { where: { id: kommandrId }, silent: true });
+    sequelize.models.Kommandr.update({ totalComments: sequelize.literal('totalComments + 1')}, { where: { id: kommandrId }, silent: true });
   });
 
   Comment.beforeBulkDestroy(options => {
@@ -42,7 +42,7 @@ module.exports = function(sequelize, DataTypes) {
         },      
       });
     }
-    sequelize.models.Kommandr.increment({ totalComments: -1 }, { where: { id: kommandrId }, silent: true });
+    sequelize.models.Kommandr.update({ totalComments: sequelize.literal('totalComments - 1')}, { where: { id: kommandrId }, silent: true });
   });
 
 

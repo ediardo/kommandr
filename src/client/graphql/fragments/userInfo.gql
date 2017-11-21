@@ -1,0 +1,10 @@
+fragment userInfo on User {
+  id
+  name
+  username
+  email
+  website
+  externalAvatarUrl
+  hasSeenWelcome
+  status
+}

@@ -1,0 +1,14 @@
+fragment commentInfo on Comment {
+  id
+  kommandrId
+  userId
+  comment
+  createdAt
+  updatedAt
+  author {
+    id
+    name
+    username
+    externalAvatarUrl
+  }
+}

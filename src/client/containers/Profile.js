@@ -1,47 +1,33 @@
-import React, { Component }  from 'react';
-import { graphql } from 'react-apollo';
-import {
-  Container,
-  Col
-} from 'reactstrap';
+  import React from 'react';
+import { graphql, compose } from 'react-apollo';
+import { Col, Row } from 'reactstrap';
 
-import getProfile from '../queries/getProfile';
+import { ProfileContent, ProfileSidebar } from '../components/Profile/';
+import getUser from '../graphql/queries/getUser.gql';
 
-import Content from './Content';
-import ProfileSidebar from '../components/Profile/ProfileSidebar';
-import ProfileContent from '../components/Profile/ProfileContent';
-
-class Profile extends Component {
-
-  render() {
-    const { profile, loading } = this.props.data;
-    //temp solution
-    if (loading) {
-      return null;
-    } else {
-      return (
-        <Container>
-          <Content className="profile row">
-            <Col xs="12" sm="3">
-              <ProfileSidebar data={profile} />
-            </Col>
-            <Col xs="12" sm="9">
-              <ProfileContent data={profile}/>
-            </Col>
-          </Content>
-        </Container>
-      )
-    }
+const Profile = props => {
+  const { data: { user, loading } } = props;
+  //temp solution
+  if (loading) {
+    return null;
+  } else {
+    return (
+      <main className="container">
+        <Row className="profile row">
+          <Col xs="12" sm="3">              
+            <ProfileSidebar user={user} />
+          </Col>
+          <Col xs="12" sm="9">
+             <ProfileContent user={user} />
+          </Col>
+        </Row>
+      </main>
+    )
   }
-}
+};
 
-
-export default graphql(getProfile, {
-  options: (props) => {
-    return { variables: {
-      username: props.match.params.username
-    }}
-  }
-})(Profile);
-
-//export default Profile;
+export default compose(
+  graphql(getUser, {
+    options: (props) => ({ variables: { username: props.match.params.username } })
+  }),
+)(Profile);

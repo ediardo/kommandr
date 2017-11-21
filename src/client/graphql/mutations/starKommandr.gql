@@ -1,0 +1,5 @@
+mutation starKommandr($id: ID!) {
+  kommandr: starKommandr(id: $id) {
+    id
+  }
+}

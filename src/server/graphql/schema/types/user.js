@@ -4,15 +4,13 @@ import {
   GraphQLBoolean,
   GraphQLString,
   GraphQLObjectType,
-  GraphQLNonNull,
   GraphQLList
 } from 'graphql';
-import { attributeFields } from 'graphql-sequelize';
-import { assign } from 'lodash';
-import { resolver } from 'graphql-sequelize';
 
-import models from '../../../models';
+import db from '../../../models';
+import activityType from './activity';
 import commentType from './comment';
+import starType from './star';
 import kommandrType from './kommandr';
 import collectionType from './collection';
 
@@ -33,11 +31,30 @@ const userType = new GraphQLObjectType({
     },
     email: {
       type: GraphQLString,
-      resolve: user => user.email
+      resolve: (user, args, ctx) => {
+        if (ctx.user && ctx.user.id === user.id) {
+          return user.email
+        } 
+        return null;
+      }
     },
     isPasswordSet: {
       type: GraphQLBoolean,
-      resolve: user => user.isPasswordSet
+      resolve: (user, args, ctx) => {
+        if (ctx.user && ctx.user.id === user.id) {
+          return user.isPasswordSet;
+        }
+        return null;
+      }
+    },
+    isUsernameSet: {
+      type: GraphQLBoolean,
+      resolve: (user, args, ctx) => {
+        if (ctx.user && ctx.user.id === user.id) {
+          return user.isUsernameSet
+        }
+        return null;
+      }
     },
     website: {
       type: GraphQLString,
@@ -49,16 +66,190 @@ const userType = new GraphQLObjectType({
     },
     hasSeenWelcome: {
       type: GraphQLBoolean,
-      resolve: user => user.hasSeenWelcome
+      resolve: (user, args, ctx) => {
+        if (ctx.user && ctx.user.id === user.id) {
+          return user.hasSeenWelcome;
+        }
+        return null;
+      }
     },
     createdAt: {
       type: GraphQLString,
       resolve: user => user.createdAt
     },
+    updatedAt: {
+      type: GraphQLString,
+      resolve: (user, args, ctx) => {
+        if (ctx.user && ctx.user.id === user.id) {
+          return user.updatedAt;
+        }
+        return null;
+      }
+    },
+    isLoginEnabled: {
+      type: GraphQLBoolean,
+      resolve: (user, args, ctx) => {
+        if (ctx.user && ctx.user.id === user.id) {
+          return user.isLoginEnabled;
+        }
+        return null;
+      }
+    },
+    githubId: {
+      type: GraphQLInt,
+      resolve: (user, args, ctx) => {
+        if (ctx.user && ctx.user.id === user.id) {
+          return user.githubId;
+        }
+        return null;
+      }
+    },
+    googleId: {
+      type: GraphQLInt,
+      resolve: (user, args, ctx) => {
+        if (ctx.user && ctx.user.id === user.id) {
+          return user.googleId;
+        }
+        return null;
+      }
+    },
+    facebookId: {
+      type: GraphQLInt,
+      resolve: (user, args, ctx) => {
+        if (ctx.user && ctx.user.id === user.id) {
+          return user.facebookId;
+        }
+        return null;
+      }
+    },
+    slackId: {
+      type: GraphQLInt,
+      resolve: (user, args, ctx) => {
+        if (ctx.user && ctx.user.id === user.id) {
+          return user.slackId;
+        }
+        return null;
+      }
+    },
+    lastSignedIn: {
+      type: GraphQLString,
+      resolve: (user, args, ctx) => {
+        if (ctx.user && ctx.user.id === user.id) {
+          return user.lastSignedIn;
+        }
+        return null;
+      }
+    },
+    lastSignedInIp: {
+      type: GraphQLInt,
+      resolve: (user, args, ctx) => {
+        if (ctx.user && ctx.user.id === user.id) {
+          return user.lastSignedInIp;
+        }
+        return null;
+      }
+    },
+    forgotPasswordToken: {
+      type: GraphQLString,
+      resolve: (user, args, ctx) => {
+        if (ctx.user && ctx.user.id === user.id) {
+          return user.forgotPasswordToken;
+        }
+        return null;
+      }
+    },
+    forgotPasswordExpires: {
+      type: GraphQLString,
+      resolve: (user, args, ctx) => {
+        if (ctx.user && ctx.user.id === user.id) {
+          return user.forgotPasswordExpires;
+        }
+        return null;
+      }
+    },
     status: {
       type: GraphQLInt,
-      resolve: user => user.status
+      resolve: (user, args, ctx) => {
+        if (ctx.user && ctx.user.id === user.id) {
+          return user.status
+        }
+        return null;
+      }
     },
+    allActivities: {
+      type: new GraphQLList(activityType),
+      resolve: user => db.Activity.findAll({
+        include: [{
+          model: db.User,
+          where: { id: user.id },
+        }],
+        order: [
+          [ 'createdAt', 'DESC' ]
+        ],
+      })
+    },
+    allComments: {
+      type: new GraphQLList(commentType),
+      resolve: user => {
+        return db.Comment.findAll({
+          include: [{
+            model: db.User,
+            where: { id: user.id },
+          }],
+          order: [
+            [ 'createdAt', 'DESC' ]
+          ],
+        });
+      }
+    },
+    allKommandrs: {
+      type: new GraphQLList(kommandrType),
+      resolve: user => {
+        return db.Kommandr.findAll({
+          include: [{
+            model: db.User,
+            where: { id: user.id },
+          }],
+          order: [
+            [ 'createdAt', 'DESC' ]
+          ],
+        });
+      }
+    },
+    allStars: {
+      type: new GraphQLList(kommandrType),
+      resolve: user => {
+        return db.Kommandr.findAll({
+          include: [
+            {
+              model: db.Star,
+              where: { 
+                userId: user.id
+              },
+            },
+          ],
+          order: [
+            [ 'createdAt', 'DESC' ]
+          ],
+        }).then(star => {
+          return star;
+        });
+      }
+    },
+    allCollections: {
+      type: new GraphQLList(collectionType),
+      resolve: user => {
+        return db.Collection.findAll({
+          include: [{
+            model: db.User,
+            where: { id: user.id },
+          }],
+          order: [
+            [ 'createdAt', 'DESC' ]
+          ],
+        });
+      }
+    }
   })
 });
 

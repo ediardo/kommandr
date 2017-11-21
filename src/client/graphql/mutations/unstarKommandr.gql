@@ -1,0 +1,5 @@
+mutation unstarKommandr($kommandrId: ID!) {
+  fav: unstarKommandr(kommandrId: $kommandrId) {
+    id
+  }
+}

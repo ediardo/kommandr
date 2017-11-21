@@ -1,0 +1,24 @@
+#import "../fragments/kommandrInfo.gql"
+#import "../fragments/kommandrStats.gql"
+#import "../fragments/kommandrForks.gql"
+
+mutation updateKommandr($id: ID!, $title: String!, $cli: String!, $description: String) {
+  kommandr: updateKommandr(id: $id, title: $title, cli: $cli, description: $description) {
+    ...kommandrInfo
+    ...kommandrForks
+    ...kommandrStats
+    author {
+      id
+      username
+    }
+    allComments {
+      id
+    }
+    allForks {
+      id
+    }
+    allStars {
+      id
+    }
+  }
+}

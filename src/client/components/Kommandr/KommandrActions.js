@@ -3,7 +3,9 @@ import { graphql } from 'react-apollo';
 import { Button } from 'reactstrap';
 import FontAwesome from 'react-fontawesome';
 
-import currentUser from '../../queries/currentUser';
+import ModalDelete from '../Modal/ModalDeleteKommandr';
+import ModalShare from '../Modal/ModalShareKommandr';
+import currentUser from '../../graphql/queries/currentUser.gql';
 
 const KommandrActions = (props) => {
 

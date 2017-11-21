@@ -1,0 +1,15 @@
+fragment collectionInfo on Collection {
+  id
+  userId
+  name
+  description
+  matchRegex
+  isEnabled
+  matchAllTime
+  totalKommandrs
+  author {
+    username
+  }
+  updatedAt
+  createdAt
+}

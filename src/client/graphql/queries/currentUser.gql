@@ -1,0 +1,30 @@
+#import "../fragments/userInfo.gql"
+#import "../fragments/activityInfo.gql"
+#import "../fragments/kommandrInfo.gql"
+#import "../fragments/commentInfo.gql"
+#import "../fragments/collectionInfo.gql"
+
+query currentUser {
+  currentUser {
+    ...userInfo
+    isPasswordSet
+    isUsernameSet
+    hasSeenWelcome
+    lastSignedIn
+    allActivities {
+      ...activityInfo
+    }
+    allKommandrs {
+      ...kommandrInfo
+    }
+    allComments {
+      ...commentInfo
+    }
+    allStars {
+      ...kommandrInfo
+    }
+    allCollections {
+      ...collectionInfo
+    }
+  }
+}
