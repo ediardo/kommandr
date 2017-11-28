@@ -25,8 +25,8 @@ app.use(session({
   saveUninitialized: true
 }));
 var corsOptions = {
-  origin: 'http://localhost:5000',
-  credentials: true // <-- REQUIRED backend setting
+  origin: ['http://localhost:5000', 'http://kommandr.com:5000'],
+  credentials: true,
 };
 
 app.use(passport.initialize());

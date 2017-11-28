@@ -1,8 +1,8 @@
 {
   "oauth": {
     "github": {
-      "clientId": "f63ed8910e9ecd3eee9d",
-      "secret": "85461a3342f897d89e49ea84ccb88ad452a492b9",
+      "clientId": "53a27cb408faca1a7072",
+      "secret": "b8a68078fb600cd5c617f60e862060a04ed46047",
       "callbackURL": "http://localhost:5001/login/github/return"
     },
     "facebook": {

@@ -73,6 +73,7 @@ module.exports = function(sequelize, DataTypes) {
     User.hasMany(models.Comment, {  foreignKey: 'userId' });
     User.hasMany(models.Collection, { foreignKey: 'userId' });
     User.hasMany(models.Star, { foreignKey: 'userId' });
+    User.hasMany(models.Token, { foreignKey: 'userId' });
   };
 
   return User;

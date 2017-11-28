@@ -128,6 +128,7 @@ const RootQueryType = new GraphQLObjectType({
       },
       resolve: (root, { title = '', cli = '', description = '' }, ctx) => {
         let where = {};
+        console.log('ALL KOMMANDRS');
         if (title || cli || description) {
           where = { $or: [] };
           if (title) where.$or.push({ title: { $like: `%${title}%` } });
@@ -188,7 +189,9 @@ const RootQueryType = new GraphQLObjectType({
     currentUser: {
       type: userType,
       resolve: (root, args, ctx) => {
+        console.log(root, args, ctx.user);
         if (!ctx.user)  return null;
+        console.log('HEREEEEEEEEEEEEEEEEEEEEEe');
         return db.User.findById(ctx.user.id);
       }
     },

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import InputSearch from '../Form/InputSearch';
 import { Alert, Button } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import _ from 'lodash';
 
 import Paginator from '../Paginator';
@@ -26,6 +26,7 @@ function ListWithFilters(WrappedList, injectedProps) {
   return class extends Component {
     constructor(props) {
       super(props);
+      console.log(props);
       this.state = {
         query: '',
         pageSize: 15,
@@ -78,13 +79,12 @@ function ListWithFilters(WrappedList, injectedProps) {
       const { queryPlaceholder, paginator: { pageSize }, listName, listActions = [] } = injectedProps;
       const { isCurrentUser, location } = this.props;
       const paginatedItems = _.slice(items, currentPage*pageSize - pageSize, currentPage*pageSize - 1);
-      const listActionsBtns = listActions.filter((action, idx) => {
+      const listActionsBtns = listActions.map((action, idx) => {
         if (!action.onlyCurrentUser) {
           return <Button key={idx} tag={Link} to={location.pathname + action.url} color={action.color} className="list-action-create">{action.name}</Button>;
         } else if (isCurrentUser) {
           return <Button key={idx} tag={Link} to={location.pathname + action.url} color={action.color} className="list-action-create">{action.name}</Button>;
         }
-        return null
       });
       return (
         <div className="container-list">
