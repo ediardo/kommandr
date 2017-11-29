@@ -7,7 +7,6 @@
     border: 0;
     background: initial;
     padding: 0;
-    
   }
 }
 
@@ -15,7 +14,6 @@ body {
   height: inherit;
   width: inherit;
   overflow: inherit;
-  background-color: #F9FCFC;
   margin-bottom: 75px;
 }
 
@@ -32,9 +30,6 @@ body {
 
 main {
   background-color: white;
-  border-left: 1px solid $layout-border-color;
-  border-right: 1px solid $layout-border-color;
-  border-bottom: 1px solid $layout-border-color;
   padding: 15px 0;
 }
 header {
@@ -200,10 +195,12 @@ a {
   .kommandr-author {
     border-bottom: 1px solid $light-gray;
     flex: none;
+    width: 100%;
   }
   .kommandr-description {
     textarea {
-      min-width: 100%;
+      min-width: 470px;
+      width: 80%;
     }
     .static-description {
       white-space: pre-line;
