@@ -1,0 +1,14 @@
+{
+  "oauth": {
+    "github": {
+      "clientId": "",
+      "secret": "",
+      "callbackURL": "http://localhost:5001/login/github/return"
+    },
+    "facebook": {
+      "clientId": "",
+      "secret": "",
+      "callbackURL": "http://localhost:5001/login/facebook/return"
+    }
+  }
+}

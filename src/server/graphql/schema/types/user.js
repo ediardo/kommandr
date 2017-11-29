@@ -247,7 +247,23 @@ const userType = new GraphQLObjectType({
         });
       }
     },
-   
+    allTokens: {
+      type: new GraphQLList(tokenType),
+      resolve: (user, args, ctx) => {
+        if (ctx.user && ctx.user.id === user.id) {
+          return db.Token.findAll({
+            include: [{
+              model: db.User,
+              where: { id: user.id },
+            }],
+            order: [
+              [ 'createdAt', 'DESC' ]
+            ]
+          })
+        }
+        return null;
+      }
+    }
   })
 });
 

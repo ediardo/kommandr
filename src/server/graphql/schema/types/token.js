@@ -14,27 +14,29 @@ const tokenType = new GraphQLObjectType({
       description: 'ID of the '
     },
     userId: {
-      type: GraphQLInt,
+      type: GraphQLID,
       description: 'ID of the User',
+    },
+    name: {
+      type: GraphQLString,
     },
     tokenHash: {
       type: GraphQLString,
       description: 'Salted hash of the token',
-      resolve: (token, args, ctx) => {
-        console.log(token, args, ctx);
-        return 'afdsafsdasfdsdaf'
-      }
     },
     tokenHint: {
-      type: GraphQLInt,
+      type: GraphQLString,
       description: 'Last four characters of the token',
     },
     createdAt: {
       type: GraphQLString,
     },
-    updateAt: {
+    updatedAt: {
       type: GraphQLString,
-    }
+    },
+    lastUsedAt: {
+      type: GraphQLString,
+    },
   })
 });
 

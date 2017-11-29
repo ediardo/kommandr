@@ -1,4 +1,3 @@
-'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('Tokens', {
@@ -16,11 +15,17 @@ module.exports = {
           key: 'id'
         }
       },
+      name: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
       tokenHash: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       tokenHint: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,

@@ -25,7 +25,7 @@ app.use(session({
   saveUninitialized: true
 }));
 var corsOptions = {
-  origin: ['http://localhost:5000', 'http://kommandr.com:5000'],
+  origin: ['http://localhost:5000', 'http://kommandr.com:5000', 'https://kommandr.com'],
   credentials: true,
 };
 

@@ -6,12 +6,15 @@ import {
   GraphQLBoolean,
 } from 'graphql';
 
+import crypto from 'crypto';
+
 import db from '../../models';
 import kommandrType from './types/kommandr';
 import collectionType from './types/collection';
 import userType from './types/user';
 import commentType from './types/comment';
 import reportType from './types/report';
+import tokenType from './types/token';
 //import teamType from './types/team';
 
 const mutation = new GraphQLObjectType({
@@ -478,6 +481,30 @@ const mutation = new GraphQLObjectType({
         });
       }
     },
+
+    addToken: {
+      type: tokenType,
+      args: {
+        name: {
+          type: GraphQLString,
+        },
+      },
+      resolve: (root, { name }, ctx) => {
+        if (!ctx.user) return null;
+        var tokenHash = crypto.createHash('sha256')
+          .update(Date.now().toString())
+          .digest('hex');
+        return db.Token.create({
+          name,
+          userId: ctx.user.id,
+          tokenHash,
+          tokenHint: tokenHash.substr(-4),
+        }).then(token => {
+          token.tokenHash = tokenHash;
+          return token;
+        });
+      }
+    }
     /*
     addTeam: {
 
