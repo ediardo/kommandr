@@ -1,7 +1,5 @@
 import bcrypt from 'bcrypt';
-
 const tokenHash = (token) => bcrypt.hashSync(token, 1);
-
 module.exports = (sequelize, DataTypes) => {
   var Token = sequelize.define('Token', {
     name: DataTypes.STRING,

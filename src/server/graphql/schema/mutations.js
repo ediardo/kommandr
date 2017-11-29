@@ -5,7 +5,7 @@ import {
   GraphQLString,
   GraphQLBoolean,
 } from 'graphql';
-
+import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 
 import db from '../../models';
@@ -16,6 +16,7 @@ import commentType from './types/comment';
 import reportType from './types/report';
 import tokenType from './types/token';
 //import teamType from './types/team';
+const tokenHash = (token) => bcrypt.hashSync(token, 1);
 
 const mutation = new GraphQLObjectType({
   name: 'Mutation',
@@ -35,7 +36,9 @@ const mutation = new GraphQLObjectType({
       },
       resolve: (root, { title, cli, description }, ctx) => {
         let userId = 0;
-        if (ctx.user) userId = ctx.user.id;
+        if (ctx.user) {
+          userId = ctx.user.id;
+        }
         return db.Kommandr.create({
           title,
           cli,
