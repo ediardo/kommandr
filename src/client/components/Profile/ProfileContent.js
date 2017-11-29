@@ -2,12 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import { NavLink, Switch, Route } from 'react-router-dom';
-import {
-  Badge,
-  Nav,
-  NavItem,
-  TabContent,
-} from 'reactstrap';
+import { Badge, Nav, NavItem } from 'reactstrap';
 
 import FontAwesome from 'react-fontawesome';
 
@@ -71,14 +66,14 @@ class ProfileContent extends Component {
           </NavItem>
           }
         </Nav>
-        <TabContent activeTab={activeTab} className="mt-3">
+        <div className="mt-3">
           <Switch>
             <Route path="/u/:username" exact render={(props) => <MyActivities items={userActivities} currentUser={currentUser} isCurrentUser={isCurrentUser} />} />
             <Route path="/u/:username/kommandrs" render={(props) => <MyKommandrs items={userKommandrs}  currentUser={currentUser} isCurrentUser={isCurrentUser} />} />
             <Route path="/u/:username/collections" render={(props) => <MyCollections items={userCollections} currentUser={currentUser} isCurrentUser={isCurrentUser} {...props} />} />
             <Route path="/u/:username/stars" render={(props) => <MyStars items={userStars} currentUser={currentUser} isCurrentUser={isCurrentUser} />} />
           </Switch>
-        </TabContent>
+        </div>
       </div>
     )
   }

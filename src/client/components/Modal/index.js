@@ -4,6 +4,7 @@ import ModalShareKommandr from './ModalShareKommandr';
 import ModalForkKommandr from './ModalForkKommandr';
 import ModalHelp from './ModalHelp';
 import ModalLogin from './ModalLogin';
+import ModalToken from './ModalToken';
 
 export {
   ModalDeleteKommandr,
@@ -12,4 +13,5 @@ export {
   ModalForkKommandr,
   ModalHelp,
   ModalLogin,
+  ModalToken,
 };

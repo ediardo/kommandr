@@ -55,7 +55,6 @@ module.exports = function(sequelize, DataTypes) {
     }
   );
 
-  
   User.hook('beforeBulkUpdate', (user) => {
     const { username, password } = user.attributes;
     if (username) {
@@ -67,12 +66,12 @@ module.exports = function(sequelize, DataTypes) {
     return user;
   });
   
-
   User.associate = models => {
     User.hasMany(models.Kommandr, { foreignKey: 'userId' });
     User.hasMany(models.Comment, {  foreignKey: 'userId' });
     User.hasMany(models.Collection, { foreignKey: 'userId' });
     User.hasMany(models.Star, { foreignKey: 'userId' });
+    User.hasMany(models.Token, { foreignKey: 'userId' });
   };
 
   return User;

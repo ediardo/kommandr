@@ -28,10 +28,10 @@ const store = createStore(reducer, applyMiddleware(...middleware));
 */
 
 const networkInterface = createNetworkInterface({
-  uri: '/graphql',
   opts: {
     credentials: 'include'
   },
+  uri: 'http://localhost:5001/graphql'
 });
 
 const client = new ApolloCLient({ 

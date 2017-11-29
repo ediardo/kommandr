@@ -93,7 +93,7 @@ class ProfileSettingsPublic extends Component {
             </div>
           </div>
         </div>
-        <Button color="primary" onClick={this.updateProfile} >Save changes</Button>
+        <Button color="primary" onClick={this.updateProfile} disabled={true}>Save changes</Button>
       </div>
     )
   }
