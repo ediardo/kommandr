@@ -298,7 +298,7 @@ class CommandLine extends Component {
       author = currentUser;
     }
     return (
-      <Fade className={classNames({ 'container-fluid d-flex flex-column': true} , {'view-mode': (mode === 'view') })}>
+      <Fade className={classNames({ 'container-fluid d-flex flex-column mt-2': true} , {'view-mode': (mode === 'view') })}>
         <div className="kommandr-title mb-2">
           <input className="editable-input" type="text" value={title} onChange={this.setTitle} placeholder="Name this kommandr" />
         </div>
@@ -324,7 +324,7 @@ class CommandLine extends Component {
         <CommandLineAuthor author={author} kommandr={kommandr} >
           <div className="kommandr-description">
             {mode === 'add' || isOwnedByCurrentUser
-              ? <Input type="textarea" value={description} onChange={this.setDescription} maxLength="1000"/>
+              ? <Input type="textarea" value={description} onChange={this.setDescription} maxLength="1000" placeholder="Explain what this command does"/>
               : <div className="static-description">{description}</div>
             }
           </div>

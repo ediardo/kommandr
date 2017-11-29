@@ -1,0 +1,9 @@
+fragment tokenInfo on Token {
+  id
+  userId
+  name
+  tokenHint
+  createdAt
+  updatedAt
+  lastUsedAt
+}

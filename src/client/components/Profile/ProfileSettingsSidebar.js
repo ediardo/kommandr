@@ -9,7 +9,7 @@ const ProfileSettingsSidebar = ({ user }) => {
       <h4>Settings</h4>
       <NavLink to={`/settings`}>My public profile</NavLink>
       <NavLink to={`/settings/account`}>My account</NavLink>
-      <NavLink to={`/settings/kommandr-client`}>ommandr client</NavLink>
+      <NavLink to={`/settings/client`}>Kommandr client</NavLink>
     </Nav>
   )
 };

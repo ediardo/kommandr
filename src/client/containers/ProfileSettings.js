@@ -13,10 +13,8 @@ import {
 import currentUser from '../graphql/queries/currentUser.gql';
 
 const ProfileSettings = ({ location, data: { loading, currentUser } }) => {
-  
   if (loading) return <span>Loading...</span>;
   if (!currentUser) return <Redirect to={{ pathname: '/login', state: { from: location } }} />
-
   return (
     <main className="container">
       <Row className="profile row">
@@ -25,9 +23,9 @@ const ProfileSettings = ({ location, data: { loading, currentUser } }) => {
         </Col>
         <Col xs="12" sm="10" className="profile-settings-container">
           <Switch>
-            <Route path="/settings" exact render={() => <ProfileSettingsPublic user={currentUser} />} />
-            <Route path="/settings/account" exact render={() => <ProfileSettingsAccount user={currentUser} />} />
-            <Route path="/settings/client" exact render={() => <ProfileSettingsClient user={currentUser} />}  />
+            <Route path="/settings" exact render={() => <ProfileSettingsPublic user={currentUser} location={location} />} />
+            <Route path="/settings/account" render={() => <ProfileSettingsAccount user={currentUser} location={location} />} />
+            <Route path="/settings/client" render={() => <ProfileSettingsClient user={currentUser} location={location} />}  />
           </Switch>
         </Col>
       </Row>

@@ -13,6 +13,7 @@ import commentType from './comment';
 import starType from './star';
 import kommandrType from './kommandr';
 import collectionType from './collection';
+import tokenType from './token';
 
 const userType = new GraphQLObjectType({
   name: 'User',
@@ -219,15 +220,11 @@ const userType = new GraphQLObjectType({
     allStars: {
       type: new GraphQLList(kommandrType),
       resolve: user => {
-        return db.Kommandr.findAll({
-          include: [
-            {
-              model: db.Star,
-              where: { 
-                userId: user.id
-              },
-            },
-          ],
+        return db.Star.findAll({
+          include: [{
+            model: db.User,
+            where: { id: user.id },
+          }],
           order: [
             [ 'createdAt', 'DESC' ]
           ],
@@ -248,6 +245,23 @@ const userType = new GraphQLObjectType({
             [ 'createdAt', 'DESC' ]
           ],
         });
+      }
+    },
+    allTokens: {
+      type: new GraphQLList(tokenType),
+      resolve: (user, args, ctx) => {
+        if (ctx.user && ctx.user.id === user.id) {
+          return db.Token.findAll({
+            include: [{
+              model: db.User,
+              where: { id: user.id },
+            }],
+            order: [
+              [ 'createdAt', 'DESC' ]
+            ]
+          })
+        }
+        return null;
       }
     }
   })

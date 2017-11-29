@@ -16,7 +16,8 @@ import kommandrType from './types/kommandr';
 import userType from './types/user';
 import db from '../../models';
 import mutations from './mutations';
-
+import bcrypt from 'bcrypt';
+const tokenHash = (token) => bcrypt.hashSync(token, 1);
 const RootQueryType = new GraphQLObjectType({
   name: 'RootQueryType',
   fields: {
@@ -127,6 +128,7 @@ const RootQueryType = new GraphQLObjectType({
         }
       },
       resolve: (root, { title = '', cli = '', description = '' }, ctx) => {
+        console.log(ctx.headers);
         let where = {};
         if (title || cli || description) {
           where = { $or: [] };

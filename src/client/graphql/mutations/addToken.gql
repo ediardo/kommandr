@@ -1,0 +1,6 @@
+mutation addToken($name: String) {
+  token: addToken(name: $name) {
+    id
+    tokenHash
+  }
+}

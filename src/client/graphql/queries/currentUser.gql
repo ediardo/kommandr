@@ -3,6 +3,7 @@
 #import "../fragments/kommandrInfo.gql"
 #import "../fragments/commentInfo.gql"
 #import "../fragments/collectionInfo.gql"
+#import "../fragments/tokenInfo.gql"
 
 query currentUser {
   currentUser {
@@ -25,6 +26,9 @@ query currentUser {
     }
     allCollections {
       ...collectionInfo
+    }
+    allTokens {
+      ...tokenInfo
     }
   }
 }
