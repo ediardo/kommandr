@@ -48,11 +48,6 @@ $ cd kommandr
 
 #### Starting webback dev server.
 ```shell
-node scripts/start.js
+$ node scripts/start.js
 ```
 
-
-More information coming SOON.
-
-## Development
-If you found any bug please create an issue on this repo.
