@@ -1,6 +1,0 @@
-fragment kommandrStats on Kommandr {
-  totalForks
-  totalViews
-  totalStars
-  totalComments
-}

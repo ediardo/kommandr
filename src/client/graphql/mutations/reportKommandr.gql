@@ -1,5 +1,0 @@
-mutation reportKommandr($id: ID!, $reason: String!) {
-  report: reportKommandr(id: $id, reason: $reason) {
-    id
-  }
-}

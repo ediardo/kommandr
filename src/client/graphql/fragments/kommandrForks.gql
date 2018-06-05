@@ -1,5 +1,0 @@
-fragment kommandrForks on Kommandr {
-  allForks {
-      id
-  }
-}

@@ -1,8 +1,0 @@
-fragment activityInfo on Activity {
-  id
-  userId
-  targetType
-  targetId
-  isPublic
-  createdAt
-}

@@ -1,0 +1,12 @@
+[submodule "src/backend/kommandr-api"]
+	path = src/backend/kommandr-api
+	url = git@github.com:kommandr/kommandr-api.git
+	branch = dev
+[submodule "src/backend/kommandr-ML"]
+	path = src/backend/kommandr-ML
+	url = git@github.com:kommandr/kommandr-ML.git
+	branch = master
+[submodule "src/frontend/kommandr-ui"]
+	path = src/frontend/kommandr-ui
+	url = git@github.com:kommandr/kommandr-ui.git
+	branch = master

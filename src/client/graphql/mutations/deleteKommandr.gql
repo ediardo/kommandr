@@ -1,5 +1,0 @@
-mutation deleteKommandr($id: ID!) {
-  kommandr: deleteKommandr(id: $id) {
-    id
-  }
-}
