@@ -1,6 +1,0 @@
-fragment starInfo on Star {
-  id
-  userId
-  kommandrId
-  createdAt
-}
