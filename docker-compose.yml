@@ -10,11 +10,10 @@ services:
       - backend
     ports:
       - "5000:5000"
-    working_dir: /home/node/ui
+    working_dir: /home/node/app/ui
     volumes:
-      - ./src/frontend/ui:/home/node/ui
-      - /home/node/ui/node_modules
-    command: npm start
+      - ./src/frontend/ui:/home/node/app/ui
+    command: npm start 
   mariadb:
     image: mariadb
     container_name: kommandr-api-mariadb
@@ -44,18 +43,15 @@ services:
     depends_on:
       - mariadb
       - mongodb
-    environment:
-      NODE_ENV: development
     networks:
       - frontend
       - backend
     ports: 
       - "5001:5001"
-    working_dir: /home/node/api
+    working_dir: /home/node/app/api
     volumes:
-      - ./src/backend/api:/home/node/api
-      - /home/node/api/node_modules
-    command: npm run docker-dev
+      - ./src/backend/api:/home/node/app/api
+    command: npm start
   recommendr:
     build: src/backend/recommendr
     container_name: kommandr-recommendr
