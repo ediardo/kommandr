@@ -1,8 +1,8 @@
 version: '3'
 services:
-  frontend:
-    build: ./src/frontend/kommandr-ui
-    container_name: kommandr-frontend
+  ui:
+    build: ./src/frontend/ui
+    container_name: kommandr-ui
     depends_on:
       - api
     networks:
@@ -10,13 +10,16 @@ services:
       - backend
     ports:
       - "5000:5000"
-    working_dir: /home/node/app
+    working_dir: /home/node/ui
     volumes:
-      - ./src/frontend/kommandr-ui:/home/node/app
+      - ./src/frontend/ui:/home/node/ui
+      - /home/node/ui/node_modules
     command: npm start
   mariadb:
     image: mariadb
     container_name: kommandr-api-mariadb
+    logging:
+      driver: none
     ports:
       - "3306:3306"
     environment:
@@ -29,27 +32,32 @@ services:
   mongodb:
     image: mongo
     container_name: kommandr-api-mongodb
+    logging:
+      driver: none
     ports: 
       - "27017:27017"
     networks:
       - backend
   api:
-    build: ./src/backend/kommandr-api
-    container_name: kommandr-api-graphql
+    build: ./src/backend/api
+    container_name: kommandr-api
     depends_on:
       - mariadb
       - mongodb
+    environment:
+      NODE_ENV: development
     networks:
       - frontend
       - backend
     ports: 
       - "5001:5001"
-    working_dir: /home/node/app
+    working_dir: /home/node/api
     volumes:
-      - ./src/backend/kommandr-api:/home/node/app
+      - ./src/backend/api:/home/node/api
+      - /home/node/api/node_modules
     command: npm run docker-dev
   recommendr:
-    build: ./src/backend/kommandr-ML
+    build: src/backend/recommendr
     container_name: kommandr-recommendr
     depends_on:
       - api
