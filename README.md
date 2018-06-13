@@ -36,7 +36,20 @@ Keep in mind that this process can take a long time
 ### Create docker containers
 `$ docker-compose up`
 
-### Restore initial database state
+
+### Configuration
+
+#### Database
+Create the configuration files for the database and edit as appropiate (not needed as of now)
+```
+$ cd src/backend/api/config
+$ cp config.json.example config.json
+$ cp db.mongo.json.example db.mongo.json
+$ cp db.sql.json.example db.sql.json
+```
+
+#### Restore initial database state
+
 ```
 $ cd src/backend/api
 $ bash scripts/createDatabases.sh
@@ -44,5 +57,17 @@ $ bash scripts/createDatabases.sh
 
 ### Access the application
 
-#### On macOS/Linux
+#### The UI
 Go to http://localhost:5000/
+
+
+#### The backend API (GraphQL)
+Go to http://localhost:5001/graphql
+
+
+#### The SQL Database
+Use the mysql client or MySQL Workbench to connnect to the database. Make sure to use the right credentials
+`$ mysql -u kommandr -p k0mm4ndr -h 127.0.0.1 -p 3306`
+
+#### The MongoDB Database
+Use MongoDB Compass using the right credentials (see config files)
