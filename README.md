@@ -37,9 +37,9 @@ Keep in mind that this process can take a long time
 `$ docker-compose up`
 
 
-### Configuration
+## Configuration
 
-#### Database
+### Database
 Create the configuration files for the database and edit as appropiate (not needed as of now)
 ```
 $ cd src/backend/api/config
@@ -48,26 +48,52 @@ $ cp db.mongo.json.example db.mongo.json
 $ cp db.sql.json.example db.sql.json
 ```
 
-#### Restore initial database state
+### Restore initial database state
 
 ```
 $ cd src/backend/api
 $ bash scripts/createDatabases.sh
 ```
 
-### Access the application
+## Access the application
 
-#### The UI
+### The UI
 Go to http://localhost:5000/
 
 
-#### The backend API (GraphQL)
+### The backend API (GraphQL)
 Go to http://localhost:5001/graphql
 
 
-#### The SQL Database
+### The SQL Database
 Use the mysql client or MySQL Workbench to connnect to the database. Make sure to use the right credentials
-`$ mysql -u kommandr -p k0mm4ndr -h 127.0.0.1 -p 3306`
+```
+$ mysql -u kommandr -p k0mm4ndr -h 127.0.0.1 -p 3306
+```
 
-#### The MongoDB Database
+### The MongoDB Database
 Use MongoDB Compass using the right credentials (see config files)
+
+## Development
+
+### Installing new dependencies
+You will need to rebuild the docker images. Depending on the project you are working on, follow the per-project instructions below:
+
+*ui*
+```
+$ docker-compose build --no-cache --force-rm ui
+```
+
+*API*
+```
+$ docker-compose build --no-cache --force-rm api
+```
+
+
+*recommendr*
+```
+$ docker-compose build --no-cache --force-rm recommendr
+```
+
+
+## Troubleshooting
