@@ -1,7 +1,8 @@
 version: '3'
 services:
   ui:
-    build: ./src/frontend/ui
+    build: 
+      context: ./src/frontend/ui
     container_name: kommandr-ui
     depends_on:
       - api
@@ -13,6 +14,7 @@ services:
     working_dir: /home/node/app/ui
     volumes:
       - ./src/frontend/ui:/home/node/app/ui
+      - /home/node/app/ui/node_modules
     command: npm start 
   mariadb:
     image: mariadb
@@ -38,7 +40,8 @@ services:
     networks:
       - backend
   api:
-    build: ./src/backend/api
+    build:
+      context: ./src/backend/api
     container_name: kommandr-api
     depends_on:
       - mariadb
@@ -51,6 +54,7 @@ services:
     working_dir: /home/node/app/api
     volumes:
       - ./src/backend/api:/home/node/app/api
+      - /home/node/app/api/node_modules
     command: npm start
   recommendr:
     build: src/backend/recommendr
