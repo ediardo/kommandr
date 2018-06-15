@@ -11,36 +11,62 @@ Utilize a centralized command center at Kommandr.com and discover, learn, save, 
 
 ## Installation
 
-### Clone this repo
+The installation process is segmented in four steps:
+ 1. Cloning the repo
+ 2. Docker images and containers
+ 3. The backend
+ 4. The GUI
+
+
+### Cloning this repo
 ```
 $ git clone git@github.com:kommandr/kommandr.git
 $ cd kommandr
 ```
 
-### Initialize and download git submodules
+#### Initialize and download git submodules
 This repo depends on 3 repositories:
 - ui: the ReactJS application
 - api: the Node.js application + GraphQL
 - recommendr: the recommendation system
 
 #### Initialize the repositories:
-`$ git submodule init`
+```
+$ git submodule init
+```
 
 #### Download the source code
-`$ git submodule update`
+```
+$ git submodule update
+```
 
-### Create docker images
-`$ docker-compose build`
-Keep in mind that this process can take a long time
+### Docker images and containers
 
-### Create docker containers
-`$ docker-compose up`
+#### Step into the root directory of the project
+```
+$ cd kommandr
+```
+#### Build images
+```
+$ docker-compose build
+```
 
+This command creates three images:
+ - kommandr-api-mariadb
+ - kommandr-api-mongodb
+ - kommandr-recommendr
 
-## Configuration
+Keep in mind that this process can take a long time.
 
-### Database
-Create the configuration files for the database and edit as appropiate (not needed as of now)
+#### Create docker containers
+```
+$ docker-compose up
+```
+
+### The backend
+
+#### Configure database endpoints
+Create the configuration files for the database and edit as appropiate
 ```
 $ cd src/backend/api/config
 $ cp config.json.example config.json
@@ -48,16 +74,23 @@ $ cp db.mongo.json.example db.mongo.json
 $ cp db.sql.json.example db.sql.json
 ```
 
-### Restore initial database state
-
+#### Install backend dependencies
 ```
 $ cd src/backend/api
-$ bash scripts/createDatabases.sh
+$ npm install -g sequelize-cli
+$ npm install
+```
+#### Restore initial database state
+```
+$ bash createDatabases.sh
 ```
 
-## Access the application
-
 ### The UI
+```
+$ cd src/frontend/ui
+$ npm install
+```
+
 Go to http://localhost:5000/
 
 

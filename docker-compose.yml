@@ -1,21 +1,5 @@
 version: '3'
 services:
-  ui:
-    build: 
-      context: ./src/frontend/ui
-    container_name: kommandr-ui
-    depends_on:
-      - api
-    networks:
-      - frontend
-      - backend
-    ports:
-      - "5000:5000"
-    working_dir: /home/node/app/ui
-    volumes:
-      - ./src/frontend/ui:/home/node/app/ui
-      - /home/node/app/ui/node_modules
-    command: npm start 
   mariadb:
     image: mariadb
     container_name: kommandr-api-mariadb
@@ -39,32 +23,12 @@ services:
       - "27017:27017"
     networks:
       - backend
-  api:
-    build:
-      context: ./src/backend/api
-    container_name: kommandr-api
-    depends_on:
-      - mariadb
-      - mongodb
-    networks:
-      - frontend
-      - backend
-    ports: 
-      - "5001:5001"
-    working_dir: /home/node/app/api
-    volumes:
-      - ./src/backend/api:/home/node/app/api
-      - /home/node/app/api/node_modules
-    command: npm start
   recommendr:
-    build: src/backend/recommendr
+    build: src/recommendr
     container_name: kommandr-recommendr
-    depends_on:
-      - api
     networks:
       - backend
     ports:
       - "7070:7070"
 networks:
-  frontend:
   backend:

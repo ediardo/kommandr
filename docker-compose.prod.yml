@@ -1,0 +1,70 @@
+version: '3'
+services:
+  ui:
+    build: 
+      context: ./src/frontend/ui
+    container_name: kommandr-ui
+    depends_on:
+      - api
+    networks:
+      - frontend
+      - backend
+    ports:
+      - "5000:5000"
+    working_dir: /home/node/app/ui
+    volumes:
+      - ./src/frontend/ui:/home/node/app/ui
+    command: bash -c "npm start"
+  mariadb:
+    image: mariadb
+    container_name: kommandr-api-mariadb
+    logging:
+      driver: none
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: kommandr
+      MYSQL_DATABASE: kommandr
+      MYSQL_USER: kommandr
+      MYSQL_PASSWORD: k0mm4ndr
+    networks:
+      - backend
+  mongodb:
+    image: mongo
+    container_name: kommandr-api-mongodb
+    logging:
+      driver: none
+    ports: 
+      - "27017:27017"
+    networks:
+      - backend
+  api:
+    build:
+      context: ./src/backend/api
+    container_name: kommandr-api
+    depends_on:
+      - mariadb
+      - mongodb
+    environment:
+      NODE_PATH: /home/node/app/node_modules
+    networks:
+      - frontend
+      - backend
+    ports: 
+      - "5001:5001"
+    working_dir: /home/node/app/api
+    volumes:
+      - ./src/backend/api:/home/node/app/api
+    command: bash -c "ls -al && npm start"
+  recommendr:
+    build: src/backend/recommendr
+    container_name: kommandr-recommendr
+    depends_on:
+      - api
+    networks:
+      - backend
+    ports:
+      - "7070:7070"
+networks:
+  frontend:
+  backend:
