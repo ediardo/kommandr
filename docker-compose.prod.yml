@@ -1,25 +1,8 @@
 version: '3'
 services:
-  ui:
-    build: 
-      context: ./src/frontend/ui
-    container_name: kommandr-ui
-    depends_on:
-      - api
-    networks:
-      - frontend
-      - backend
-    ports:
-      - "5000:5000"
-    working_dir: /home/node/app/ui
-    volumes:
-      - ./src/frontend/ui:/home/node/app/ui
-    command: bash -c "npm start"
-  mariadb:
+  sql:
     image: mariadb
-    container_name: kommandr-api-mariadb
-    logging:
-      driver: none
+    container_name: kommandr-api-sql
     ports:
       - "3306:3306"
     environment:
@@ -32,39 +15,37 @@ services:
   mongodb:
     image: mongo
     container_name: kommandr-api-mongodb
-    logging:
-      driver: none
     ports: 
       - "27017:27017"
     networks:
       - backend
+  recommendr:
+    build: src/backend/recommendr
+    container_name: kommandr-recommendr
+    networks:
+      - backend
+    ports:
+      - "7070:7070"
   api:
     build:
       context: ./src/backend/api
     container_name: kommandr-api
     depends_on:
-      - mariadb
+      - sql
       - mongodb
     environment:
-      NODE_PATH: /home/node/app/node_modules
+      NODE_ENV: production
+      KMDR_API_SQL_HOST: kommandr-api-sql
+      KMDR_API_SQL_PORT: 3306
+      KMDR_API_MONGODB_HOST: kommandr-api-mongodb
+      KMDR_API_MONGODB_PORT: 27017
+      KMDR_API_RECOMMENDR_HOST: http://kommandr-recommendr
+      KMDR_API_RECOMMENDR_PORT: 7070
     networks:
-      - frontend
       - backend
     ports: 
-      - "5001:5001"
-    working_dir: /home/node/app/api
-    volumes:
-      - ./src/backend/api:/home/node/app/api
-    command: bash -c "ls -al && npm start"
-  recommendr:
-    build: src/backend/recommendr
-    container_name: kommandr-recommendr
-    depends_on:
-      - api
-    networks:
-      - backend
-    ports:
-      - "7070:7070"
+      - "80:5001"
+    working_dir: /home/node/api
+    command: npm run build
 networks:
-  frontend:
   backend:
