@@ -2,23 +2,21 @@
 
 Utilize a centralized command center at Kommandr.com and discover, learn, save, and share commands. Watch demo video [here](https://www.youtube.com/watch?v=TWnx7LMQmI0)
 
-## Prerequisites
-1. docker
-2. npm
-3. git client
-4. MySQLWorkbench (optional)
-5. MongoDB Compass Community (optional)
 
 ## Installation
-
 The installation process is segmented in four steps:
- 1. Cloning the repo
+ 1. Cloning this repo
  2. Docker images and containers
- 3. The backend
- 4. The GUI
+ 3. The backend and the database
+ 4. The UI
 
+### Prerequisites
+1. docker and docker-compose
+2. npm
+3. git client
 
-### Cloning this repo
+### Clone this repository
+Download the source code of this repository to your computer. This repo only contains high-level configuration for deployment with docker-compose
 ```
 $ git clone git@github.com:kommandr/kommandr.git
 $ cd kommandr
@@ -26,49 +24,54 @@ $ cd kommandr
 
 #### Initialize and download git submodules
 This repo depends on 3 repositories:
-- ui: the ReactJS application
-- api: the Node.js application + GraphQL
-- recommendr: the recommendation system
-
-#### Initialize the repositories:
-```
-$ git submodule init
-```
+- ui: the facing part of the project that lets user to fetch and store information
+- api: the  application that sits on the server and manages connection to two databases and responds to API calls via GraphQL
+- recommendr: the recommendation system that suggests similar programs that perform a similar task.
+- tldr-pages-parser: a set of scripts built on JS that reads Markdown files from TL;DR Pages project and transforms them into objects that can be later used programmatically
+- kmdr.sh: the command-line client that lets you use Kommandr from the terminal.
 
 #### Download the source code
 ```
-$ git submodule update
+$ git submodule update --init
 ```
+This will pull the source code of the submodules after registering their names and urls into the `.git/config`. 
 
 ### Docker images and containers
+Kommandr uses Docker containers for development and production. While not all of the projects are containerized, both the database layer and recommendation system are always put into containers for development and production environments. More details can be found inside of the compose files `docker-compose.dev.yml` and docker-compose.prod.yml`
 
 #### Step into the root directory of the project
 ```
 $ cd kommandr
 ```
-#### Build images
-```
-$ docker-compose build
-```
 
-This command creates three images:
- - kommandr-api-mariadb
- - kommandr-api-mongodb
- - kommandr-recommendr
-
-Keep in mind that this process can take a long time.
-
-#### Create docker containers
+#### Build Dockerimages
+##### Development
 ```
-$ docker-compose up
+$ docker-compose -f docker-compose.dev.yml build
+```
+##### Production
+```
+$ docker-compose -f docker-compose.prod.yml build
 ```
 
-### The backend
+*Keep in mind that this process can take a long time to complete.*
+
+#### Create and start Docker containers
+##### Development
+```
+$ docker-compose -f docker-compose.dev.yml up
+```
+##### Production
+```
+$ docker-compose -f docker-compose.prod.yml up 
+```
+
+### The backend and the database layer
 
 #### Configure database endpoints
 Create the configuration files for the database and edit as appropiate
 ```
-$ cd src/backend/api/config
+$ cd src/api/config
 $ cp config.json.example config.json
 $ cp db.mongo.json.example db.mongo.json
 $ cp db.sql.json.example db.sql.json
@@ -76,7 +79,7 @@ $ cp db.sql.json.example db.sql.json
 
 #### Install backend dependencies
 ```
-$ cd src/backend/api
+$ cd src/api
 $ npm install -g sequelize-cli
 $ npm install
 ```
@@ -86,47 +89,31 @@ $ bash createDatabases.sh
 ```
 
 ### The UI
+#### Download packages
 ```
-$ cd src/frontend/ui
+$ cd src/ui
 $ npm install
 ```
 
-Go to http://localhost:5000/
-
-
-### The backend API (GraphQL)
-Go to http://localhost:5001/graphql
-
-
-### The SQL Database
-Use the mysql client or MySQL Workbench to connnect to the database. Make sure to use the right credentials
+#### Start the server for development
 ```
-$ mysql -u kommandr -p k0mm4ndr -h 127.0.0.1 -p 3306
+$ npm start
 ```
 
-### The MongoDB Database
-Use MongoDB Compass using the right credentials (see config files)
-
-## Development
-
-### Installing new dependencies
-You will need to rebuild the docker images. Depending on the project you are working on, follow the per-project instructions below:
-
-*ui*
+#### Build for production
+##### Set KMDR_API_ENDPOINT environment variable
 ```
-$ docker-compose build --no-cache --force-rm ui
+$ export KMDR_API_ENDPOINT=http://endpoint
 ```
-
-*API*
+##### Build a production-ready bundle
 ```
-$ docker-compose build --no-cache --force-rm api
+$ npm run build
+```
+##### Start the server
+```
+$ npm install -g serve
+$ serve -s build/
 ```
 
-
-*recommendr*
-```
-$ docker-compose build --no-cache --force-rm recommendr
-```
-
-
-## Troubleshooting
+### Troubleshooting
+Pending...
