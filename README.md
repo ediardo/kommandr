@@ -95,7 +95,7 @@ Starting kommandr-recommendr  ... done
 *Keep in mind that this process can take a long time to complete.*
 
 ### Configure and start the API (Window #2)
-**This part explains the most important steps to get the API up & running. If you are looking for details then (visit the project's README)[https://github.com/kommandr/api]
+**This part explains the most important steps to get the API up & running. If you are looking for details then [visit the project's README](https://github.com/kommandr/api)**
 
 The API is not containerized for development as changes would require to constantly build the images wasting our precious time.
 
