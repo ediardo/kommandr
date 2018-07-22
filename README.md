@@ -45,7 +45,11 @@ This will download the projects after registering their names and urls into the 
 
 ## Development
 
-Kommandr uses Docker containers for development and production environments. While not all of the projects are containerized, both the *database layer and recommendation system are always put into containers for development and production environments*. More details can be found inside of the compose files `docker-compose.dev.yml` and `docker-compose.prod.yml`
+Kommandr uses Docker containers for development and production environments. While not all of the projects are containerized, both the **database layer and recommendation system are always put into containers for development and production environments**. More details can be found inside of the compose files `docker-compose.dev.yml` and `docker-compose.prod.yml`
+
+### A high-level architecture of kommandr.com
+
+![Alt text](kommandr-architecture-diagram.png?raw=true "High-level architecture"){:height="85%" width="85%"}
 
 It's recommended to keep at least three terminal windows open as you work on kommandr.
 - Terminal Window #1: building and running docker containers
@@ -91,6 +95,8 @@ Starting kommandr-recommendr  ... done
 *Keep in mind that this process can take a long time to complete.*
 
 ### Configure and start the API (Window #2)
+**This part explains the most important steps to get the API up & running. If you are looking for details then (visit the project's README)[https://github.com/kommandr/api]
+
 The API is not containerized for development as changes would require to constantly build the images wasting our precious time.
 
 #### Install dependencies
@@ -109,20 +115,17 @@ $ cp db.sql.json.example db.sql.json
 ```
 
 #### Restore database state
-Download databases from production and put them into the `dumps/` directory.
-
 ```
-$ bash createDatabases.sh all
+$ ./databases.sh restore --all
 ```
 ##### Restore the SQL database only:
 ```
-$ bash createDatabases.sh sql
+$ ./databases.sh restore --sql
 ```
 ##### Restore the Mongo database only:
 ```
-$ bash createDatabases.sh mongo
+$ ./databases.sh restore --mongo
 ```
-
 #### Start the dev server
 ```
 $ npm start
