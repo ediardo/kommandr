@@ -49,7 +49,7 @@ Kommandr uses Docker containers for development and production environments. Whi
 
 ### A high-level architecture of kommandr.com
 
-![Alt text](kommandr-architecture-diagram.png?raw=true "High-level architecture"){:height="85%" width="85%"}
+![Alt text](kommandr-architecture-diagram.png?raw=true "High-level architecture")
 
 It's recommended to keep at least three terminal windows open as you work on kommandr.
 - Terminal Window #1: building and running docker containers
@@ -171,5 +171,8 @@ Compiled successfully!
 ## Production
 Pending...
 
-### Troubleshooting
+## Contributing
+Pending...
+
+## Troubleshooting
 Pending...
