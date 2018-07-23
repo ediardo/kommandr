@@ -1,6 +1,6 @@
 # kommandr.com
 
-Kommandr had a simple yet ambitious charter: be a social application that enables users to discover, learn about, save, and share commands.
+Kommandr has a simple yet ambitious charter: be a social application that enables users to discover, learn about, save, and share commands.
 
 Things you can do with the Kommandr MVP:
 
