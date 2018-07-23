@@ -20,7 +20,7 @@ services:
     networks:
       - backend
   recommendr:
-    build: src/backend/recommendr
+    build: src/recommendr
     container_name: kommandr-recommendr
     networks:
       - backend

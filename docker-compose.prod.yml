@@ -20,7 +20,7 @@ services:
     networks:
       - backend
   recommendr:
-    build: src/backend/recommendr
+    build: src/recommendr
     container_name: kommandr-recommendr
     networks:
       - backend
@@ -28,7 +28,7 @@ services:
       - "7070:7070"
   api:
     build:
-      context: ./src/backend/api
+      context: ./src/api
     container_name: kommandr-api
     depends_on:
       - sql

@@ -1,12 +1,9 @@
-[submodule "src/frontend/ui"]
-	path = src/frontend/ui
-	url = git@github.com:kommandr/ui.git
-	branch = dev
-[submodule "src/backend/api"]
-	path = src/backend/api
+[submodule "src/api"]
+	path = src/api
 	url = git@github.com:kommandr/api.git
-	branch = dev
-[submodule "src/backend/recommendr"]
-	path = src/backend/recommendr
+[submodule "src/ui"]
+	path = src/ui
+	url = git@github.com:kommandr/ui.git
+[submodule "src/recommendr"]
+	path = src/recommendr
 	url = git@github.com:kommandr/recommendr.git
-	branch = master
